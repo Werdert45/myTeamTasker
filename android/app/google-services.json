@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "284649479880",
+    "firebase_url": "https://collaborative-repetition.firebaseio.com",
+    "project_id": "collaborative-repetition",
+    "storage_bucket": "collaborative-repetition.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284649479880:android:03437375961e42edfbcffd",
+        "android_client_info": {
+          "package_name": "nl.ianronk.collaborative_repitition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284649479880-3532m65pf62i0mmecujee604ed8200l9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAInNwxzs5NO6MvsNhb3irk0yvHAu1ly9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284649479880-3532m65pf62i0mmecujee604ed8200l9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
