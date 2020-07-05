@@ -25,6 +25,19 @@ class _DashboardPageState extends State<DashboardPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            Container(
+              height: MediaQuery.of(context).size.height / 4.5,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color(0xFF572f8c),
+                border: Border(
+                  
+                ),
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+              ),
+            ),
+
+
             SizedBox(height: 100),
             RaisedButton(
               onPressed: () async {

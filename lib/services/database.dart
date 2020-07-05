@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collaborative_repitition/models/group.dart';
+import 'package:collaborative_repitition/models/user_db.dart';
 
 // TODO get all recent catches from the database and all of the species
 
@@ -13,6 +15,24 @@ class Streams {
   final CollectionReference usersCollection = Firestore.instance.collection('users');
   final CollectionReference groupsCollection = Firestore.instance.collection('groups');
 
+  getCompleteUser(uid) async {
+    var userdata = await usersCollection.document(uid).get();
+
+    var user = user_db.fromMap(userdata.data);
+
+    var tasks = [];
+
+    for (var i = 0; i < user.groups.length; i++) {
+      var groupdata = await groupsCollection.document(user.groups[i]).get();
+      var spec_group = group.fromMap(groupdata.data);
+      tasks = tasks + spec_group.tasks;
+    }
+
+
+
+
+  }
+
 
   Stream<DocumentSnapshot> get users {
     return usersCollection.document(uid).snapshots();
@@ -21,6 +41,16 @@ class Streams {
   Stream<DocumentSnapshot> get groups {
     return groupsCollection.document(uid).snapshots();
   }
+
+
+  Stream<user_db> streamUser(String uid) {
+    return usersCollection.document(uid).snapshots().map((snap) => user_db.fromMap(snap.data));
+  }
+
+  Stream<group> streamGroup(String code) {
+    return groupsCollection.document(code).snapshots().map((snap) => group.fromMap(snap.data));
+  }
+
 }
 
 class DatabaseService {
