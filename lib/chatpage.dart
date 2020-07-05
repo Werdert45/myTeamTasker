@@ -21,7 +21,6 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
-    print(streams.getCompleteUser(user.uid));
 
     return Container(
         child: Center(
