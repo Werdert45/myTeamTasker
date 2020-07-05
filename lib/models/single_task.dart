@@ -17,7 +17,7 @@ class single_task {
       icon: data['icon'] ?? '',
       id: data['id'] ?? '',
       title: data['title'] ?? '',
-      days: [],
+      days: null,
       date: DateTime.fromMillisecondsSinceEpoch(data['date']) ?? null,
       alert_time: DateTime.fromMillisecondsSinceEpoch(data['alert_time']) ?? null,
       creator: data['creator'] ?? '',

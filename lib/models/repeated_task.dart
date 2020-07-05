@@ -17,7 +17,7 @@ class repeated_task {
         id: data['id'] ?? '',
         title: data['title'] ?? '',
         creator: data['creator'] ?? '',
-        days: data['days'] ?? [],
+        days: data['days'] ?? null,
         alert_time: DateTime.fromMillisecondsSinceEpoch(data['alert_time']) ?? null,
         assignee: data['assignee'] ?? '',
     );

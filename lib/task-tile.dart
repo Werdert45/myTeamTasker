@@ -18,16 +18,16 @@ class EmoIconState extends State<EmoIcon> {
   DateTime _dateTime = DateTime.now();
 
 
-  var repeated;
+  var repeated = false;
   var setAlert;
   var task_name;
-  List days_show = [false,false,false,false,false,false,false];
 
 
   // Helper function:
   List days = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
   Map months_in_year = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dec"};
   bool isShowSticker;
+  var days_show;
   bool checkedValue = false;
   var expanded = false;
   TextEditingController _controller;
@@ -38,7 +38,12 @@ class EmoIconState extends State<EmoIcon> {
   void initState() {
     super.initState();
 
-    widget.task.days != [] ? repeated = true : repeated = false;
+    widget.task.days == null ? repeated = false : repeated = true;
+
+    if (repeated) {
+      days_show = widget.task.days;
+    }
+
     widget.task.alert_time != null ? setAlert = true : setAlert = false;
     isShowSticker = false;
     categories = Emoji(name: 'Sailboat', emoji: widget.task.icon);
@@ -47,6 +52,8 @@ class EmoIconState extends State<EmoIcon> {
     _controller = new TextEditingController(text: task_name);
     _dateTime = DateTime.now();
   }
+
+
 
   Future<Null> selectDate(BuildContext context) async {
     var picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime(2100));
@@ -84,6 +91,10 @@ class EmoIconState extends State<EmoIcon> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.task.days);
+    print(repeated);
+
+//    print(days_show);
     editTask() {
       setState(() {
         expanded = ! expanded;
@@ -97,7 +108,6 @@ class EmoIconState extends State<EmoIcon> {
       });
     }
 
-    print(task_name);
 
     return Stack(
       children: <Widget>[
@@ -391,7 +401,6 @@ class EmoIconState extends State<EmoIcon> {
       recommendKeywords: ["dog", "boat"],
       numRecommended: 10,
       onEmojiSelected: (emoji, category) {
-        print(emoji);
         setState(() {
           categories = emoji;
         });
