@@ -1,5 +1,10 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/group.dart';
+import 'package:collaborative_repitition/models/repeated_task.dart';
+import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user_db.dart';
 
 // TODO get all recent catches from the database and all of the species
@@ -14,6 +19,8 @@ class Streams {
   // collection reference
   final CollectionReference usersCollection = Firestore.instance.collection('users');
   final CollectionReference groupsCollection = Firestore.instance.collection('groups');
+  final CollectionReference repeatedTasksCollection = Firestore.instance.collection('repeated_tasks');
+  final CollectionReference singleTasksCollection = Firestore.instance.collection('single_tasks');
 
   getCompleteUser(uid) async {
     var userdata = await usersCollection.document(uid).get();
@@ -21,16 +28,35 @@ class Streams {
     var user = user_db.fromMap(userdata.data);
 
     var tasks = [];
+    user.personal_tasks.isNotEmpty ? tasks.add(user.personal_tasks) : null;
+
+    var repeated_tasks = [];
+    var single_tasks = [];
 
     for (var i = 0; i < user.groups.length; i++) {
       var groupdata = await groupsCollection.document(user.groups[i]).get();
       var spec_group = group.fromMap(groupdata.data);
-      tasks = tasks + spec_group.tasks;
+      repeated_tasks = repeated_tasks + spec_group.repeated_tasks;
+      single_tasks = single_tasks + spec_group.single_tasks;
     }
 
+    for (var i = 0; i < repeated_tasks.length; i++) {
+      var repeated_tasks_data = await repeatedTasksCollection.document(repeated_tasks[i]).get();
+      var spec_repeated_task = repeated_task.fromMap(repeated_tasks_data.data);
+      tasks.add(spec_repeated_task);
+    }
 
+    for (var i = 0; i < single_tasks.length; i++) {
+      var single_tasks_data = await singleTasksCollection.document(single_tasks[i]).get();
+      var spec_single_task = single_task.fromMap(single_tasks_data.data);
+      tasks.add(spec_single_task);
+    }
 
+    var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': user.groups, 'tasks': tasks});
 
+    print("TDF");
+    print(userWithTasks);
+    return userWithTasks;
   }
 
 
@@ -62,6 +88,60 @@ class DatabaseService {
   // collection reference
   final CollectionReference usersCollection = Firestore.instance.collection('users');
   final CollectionReference groupsCollection = Firestore.instance.collection('groups');
+  final CollectionReference repeatedTasksCollection = Firestore.instance.collection('repeated_tasks');
+  final CollectionReference singleTasksCollection = Firestore.instance.collection('single_tasks');
+
+
+  Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid) async {
+    await singleTasksCollection.document(taskID).setData({
+      'alert_time': alertTime,
+      'date': date,
+      'creator': puid,
+      'assignee': assignee,
+      'days': null,
+      'icon': icon,
+      'id': taskID,
+      'title': title
+    });
+  }
+
+  Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title) async {
+    await repeatedTasksCollection.document(taskID).setData({
+      'alert_time': alertTime,
+      'assignee': assignee,
+      'creator': puid,
+      'days': days,
+      'icon': icon,
+      'id': taskID,
+      'title': title
+    });
+  }
+
+  Future updateSingleTask(taskID, alertTime, date, icon, title) async {
+    await singleTasksCollection.document(taskID).updateData({
+      'alert_time': alertTime,
+      'icon': icon,
+      'title': title,
+      'date': date
+    });
+  }
+
+  Future updateRepeatedTask(taskID, alertTime, days, icon, title) async {
+    await repeatedTasksCollection.document(taskID).updateData({
+      'alert_time': alertTime,
+      'icon': icon,
+      'title': title,
+      'days': days
+    });
+  }
+
+  Future removeSingleTask(taskID) async {
+    await singleTasksCollection.document(taskID).delete();
+  }
+
+  Future removeRepeatedTask(taskID) async {
+    await repeatedTasksCollection.document(taskID).delete();
+  }
 
 
   Future createUser(puid, name, email) async {
@@ -92,7 +172,6 @@ class DatabaseService {
         'groups': FieldValue.arrayUnion([group_code])
       });
 
-      print("SUCCESS");
       return "finished";
     } catch (e) {
       return e;
@@ -108,7 +187,9 @@ class DatabaseService {
       'description': group_description,
       'id': puid.split('').reversed.join(),
       'members': [puid],
-      'name': group_name
+      'name': group_name,
+      'single_tasks': [],
+      'repeated_tasks': [],
     });
 
     await usersCollection.document(puid).updateData({

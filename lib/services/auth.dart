@@ -23,7 +23,6 @@ class AuthService {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
-      print(user.uid);
 
       // create a new document for the user with the uid
       await DatabaseService(uid: user.uid).createUser(user.uid, name, email);
