@@ -19,9 +19,13 @@ class _DashboardPageState extends State<DashboardPage> {
   final Streams streams = Streams();
   final DatabaseService database = DatabaseService();
 
+  var tasks = [];
+
   void initState() {
     super.initState();
     checkedValue = false;
+
+    tasks = [];
   }
 
 
@@ -35,8 +39,8 @@ class _DashboardPageState extends State<DashboardPage> {
         builder: (context, snapshot) {
           print(snapshot);
 
-          var tasks = snapshot.data.tasks;
 
+          tasks = snapshot.data.tasks;
           return Container(
               child: Column(
                 children: [
@@ -70,7 +74,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         itemBuilder: (context, index) {
                           return Container(
                             width: double.infinity,
-                            child: EmoIcon(tasks[index], user.uid),
+                            child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
                           );
                         }
                     ),
