@@ -91,6 +91,24 @@ class DatabaseService {
   final CollectionReference repeatedTasksCollection = Firestore.instance.collection('repeated_tasks');
   final CollectionReference singleTasksCollection = Firestore.instance.collection('single_tasks');
 
+  Future addRepeatedTaskToGroup(taskID, puid, group_id) async {
+    await groupsCollection.document(group_id).updateData({
+      'repeated_tasks': FieldValue.arrayUnion([taskID])
+    });
+  }
+
+  Future removeRepeatedTaskFromGroup(taskID, group_id) async {
+    await groupsCollection.document(group_id).updateData({
+      'repeated_tasks': FieldValue.arrayRemove([taskID])
+    });
+  }
+
+  Future removeSingleTaskFromGroup(taskID, group_id) async {
+    await groupsCollection.document(group_id).updateData({
+      'single_tasks': FieldValue.arrayRemove([taskID])
+    });
+  }
+
 
   Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid) async {
     await singleTasksCollection.document(taskID).setData({
@@ -176,8 +194,8 @@ class DatabaseService {
     } catch (e) {
       return e;
     }
-
   }
+
 
   Future createGroup(puid, group_name, group_description) async {
     var group_code = puid.toString().substring(0,6).toUpperCase();

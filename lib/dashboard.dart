@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
   final AuthService _auth = AuthService();
   final Streams streams = Streams();
+  final DatabaseService database = DatabaseService();
+
+  var tasks = [];
 
   void initState() {
     super.initState();
     checkedValue = false;
+
+    tasks = [];
   }
 
 
@@ -33,6 +39,8 @@ class _DashboardPageState extends State<DashboardPage> {
         builder: (context, snapshot) {
           print(snapshot);
 
+
+          tasks = snapshot.data.tasks;
           return Container(
               child: Column(
                 children: [
@@ -58,7 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   SizedBox(height: 20),
                   Container(
                     width: double.infinity,
-                    height: 800,
+//                    height: 800,
                     child: ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -66,10 +74,39 @@ class _DashboardPageState extends State<DashboardPage> {
                         itemBuilder: (context, index) {
                           return Container(
                             width: double.infinity,
-                            child: EmoIcon(snapshot.data.tasks[index], user.uid),
+                            child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
                           );
                         }
                     ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add_circle),
+                    onPressed: () async {
+                      var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
+                      var alertTime = '14:15';
+                      var assignee = user.uid;
+                      var puid = user.uid;
+                      var days = [false, false, false, false, false, false, false];
+                      var icon = "😇";
+                      var title = "New Task";
+                      var group_id = snapshot.data.groups[0];
+
+                      await database.createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title);
+
+                      await database.addRepeatedTaskToGroup(taskID, puid, group_id);
+
+                      setState(() {
+                        var new_task = repeated_task.fromMap({
+                          'icon': icon,
+                          'id': taskID,
+                          'title': title,
+                          'creator': user.uid,
+                          'days': days,
+                          'alert_time': alertTime
+                        });
+                        tasks.add(new_task);
+                      });
+                    },
                   )
                 ],
               )

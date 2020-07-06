@@ -7,8 +7,10 @@ import 'components/button.dart';
 class EmoIcon extends StatefulWidget {
   final task;
   final puid;
+  final group;
+  final parent;
 //
-  EmoIcon(this.task, this.puid);
+  EmoIcon(this.task, this.puid, this.group, this.parent);
 
 
   @override
@@ -396,6 +398,33 @@ class EmoIconState extends State<EmoIcon> {
                                     child: Text("EDIT"),
                                   )
                                 ],
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            RaisedButton(
+                              onPressed: () {
+                                if (repeated) {
+                                  database.removeRepeatedTask(widget.task.id);
+                                  database.removeRepeatedTaskFromGroup(widget.task.id, widget.group);
+                                  widget.parent.setState(() {
+                                    widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                  });
+                                }
+                                else {
+                                  database.removeSingleTask(widget.task.id);
+                                  database.removeSingleTaskFromGroup(widget.task.id, widget.group);
+                                }
+
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 50,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.delete),
+                                    SizedBox(width: 8),
+                                    Text("Delete Task")
+                                  ],
+                                ),
                               ),
                             )
                           ],
