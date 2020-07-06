@@ -56,6 +56,11 @@ class EmoIconState extends State<EmoIcon> {
     task_name = widget.task.title;
     _controller = new TextEditingController(text: task_name);
     _dateTime = DateTime.now();
+
+    if (widget.task.title == "New Task") {
+      expanded = true;
+    }
+
   }
 
 
@@ -122,10 +127,6 @@ class EmoIconState extends State<EmoIcon> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.task.days);
-    print(repeated);
-
-//    print(days_show);
     editTask() {
       setState(() {
         expanded = ! expanded;
@@ -138,7 +139,6 @@ class EmoIconState extends State<EmoIcon> {
         expanded = ! expanded;
       });
     }
-
 
     return Stack(
       children: <Widget>[
@@ -176,7 +176,6 @@ class EmoIconState extends State<EmoIcon> {
                                       )
                                   ),
                                 ),
-
                             ),
                           ),
                           SizedBox(width: 20),

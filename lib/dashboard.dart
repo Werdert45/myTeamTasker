@@ -37,9 +37,6 @@ class _DashboardPageState extends State<DashboardPage> {
       child: FutureBuilder(
         future: streams.getCompleteUser(user.uid),
         builder: (context, snapshot) {
-          print(snapshot);
-
-
           tasks = snapshot.data.tasks;
           return Container(
               child: Column(
@@ -105,6 +102,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           'alert_time': alertTime
                         });
                         tasks.add(new_task);
+                        
                       });
                     },
                   )
