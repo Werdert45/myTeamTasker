@@ -91,6 +91,12 @@ class DatabaseService {
   final CollectionReference repeatedTasksCollection = Firestore.instance.collection('repeated_tasks');
   final CollectionReference singleTasksCollection = Firestore.instance.collection('single_tasks');
 
+  Future addRepeatedTaskToGroup(taskID, puid, group_id) async {
+    await groupsCollection.document(group_id).updateData({
+      'repeated_tasks': FieldValue.arrayUnion([taskID])
+    });
+  }
+
 
   Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid) async {
     await singleTasksCollection.document(taskID).setData({
