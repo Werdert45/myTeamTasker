@@ -55,6 +55,8 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
         .child('profile_pictures/${uid.toString()}.jpg');
     StorageUploadTask task = firebaseStorageRef.putFile(newProfilePic);
 
+
+
     _auth.setProfileImage(uid, 'profile_pictures/${uid.toString()}.jpg');
 
     Navigator.pushNamed(context, '/selectgroup');

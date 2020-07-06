@@ -1,15 +1,20 @@
 //import 'dart:html';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
-import 'package:firebase_image/firebase_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'task-tile.dart';
 import 'components/button.dart';
 import 'services/auth.dart';
+import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
+import 'dart:async';
+
+
+const String kTestString = 'Hello world!';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -18,10 +23,44 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   bool checkedValue;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  List<StorageUploadTask> _tasks = <StorageUploadTask>[];
 
   final AuthService _auth = AuthService();
   final Streams streams = Streams();
   final DatabaseService database = DatabaseService();
+  final FirebaseStorage storage = FirebaseStorage(storageBucket: 'gs://collaborative-repetition.appspot.com/');
+
+  Future<void> _downloadFile(StorageReference ref) async {
+    final String url = await ref.getDownloadURL();
+    final String uuid = Uuid().v1();
+    final http.Response downloadData = await http.get(url);
+    final Directory systemTempDir = Directory.systemTemp;
+    final File tempFile = File('${systemTempDir.path}/tmp$uuid.txt');
+    if (tempFile.existsSync()) {
+      await tempFile.delete();
+    }
+    await tempFile.create();
+    assert(await tempFile.readAsString() == "");
+    final StorageFileDownloadTask task = ref.writeToFile(tempFile);
+    final int byteCount = (await task.future).totalByteCount;
+    final String tempFileContents = await tempFile.readAsString();
+    assert(tempFileContents == kTestString);
+    assert(byteCount == kTestString.length);
+
+    final String fileContents = downloadData.body;
+    final String name = await ref.getName();
+    final String bucket = await ref.getBucket();
+    final String path = await ref.getPath();
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+        'Success!\n Downloaded $name \n from url: $url @ bucket: $bucket\n '
+            'at path: $path \n\nFile contents: "$fileContents" \n'
+            'Wrote "$tempFileContents" to tmp.txt',
+        style: const TextStyle(color: Color.fromARGB(255, 0, 155, 0)),
+      ),
+    ));
+  }
 
   var tasks = [];
 
@@ -30,8 +69,10 @@ class _DashboardPageState extends State<DashboardPage> {
     checkedValue = false;
 
     tasks = [];
+
+
   }
-  
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +83,11 @@ class _DashboardPageState extends State<DashboardPage> {
         future: streams.getCompleteUser(user.uid),
         builder: (context, snapshot) {
           tasks = snapshot.data.tasks;
+
+
+
+          _downloadFile(snapshot.data.profile_picture);
+
           return Container(
               child: Column(
                 children: [
@@ -58,29 +104,15 @@ class _DashboardPageState extends State<DashboardPage> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 30, top: 70),
-                            child: Text("These are today's tasks", style: TextStyle(fontSize: 14, color: Colors.white))
+                              padding: EdgeInsets.only(left: 30, top: 70),
+                              child: Text("These are today's tasks", style: TextStyle(fontSize: 14, color: Colors.white))
                           ),
                         ),
                         Align(
                           alignment: Alignment.centerRight,
                           child: Padding(
                             padding: EdgeInsets.only(right: 30),
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: FittedBox(
-                                  fit: BoxFit.fitHeight,
-                                  child: Align(
-                                      alignment: Alignment.center,
-                                      heightFactor: 0.5,
-                                      widthFactor: 1,
-                                      child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/profile_pictures/DfQpnOQD2jeVFqSMEjypavniVIh1.jpg'))),
-                                ),
-                              ),
-                            )
+                            child: SizedBox(),
                           ),
                         )
                       ],
@@ -152,7 +184,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           'alert_time': alertTime
                         });
                         tasks.add(new_task);
-                        
+
                       });
                     },
                   )
