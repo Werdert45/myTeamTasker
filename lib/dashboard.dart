@@ -31,6 +31,8 @@ class _DashboardPageState extends State<DashboardPage> {
       child: FutureBuilder(
         future: streams.getCompleteUser(user.uid),
         builder: (context, snapshot) {
+          print(snapshot);
+
           return Container(
               child: Column(
                 children: [
@@ -64,7 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         itemBuilder: (context, index) {
                           return Container(
                             width: double.infinity,
-                            child: EmoIcon(snapshot.data.tasks[index]),
+                            child: EmoIcon(snapshot.data.tasks[index], user.uid),
                           );
                         }
                     ),

@@ -2,8 +2,8 @@ class single_task {
   final String icon;
   final String title;
   final String id;
-  final DateTime date;
-  final DateTime alert_time;
+  final int date;
+  final String alert_time;
   final String creator;
   final String assignee;
   final List days;
@@ -18,8 +18,8 @@ class single_task {
       id: data['id'] ?? '',
       title: data['title'] ?? '',
       days: null,
-      date: DateTime.fromMillisecondsSinceEpoch(data['date']) ?? null,
-      alert_time: DateTime.fromMillisecondsSinceEpoch(data['alert_time']) ?? null,
+      date: data['date'] ?? null,
+      alert_time: data['alert_time'] ?? null,
       creator: data['creator'] ?? '',
       assignee: data['assignee'] ?? ''
     );

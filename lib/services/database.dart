@@ -54,6 +54,8 @@ class Streams {
 
     var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': user.groups, 'tasks': tasks});
 
+    print("TDF");
+    print(userWithTasks);
     return userWithTasks;
   }
 
@@ -86,6 +88,60 @@ class DatabaseService {
   // collection reference
   final CollectionReference usersCollection = Firestore.instance.collection('users');
   final CollectionReference groupsCollection = Firestore.instance.collection('groups');
+  final CollectionReference repeatedTasksCollection = Firestore.instance.collection('repeated_tasks');
+  final CollectionReference singleTasksCollection = Firestore.instance.collection('single_tasks');
+
+
+  Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid) async {
+    await singleTasksCollection.document(taskID).setData({
+      'alert_time': alertTime,
+      'date': date,
+      'creator': puid,
+      'assignee': assignee,
+      'days': null,
+      'icon': icon,
+      'id': taskID,
+      'title': title
+    });
+  }
+
+  Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title) async {
+    await repeatedTasksCollection.document(taskID).setData({
+      'alert_time': alertTime,
+      'assignee': assignee,
+      'creator': puid,
+      'days': days,
+      'icon': icon,
+      'id': taskID,
+      'title': title
+    });
+  }
+
+  Future updateSingleTask(taskID, alertTime, date, icon, title) async {
+    await singleTasksCollection.document(taskID).updateData({
+      'alert_time': alertTime,
+      'icon': icon,
+      'title': title,
+      'date': date
+    });
+  }
+
+  Future updateRepeatedTask(taskID, alertTime, days, icon, title) async {
+    await repeatedTasksCollection.document(taskID).updateData({
+      'alert_time': alertTime,
+      'icon': icon,
+      'title': title,
+      'days': days
+    });
+  }
+
+  Future removeSingleTask(taskID) async {
+    await singleTasksCollection.document(taskID).delete();
+  }
+
+  Future removeRepeatedTask(taskID) async {
+    await repeatedTasksCollection.document(taskID).delete();
+  }
 
 
   Future createUser(puid, name, email) async {

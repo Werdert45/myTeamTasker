@@ -3,7 +3,7 @@ class repeated_task {
   final String title;
   final String id;
   final List days;
-  final DateTime alert_time;
+  final String alert_time;
   final String creator;
   final String assignee;
 
@@ -18,7 +18,7 @@ class repeated_task {
         title: data['title'] ?? '',
         creator: data['creator'] ?? '',
         days: data['days'] ?? null,
-        alert_time: DateTime.fromMillisecondsSinceEpoch(data['alert_time']) ?? null,
+        alert_time: data['alert_time'] ?? null,
         assignee: data['assignee'] ?? '',
     );
   }

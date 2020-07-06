@@ -1,12 +1,14 @@
 import 'package:collaborative_repitition/models/complete_user.dart';
+import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'components/button.dart';
 
 class EmoIcon extends StatefulWidget {
   final task;
+  final puid;
 //
-  EmoIcon(this.task);
+  EmoIcon(this.task, this.puid);
 
 
   @override
@@ -16,6 +18,7 @@ class EmoIcon extends StatefulWidget {
 class EmoIconState extends State<EmoIcon> {
   TimeOfDay _time = TimeOfDay.now();
   DateTime _dateTime = DateTime.now();
+  DatabaseService database = DatabaseService();
 
 
   var repeated = false;
@@ -74,6 +77,32 @@ class EmoIconState extends State<EmoIcon> {
       setState(() {
         _time = picked;
       });
+    }
+  }
+
+  updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date) async {
+    // needs: title, description,
+    if (repeated) {
+      if (init_days != null) {
+        // only update
+        await database.updateRepeatedTask(id, alertTime, days, icon, title);
+      }
+      else {
+        // remove the entry in the database and set a repeated task
+        await database.removeSingleTask(id);
+        await database.createRepeatedTask(id, alertTime, "not certain", puid, days, icon, title);
+      }
+    }
+    else {
+      if (init_days == null) {
+        // only update
+        await database.updateSingleTask(id, alertTime, date, icon, title);
+      }
+      else {
+        // remove entry in the database and set a single task
+        await database.removeRepeatedTask(id);
+        await database.createSingleTask(id, alertTime, date, icon, 'not certain', title, puid);
+      }
     }
   }
 
@@ -170,7 +199,20 @@ class EmoIconState extends State<EmoIcon> {
                           ),
                           FlatButton(
                             onPressed: editTask,
-                            child: expanded ? GestureDetector(child: Text("SAVE"), onTap: saveTask) : Text("EDIT"),
+                            child: expanded ? GestureDetector(
+                                child: Text("SAVE"),
+                                onTap: () {
+                                  var title = task_name;
+                                  var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                                  var id = widget.task.id;
+                                  var init_days = widget.task.days;
+                                  var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                                  var puid = widget.puid;
+                                  var date = _dateTime.millisecondsSinceEpoch.toString();
+
+                                  updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date);
+                                  saveTask();
+                                }) : Text("EDIT"),
                           )
                         ],
                       ),
