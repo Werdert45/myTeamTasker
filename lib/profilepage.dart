@@ -2,12 +2,19 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:collaborative_repitition/models/single_task.dart';
+import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/services/auth.dart';
+import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
+import 'package:collaborative_repitition/task-tile.dart';
+import 'package:firebase_image/firebase_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -15,269 +22,193 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  var profilePicUrl =
-      'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg';
+  bool checkedValue;
+  var _controller;
+  var name;
+  var picture;
 
-  var nickName = 'Tom';
+  final AuthService _auth = AuthService();
+  final Streams streams = Streams();
+  final DatabaseService database = DatabaseService();
 
-  bool isLoading = false;
+  var tasks = [];
 
-  File selectedImage;
-
-  UserManagement userManagement = new UserManagement();
-
-  String newNickName;
-
-  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    FirebaseAuth.instance.currentUser().then((user) {
-      setState(() {
-        profilePicUrl = user.photoUrl;
-        nickName = user.displayName;
-      });
-    }).catchError((e) {
-      print(e);
-    });
+    checkedValue = false;
+
+
+    tasks = [];
   }
 
-  Future selectPhoto() async {
-    setState(() {
-      isLoading = true;
-    });
-    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      selectedImage = tempImage;
-      uploadImage();
-    });
-  }
-
-  Future uploadImage() async {
-    var randomno = Random(25);
-    final StorageReference firebaseStorageRef = FirebaseStorage.instance
-        .ref()
-        .child('profilepics/${randomno.nextInt(5000).toString()}.jpg');
-    StorageUploadTask task = firebaseStorageRef.putFile(selectedImage);
-
-//    task.future.then((value) {
-//      setState(() {
-//        userManagement
-//            .updateProfilePic(value.downloadUrl.toString())
-//            .then((val) {
-//          setState(() {
-//            profilePicUrl = value.downloadUrl.toString();
-//            isLoading = false;
-//          });
-//        });
-//      });
-//    }).catchError((e) {
-//      print(e);
-//    });
-  }
-
-  Future<bool> editName(BuildContext context) async {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Edit Nick Name', style: TextStyle(fontSize: 15.0)),
-            content: Container(
-              height: 100.0,
-              width: 100.0,
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(
-                        labelText: 'New Name',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold)),
-                    onChanged: (value) {
-                      newNickName = value;
-                    },
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Update'),
-                textColor: Colors.blue,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    isLoading = true;
-                  });
-                  userManagement.updateNickName(newNickName).then((onValue) {
-                    setState(() {
-                      isLoading = false;
-                      nickName = newNickName;
-                    });
-                  }).catchError((e) {
-                    print(e);
-                  });
-                },
-              )
-            ],
-          );
-        });
-  }
-
-  getLoader() {
-    return isLoading
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              CircularProgressIndicator(),
-            ],
-          )
-        : Container();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        body: new Stack(
-      children: <Widget>[
-        ClipPath(
-          child: Container(color: Colors.teal.withOpacity(0.8)),
-          clipper: getClipper(),
-        ),
-        Positioned(
-            width: 350.0,
-            left: 4.0,
-            top: MediaQuery.of(context).size.height / 5,
-            child: Column(
-              children: <Widget>[
-                Container(
-                    width: 150.0,
-                    height: 150.0,
+    var user = Provider.of<User>(context);
+
+    return SingleChildScrollView(
+      child: FutureBuilder(
+        future: streams.getCompleteUser(user.uid),
+        builder: (context, snapshot) {
+          tasks = snapshot.data.tasks;
+
+          _controller = new TextEditingController(text: snapshot.data.name);
+
+          return Container(
+              child: Stack(
+                children: [
+                  Container(
+                    child: Stack(
+                      children: [
+                        Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 10, top: 30),
+                              child: IconButton(
+                                icon: Icon(Icons.exit_to_app, color: Colors.white, size: 30),
+                                onPressed: () async {
+                                  await _auth.signOut();
+                                  Navigator.pushReplacementNamed(context, '/landingpage');
+                                },
+                              ),
+                            )
+                        )
+                      ],
+                    ),
+                    height: MediaQuery.of(context).size.height / 5,
+                    width: double.infinity,
                     decoration: BoxDecoration(
-                        color: Colors.red,
-                        image: DecorationImage(
-                            image: NetworkImage(profilePicUrl),
-                            fit: BoxFit.cover),
-                        borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                        boxShadow: [
-                          BoxShadow(blurRadius: 7.0, color: Colors.black)
-                        ])),
-                SizedBox(height: 20.0),
-                getLoader(),
-                SizedBox(height: 65.0),
-                Text(
-                  nickName,
-                  style: TextStyle(
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat'),
-                ),
-                SizedBox(height: 15.0),
-                Text(
-                  'Actor',
-                  style: TextStyle(
-                      fontSize: 17.0,
-                      fontStyle: FontStyle.italic,
-                      fontFamily: 'Montserrat'),
-                ),
-                SizedBox(height: 75.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                        height: 30.0,
-                        width: 95.0,
-                        child: Material(
-                          borderRadius: BorderRadius.circular(20.0),
-                          shadowColor: Colors.greenAccent,
-                          color: Colors.green,
-                          elevation: 7.0,
-                          child: GestureDetector(
-                            onTap: () {
-                              editName(context);
-                            },
-                            child: Center(
-                              child: Text(
-                                'Edit Name',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Montserrat'),
+                        color: Color(0xFF572f8c),
+                        border: Border(
+                        ),
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 7),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 200,
+                            height: 200,
+                            child: Stack(
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    height: 200,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: FittedBox(
+                                        fit: BoxFit.fitHeight,
+                                        child: Align(
+                                            alignment: Alignment.center,
+                                            heightFactor: 0.5,
+                                            widthFactor: 1,
+                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/profile_pictures/DfQpnOQD2jeVFqSMEjypavniVIh1.jpg'))),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: IconButton(
+                                      icon: Icon(Icons.add_circle, size: 40),
+                                      onPressed: () {
+                                      },
+                                    ),
+                                  ),
+                                ]
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Container(
+                            width: 250,
+                            child: TextField(
+                              autofocus: false,
+                              onChanged: (val) {
+                                setState(() => name = val);
+                              },
+                              controller: _controller,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                                labelText: "Name",
+                                prefixText: "df",
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
+                                  focusColor: Color(0xFF572f8c),
+                                  fillColor: Color(0xFF572f8c),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  ),
                               ),
                             ),
                           ),
-                        )),
-                    Container(
-                        height: 30.0,
-                        width: 95.0,
-                        child: Material(
-                          borderRadius: BorderRadius.circular(20.0),
-                          shadowColor: Colors.blueAccent,
-                          color: Colors.blue,
-                          elevation: 7.0,
-                          child: GestureDetector(
-                            onTap: selectPhoto,
-                            child: Center(
-                              child: Text(
-                                'Edit Photo',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Montserrat'),
+                          SizedBox(height: 40),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Personal Tasks", style: TextStyle(fontSize: 24)),
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: snapshot.data.tasks.length,
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          width: double.infinity,
+                                          child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
+                                        );
+                                      }
+                                  ),
+                                  SizedBox(height: 20),
+                                  Text("Groups", style: TextStyle(fontSize: 24)),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: snapshot.data.groups.length,
+                                      itemBuilder: (context, index) {
+                                      return ListTile(
+                                        title: Text(snapshot.data.groups[index].name),
+                                        subtitle: Text(snapshot.data.groups[index].description),
+                                        trailing: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Tasks: " + snapshot.data.groups[index].repeated_tasks.length.toString()),
+                                            SizedBox(height: 2),
+                                            Text("Members: " + snapshot.data.groups[index].members.length.toString())
+                                          ],
+                                        ),
+                                      );
+                                      }
+                                  )
+                                ],
                               ),
                             ),
-                          ),
-                        )),
-                    Container(
-                        height: 30.0,
-                        width: 95.0,
-                        child: Material(
-                          borderRadius: BorderRadius.circular(20.0),
-                          shadowColor: Colors.redAccent,
-                          color: Colors.red,
-                          elevation: 7.0,
-                          child: GestureDetector(
-                            onTap: () {
-                              FirebaseAuth.instance.signOut().then((val) {
-                                Navigator.of(context)
-                                    .pushReplacementNamed('/landingpage');
-                              }).catchError((e) {
-                                print(e);
-                              });
-                            },
-                            child: Center(
-                              child: Text(
-                                'Log out',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Montserrat'),
-                              ),
-                            ),
-                          ),
-                        ))
-                  ],
-                ),
-              ],
-            ))
-      ],
-    ));
+                          )
+                        ],
+                      )
+                    ),
+                  )
+                ],
+              )
+          );
+        },
+      ),
+    );
   }
 }
 
-class getClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = new Path();
-
-    path.lineTo(0.0, size.height / 1.9);
-    path.lineTo(size.width + 125, 0.0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
-    return true;
-  }
-}
