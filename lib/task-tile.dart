@@ -91,39 +91,38 @@ class EmoIconState extends State<EmoIcon> {
     print(init_days);
     if (repeated) {
       if (init_days != null) {
-        // only update
+        print("Update repeated task");
+
         await database.updateRepeatedTask(id, alertTime, days, icon, title);
       }
       else {
-        print("THISHJD");
-        // remove the entry in the database and set a repeated task
+        print("Transition from single to repeated task");
+
+        // remove the single task
+        await database.removeSingleTaskFromGroup(id, group);
         await database.removeSingleTask(id);
 
-        // EITHER HERE
-        // add removeSingleTaskFromGroup
-        await database.removeSingleTaskFromGroup(id, group);
-        // add addRepeatedTaskFromGroup
+        // Add the repeated task
+        await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title);
         await database.addRepeatedTaskToGroup(id, puid, group);
-        await database.createRepeatedTask(id, alertTime, "not certain", puid, days, icon, title);
       }
     }
     else {
       if (init_days == null) {
-        print("THIS IS THE ROUTE 1");
-        // only update
+        print("Update single task");
+
         await database.updateSingleTask(id, alertTime, date, icon, title);
       }
       else {
-        print("THIS IS THE ROUTE 2");
-        // remove entry in the database and set a single task
+        print("Transition from repeated to single task");
+
+        // Remove the repeated task
+        await database.removeRepeatedTaskFromGroup(id, group);
         await database.removeRepeatedTask(id);
 
-        // EITHER HERE
-        // add removeRepeatedTaskFromGroup
-        await database.removeRepeatedTaskFromGroup(id, group);
-        // add addSingleTaskFromGroup
-        await database.addSingleTaskToGroup(id, puid, group);
+        // Add the single task
         await database.createSingleTask(id, alertTime, date, icon, 'not certain', title, puid);
+        await database.addSingleTaskToGroup(id, puid, group);
       }
     }
   }
@@ -154,6 +153,9 @@ class EmoIconState extends State<EmoIcon> {
         expanded = ! expanded;
       });
     }
+    var init_days = widget.task.days;
+
+    print(widget.task.title);
 
     return Stack(
       children: <Widget>[
@@ -175,22 +177,22 @@ class EmoIconState extends State<EmoIcon> {
                           Container(
                             padding: EdgeInsets.only(top: 15),
                             child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    checkedValue = ! checkedValue;
-                                  });
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      color: checkedValue ? Colors.green : Colors.grey,
-                                      border: Border.all(width: 3, color: Colors.blueGrey),
-                                      borderRadius: new BorderRadius.all(
-                                          Radius.circular(6)
-                                      )
-                                  ),
+                              onTap: () {
+                                setState(() {
+                                  checkedValue = ! checkedValue;
+                                });
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    color: checkedValue ? Colors.green : Colors.grey,
+                                    border: Border.all(width: 3, color: Colors.blueGrey),
+                                    borderRadius: new BorderRadius.all(
+                                        Radius.circular(6)
+                                    )
                                 ),
+                              ),
                             ),
                           ),
                           SizedBox(width: 20),
@@ -221,7 +223,6 @@ class EmoIconState extends State<EmoIcon> {
                                   var title = task_name;
                                   var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
                                   var id = widget.task.id;
-                                  var init_days = widget.task.days;
                                   var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
                                   var puid = widget.puid;
                                   var date = _dateTime.millisecondsSinceEpoch.toString();

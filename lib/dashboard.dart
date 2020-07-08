@@ -1,6 +1,7 @@
 //import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collaborative_repitition/models/repeated_task.dart';
+import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:firebase_image/firebase_image.dart';
@@ -37,7 +38,6 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
-    print(streams.getCompleteUser(user.uid));
 
     return SingleChildScrollView(
       child: FutureBuilder(
@@ -45,7 +45,6 @@ class _DashboardPageState extends State<DashboardPage> {
         builder: (context, snapshot) {
           tasks = snapshot.data.tasks;
 
-          print(tasks);
           return Container(
               child: Column(
                 children: [
@@ -181,7 +180,6 @@ class _DashboardPageState extends State<DashboardPage> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data.tasks.length,
                             itemBuilder: (context, index) {
-                              print(snapshot.data.tasks);
                               return Container(
                                 width: double.infinity,
                                 child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -198,23 +196,25 @@ class _DashboardPageState extends State<DashboardPage> {
                       var alertTime = '14:15';
                       var assignee = user.uid;
                       var puid = user.uid;
-                      var days = [false, false, false, false, false, false, false];
+//                      var days = [false, false, false, false, false, false, false];
                       var icon = "😇";
                       var title = "New Task";
                       var group_id = snapshot.data.groups[0];
+                      var date = DateTime.now().millisecondsSinceEpoch.toString();
 
-                      await database.createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title);
+                      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid);
 
-                      await database.addRepeatedTaskToGroup(taskID, puid, group_id);
+                      await database.addSingleTaskToGroup(taskID, puid, group_id);
 
                       setState(() {
-                        var new_task = repeated_task.fromMap({
+                        var new_task = single_task.fromMap({
                           'icon': icon,
                           'id': taskID,
                           'title': title,
                           'creator': user.uid,
-                          'days': days,
-                          'alert_time': alertTime
+                          'days': null,
+                          'date': date,
+                          'alert_time': alertTime,
                         });
                         tasks.add(new_task);
                         

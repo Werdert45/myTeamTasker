@@ -52,8 +52,6 @@ class Streams {
       tasks.add(spec_single_task);
     }
 
-    print(tasks);
-
     var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': user.groups, 'tasks': tasks});
 
     return userWithTasks;

@@ -22,7 +22,6 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
-    print(todayTasks([], []));
 
 
     return Container(
