@@ -33,6 +33,9 @@ class Streams {
     var repeated_tasks = [];
     var single_tasks = [];
 
+    var repeated_full = [];
+    var single_full = [];
+
     for (var i = 0; i < user.groups.length; i++) {
       var groupdata = await groupsCollection.document(user.groups[i]).get();
       var spec_group = group.fromMap(groupdata.data);
@@ -43,14 +46,27 @@ class Streams {
     for (var i = 0; i < repeated_tasks.length; i++) {
       var repeated_tasks_data = await repeatedTasksCollection.document(repeated_tasks[i]).get();
       var spec_repeated_task = repeated_task.fromMap(repeated_tasks_data.data);
-      tasks.add(spec_repeated_task);
+
+      var today = DateTime.now().weekday;
+
+      if (spec_repeated_task.days[today - 1]) {
+        repeated_full.add(spec_repeated_task);
+      }
     }
 
     for (var i = 0; i < single_tasks.length; i++) {
       var single_tasks_data = await singleTasksCollection.document(single_tasks[i]).get();
       var spec_single_task = single_task.fromMap(single_tasks_data.data);
-      tasks.add(spec_single_task);
+
+      var today = DateTime.now();
+      var date = DateTime.fromMillisecondsSinceEpoch(int.parse(spec_single_task.date));
+
+      if ((date.day == today.day) && (date.month == today.month) && (date.year == today.year)) {
+        single_full.add(spec_single_task);
+      }
     }
+
+    tasks = repeated_full + single_full;
 
     var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': user.groups, 'tasks': tasks});
 

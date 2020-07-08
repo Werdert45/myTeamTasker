@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/models/complete_user.dart';
+import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:emoji_picker/emoji_picker.dart';
@@ -86,9 +87,9 @@ class EmoIconState extends State<EmoIcon> {
   }
 
   updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date, group) async {
-    // needs: title, description,
+    // DONT USE init_days but check if model is one of those
 
-    print(init_days);
+
     if (repeated) {
       if (init_days != null) {
         print("Update repeated task");
@@ -154,8 +155,6 @@ class EmoIconState extends State<EmoIcon> {
       });
     }
     var init_days = widget.task.days;
-
-    print(widget.task.title);
 
     return Stack(
       children: <Widget>[
