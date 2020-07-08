@@ -2,7 +2,7 @@ class single_task {
   final String icon;
   final String title;
   final String id;
-  final int date;
+  final String date;
   final String alert_time;
   final String creator;
   final String assignee;

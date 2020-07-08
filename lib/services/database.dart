@@ -52,10 +52,10 @@ class Streams {
       tasks.add(spec_single_task);
     }
 
+    print(tasks);
+
     var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': user.groups, 'tasks': tasks});
 
-    print("TDF");
-    print(userWithTasks);
     return userWithTasks;
   }
 
@@ -94,6 +94,12 @@ class DatabaseService {
   Future addRepeatedTaskToGroup(taskID, puid, group_id) async {
     await groupsCollection.document(group_id).updateData({
       'repeated_tasks': FieldValue.arrayUnion([taskID])
+    });
+  }
+
+  Future addSingleTaskToGroup(taskID, puid, group_id) async {
+    await groupsCollection.document(group_id).updateData({
+      'single_tasks': FieldValue.arrayUnion([taskID])
     });
   }
 

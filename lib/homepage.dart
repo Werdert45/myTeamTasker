@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return new Scaffold(
       bottomNavigationBar: new Material(
-        color: Colors.teal,
+        color: Color(0xFF572f8c),
         child: TabBar(
           controller: tabController,
           tabs: <Widget>[

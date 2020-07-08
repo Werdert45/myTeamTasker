@@ -2,6 +2,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/models/user_db.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/date-functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,15 +22,12 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
+    print(todayTasks([], []));
+
 
     return Container(
         child: Center(
-          child: StreamBuilder(
-              stream: streams.streamUser(user.uid),
-              builder: (BuildContext context, snapshot) {
-                return Text(snapshot.data.groups[0]);
-              }
-          ),
+          child: Text("Testing page")
         )
     );
   }

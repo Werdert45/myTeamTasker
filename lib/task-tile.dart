@@ -63,8 +63,6 @@ class EmoIconState extends State<EmoIcon> {
 
   }
 
-
-
   Future<Null> selectDate(BuildContext context) async {
     var picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime(2100));
     if (picked != null && picked != _dateTime) {
@@ -87,27 +85,44 @@ class EmoIconState extends State<EmoIcon> {
     }
   }
 
-  updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date) async {
+  updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date, group) async {
     // needs: title, description,
+
+    print(init_days);
     if (repeated) {
       if (init_days != null) {
         // only update
         await database.updateRepeatedTask(id, alertTime, days, icon, title);
       }
       else {
+        print("THISHJD");
         // remove the entry in the database and set a repeated task
         await database.removeSingleTask(id);
+
+        // EITHER HERE
+        // add removeSingleTaskFromGroup
+        await database.removeSingleTaskFromGroup(id, group);
+        // add addRepeatedTaskFromGroup
+        await database.addRepeatedTaskToGroup(id, puid, group);
         await database.createRepeatedTask(id, alertTime, "not certain", puid, days, icon, title);
       }
     }
     else {
       if (init_days == null) {
+        print("THIS IS THE ROUTE 1");
         // only update
         await database.updateSingleTask(id, alertTime, date, icon, title);
       }
       else {
+        print("THIS IS THE ROUTE 2");
         // remove entry in the database and set a single task
         await database.removeRepeatedTask(id);
+
+        // EITHER HERE
+        // add removeRepeatedTaskFromGroup
+        await database.removeRepeatedTaskFromGroup(id, group);
+        // add addSingleTaskFromGroup
+        await database.addSingleTaskToGroup(id, puid, group);
         await database.createSingleTask(id, alertTime, date, icon, 'not certain', title, puid);
       }
     }
@@ -202,7 +217,7 @@ class EmoIconState extends State<EmoIcon> {
                             onPressed: editTask,
                             child: expanded ? GestureDetector(
                                 child: Text("SAVE"),
-                                onTap: () {
+                                onTap: () async {
                                   var title = task_name;
                                   var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
                                   var id = widget.task.id;
@@ -210,9 +225,13 @@ class EmoIconState extends State<EmoIcon> {
                                   var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
                                   var puid = widget.puid;
                                   var date = _dateTime.millisecondsSinceEpoch.toString();
+                                  var group = widget.group;
 
-                                  updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date);
-                                  saveTask();
+                                  await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group);
+                                  await saveTask();
+
+                                  Navigator.pushReplacementNamed(
+                                      context, '/homepage');
                                 }) : Text("EDIT"),
                           )
                         ],
@@ -255,6 +274,13 @@ class EmoIconState extends State<EmoIcon> {
                                     onChanged: (bool value) {
                                       setState(() {
                                         repeated = ! repeated;
+
+                                        if (repeated) {
+                                          days_show = [false, false, false, false, false, false, false];
+                                        }
+                                        else {
+                                          days_show = null;
+                                        }
                                       });
 
                                     },
@@ -414,6 +440,8 @@ class EmoIconState extends State<EmoIcon> {
                                   database.removeSingleTaskFromGroup(widget.task.id, widget.group);
                                 }
 
+                                Navigator.pushReplacementNamed(
+                                    context, '/homepage');
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width - 50,
