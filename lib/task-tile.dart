@@ -230,8 +230,8 @@ class EmoIconState extends State<EmoIcon> {
                                   await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group);
                                   await saveTask();
 
-                                  Navigator.pushReplacementNamed(
-                                      context, '/homepage');
+//                                  Navigator.pushReplacementNamed(
+//                                      context, '/homepage');
                                 }) : Text("EDIT"),
                           )
                         ],
@@ -440,8 +440,8 @@ class EmoIconState extends State<EmoIcon> {
                                   database.removeSingleTaskFromGroup(widget.task.id, widget.group);
                                 }
 
-                                Navigator.pushReplacementNamed(
-                                    context, '/homepage');
+//                                Navigator.pushReplacementNamed(
+//                                    context, '/homepage');
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width - 50,

@@ -33,12 +33,15 @@ class Streams {
     var repeated_tasks = [];
     var single_tasks = [];
 
+    var groups = [];
+
     var repeated_full = [];
     var single_full = [];
 
     for (var i = 0; i < user.groups.length; i++) {
       var groupdata = await groupsCollection.document(user.groups[i]).get();
       var spec_group = group.fromMap(groupdata.data);
+      groups.add(spec_group);
       repeated_tasks = repeated_tasks + spec_group.repeated_tasks;
       single_tasks = single_tasks + spec_group.single_tasks;
     }
@@ -68,7 +71,7 @@ class Streams {
 
     tasks = repeated_full + single_full;
 
-    var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': user.groups, 'tasks': tasks});
+    var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': groups, 'tasks': tasks});
 
     return userWithTasks;
   }
