@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'dashboard.dart';
 import 'profilepage.dart';
-import 'chatpage.dart';
+import 'calendarpage.dart';
 import 'groups.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage>
         controller: tabController,
         children: <Widget>[
           DashboardPage(),
-          ChatPage(),
+          CalendarScreen(),
           GroupsPage(),
           ProfilePage()
         ],
