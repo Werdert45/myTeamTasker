@@ -38,6 +38,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
+    print(user.uid);
 
     return SingleChildScrollView(
       child: FutureBuilder(
@@ -75,12 +76,12 @@ class _DashboardPageState extends State<DashboardPage> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: FittedBox(
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.scaleDown,
                                   child: Align(
                                       alignment: Alignment.center,
                                       heightFactor: 0.5,
                                       widthFactor: 1,
-                                      child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/profile_pictures/DfQpnOQD2jeVFqSMEjypavniVIh1.jpg'))),
+                                      child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + snapshot.data.profile_picture.toString()))),
                                 ),
                               ),
                             )

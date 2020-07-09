@@ -102,12 +102,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child: FittedBox(
-                                        fit: BoxFit.fitHeight,
+                                        fit: BoxFit.scaleDown,
                                         child: Align(
                                             alignment: Alignment.center,
                                             heightFactor: 0.5,
                                             widthFactor: 1,
-                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/profile_pictures/DfQpnOQD2jeVFqSMEjypavniVIh1.jpg'))),
+                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + snapshot.data.profile_picture.toString()))),
                                       ),
                                     ),
                                   ),

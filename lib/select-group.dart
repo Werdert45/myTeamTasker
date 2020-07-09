@@ -16,6 +16,7 @@ class SelectGroupPage extends StatefulWidget {
 class _SelectGroupPageState extends State<SelectGroupPage> {
 
   final AuthService _auth = AuthService();
+  final DatabaseService database = DatabaseService();
   final _formkey = GlobalKey<FormState>();
 
   String _group_code = "";
@@ -23,18 +24,6 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
-
-    joinGroup(uid, group_code) async {
-      try {
-        var check = await DatabaseService(uid: uid).addToGroup(uid, group_code);
-
-        if (check == "finished") {
-          Navigator.pop(context);
-        }
-      } catch (e) {
-        return e;
-      }
-    }
 
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -104,7 +93,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                         )
                     ),
                     SizedBox(height: 20),
-                    secondaryRoundButton(Color(0xFF572f8c), Colors.white, "JOIN", joinGroup(user.uid, _group_code), 310, 30),
+                    secondaryRoundButton(Color(0xFF572f8c), Colors.white, "JOIN", database.addToGroup(user.uid, _group_code), 310, 30),
                     SizedBox(height: 30),
                     Container(
                       width: MediaQuery.of(context).size.width - 40,
