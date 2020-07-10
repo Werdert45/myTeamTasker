@@ -134,12 +134,11 @@ class Streams {
     var month = day_of_the_year.month;
     var year = day_of_the_year.year;
 
-    for (int k = 0; k < 365; k++) {
-      var added_day = day_of_the_year.add(Duration(days: k));
-      per_day[DateTime(year, month, day)] = {'name': 'NoNO', 'isDone': false};
-//        per_day[[year, month, day]] = [];
-    }
-//    print(per_day.runtimeType);
+//    for (int k = 0; k < 365; k++) {
+//      var added_day = day_of_the_year.add(Duration(days: k));
+//      per_day[DateTime(year, month, day)] = {'name': 'NoNO', 'icon': '😊', 'isDone': false, 'days': null, 'alert_time': null};
+////        per_day[[year, month, day]] = [];
+//    }
 
 
     // Per task in the total task list
@@ -151,12 +150,19 @@ class Streams {
         var month = date.month;
         var year = date.year;
 
-        per_day[DateTime(year, month, day)] = {'name': tasks[i].title, 'isDone': false};
+        if (per_day.containsKey(DateTime(year, month, day))) {
+          // Second task
+          print("second task");
+
+          per_day[DateTime(year, month, day)] += {'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time};
+        } else {
+          per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+        }
+
 //        per_day[[year, month, day]] = tasks[i];
       }
 
       else {
-
         // Set day of today
         var day_of_the_year = DateTime.now();
 
@@ -168,8 +174,13 @@ class Streams {
             var month = day_of_the_year.month;
             var year = day_of_the_year.year;
 
-            per_day[DateTime(year, month, day)] = {'name': tasks[i].title, 'isDone': false};
-//            per_day[[year, month, day]] = tasks[i];
+            if (per_day.containsKey(DateTime(year, month, day))) {
+//              print(per_day[DateTime(year, month, day)] += {'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time});
+
+              per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+            } else {
+              per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+            }
           }
 
           day_of_the_year = day_of_the_year.add(Duration(days: 1));
@@ -221,6 +232,7 @@ class DatabaseService {
   }
 
   Future addSingleTaskToGroup(taskID, puid, group_id) async {
+    print(group_id);
     await groupsCollection.document(group_id).updateData({
       'single_tasks': FieldValue.arrayUnion([taskID])
     });

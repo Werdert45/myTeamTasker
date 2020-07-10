@@ -200,7 +200,7 @@ class _DashboardPageState extends State<DashboardPage> {
 //                      var days = [false, false, false, false, false, false, false];
                       var icon = "😇";
                       var title = "New Task";
-                      var group_id = snapshot.data.groups[0];
+                      var group_id = snapshot.data.groups[0].code;
                       var date = DateTime.now().millisecondsSinceEpoch.toString();
 
                       await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid);

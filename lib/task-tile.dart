@@ -225,7 +225,7 @@ class EmoIconState extends State<EmoIcon> {
                                   var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
                                   var puid = widget.puid;
                                   var date = _dateTime.millisecondsSinceEpoch.toString();
-                                  var group = widget.group;
+                                  var group = widget.group.code;
 
                                   await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group);
                                   await saveTask();
@@ -430,14 +430,14 @@ class EmoIconState extends State<EmoIcon> {
                               onPressed: () {
                                 if (repeated) {
                                   database.removeRepeatedTask(widget.task.id);
-                                  database.removeRepeatedTaskFromGroup(widget.task.id, widget.group);
+                                  database.removeRepeatedTaskFromGroup(widget.task.id, widget.group.code);
                                   widget.parent.setState(() {
                                     widget.parent.tasks.removeWhere((item) => item == widget.task.id);
                                   });
                                 }
                                 else {
                                   database.removeSingleTask(widget.task.id);
-                                  database.removeSingleTaskFromGroup(widget.task.id, widget.group);
+                                  database.removeSingleTaskFromGroup(widget.task.id, widget.group.code);
                                 }
 
 //                                Navigator.pushReplacementNamed(
