@@ -25,6 +25,7 @@ class EmoIconState extends State<EmoIcon> {
 
 
   var repeated = false;
+  var shared = false;
   var setAlert;
   var task_name;
 
@@ -86,45 +87,33 @@ class EmoIconState extends State<EmoIcon> {
     }
   }
 
-  updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date, group) async {
-    // DONT USE init_days but check if model is one of those
+  updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated) async {
+    // Remove all from the specific task
+    await database.completeReplacementTask(id, group, puid, repeated, shared, init_repeated, init_shared);
 
-
-    if (repeated) {
-      if (init_days != null) {
-        print("Update repeated task");
-
-        await database.updateRepeatedTask(id, alertTime, days, icon, title);
-      }
-      else {
-        print("Transition from single to repeated task");
-
-        // remove the single task
-        await database.removeSingleTaskFromGroup(id, group);
-        await database.removeSingleTask(id);
-
-        // Add the repeated task
-        await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title);
-        await database.addRepeatedTaskToGroup(id, puid, group);
-      }
+    // Check the conditions and add accordingly
+    if (repeated && shared) {
+      // add to repeated in group
+      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared);
+      await database.addRepeatedTask(id, puid, group, shared);
     }
-    else {
-      if (init_days == null) {
-        print("Update single task");
 
-        await database.updateSingleTask(id, alertTime, date, icon, title);
-      }
-      else {
-        print("Transition from repeated to single task");
+    else if (repeated && !shared) {
+      // add to repeated in user
+      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared);
+      await database.addRepeatedTask(id, puid, group, shared);
+    }
 
-        // Remove the repeated task
-        await database.removeRepeatedTaskFromGroup(id, group);
-        await database.removeRepeatedTask(id);
+    else if (!repeated && shared) {
+      // add to single in group
+      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared);
+      await database.addSingleTask(id, puid, group, shared);
+    }
 
-        // Add the single task
-        await database.createSingleTask(id, alertTime, date, icon, 'not certain', title, puid);
-        await database.addSingleTaskToGroup(id, puid, group);
-      }
+    else if (!repeated && !shared) {
+      // add to single in user
+      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared);
+      await database.addSingleTask(id, puid, group, shared);
     }
   }
 
@@ -226,8 +215,10 @@ class EmoIconState extends State<EmoIcon> {
                                   var puid = widget.puid;
                                   var date = _dateTime.millisecondsSinceEpoch.toString();
                                   var group = widget.group.code;
+                                  var init_shared = widget.task.shared;
+                                  var init_repeated = widget.task.repeated;
 
-                                  await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group);
+                                  await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated);
                                   await saveTask();
 
 //                                  Navigator.pushReplacementNamed(
@@ -237,7 +228,7 @@ class EmoIconState extends State<EmoIcon> {
                         ],
                       ),
                       Container(
-                        height: expanded ? 300 : 0,
+                        height: expanded ? 340 : 0,
                         width: MediaQuery.of(context).size.width - 50,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,6 +256,7 @@ class EmoIconState extends State<EmoIcon> {
                                 buildInput('t', 25.0)
                               ],
                             ),
+                            SizedBox(height: 5),
                             SizedBox(height: 5),
                             Row(
                                 children: [
@@ -413,7 +405,7 @@ class EmoIconState extends State<EmoIcon> {
                                         value: setAlert,
                                       ),
                                       SizedBox(width: 5),
-                                      Text("Receive alert:      " + (setAlert ? _time.hour.toString() + ":" + _time.minute.toString() : "")),
+                                      Text("Receive alert:  " + (setAlert ? _time.hour.toString() + ":" + _time.minute.toString() : "")),
                                     ],
                                   ),
                                   GestureDetector(
@@ -421,11 +413,30 @@ class EmoIconState extends State<EmoIcon> {
                                       selectTime(context);
                                     },
                                     child: Text("EDIT"),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+
+                                children: [
+                                  Text("Personal Task"),
+                                  Switch(
+                                    activeColor: Colors.grey,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        shared = !shared;
+                                      });
+                                    },
+                                    value: shared,
+                                  ),
+                                  Text("Shared Task"),
+                                ]
+                            ),
+                            SizedBox(height: 5),
                             RaisedButton(
                               onPressed: () {
                                 if (repeated) {

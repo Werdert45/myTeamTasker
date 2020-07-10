@@ -38,8 +38,6 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
-    print(user.uid);
-
     return SingleChildScrollView(
       child: FutureBuilder(
         future: streams.getCompleteUser(user.uid),
@@ -202,10 +200,11 @@ class _DashboardPageState extends State<DashboardPage> {
                       var title = "New Task";
                       var group_id = snapshot.data.groups[0].code;
                       var date = DateTime.now().millisecondsSinceEpoch.toString();
+                      var shared = false;
 
-                      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid);
+                      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
 
-                      await database.addSingleTaskToGroup(taskID, puid, group_id);
+                      await database.addSingleTask(taskID, puid, group_id, shared);
 
                       setState(() {
                         var new_task = single_task.fromMap({
