@@ -53,7 +53,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             future: streams.getCalendar(user.uid),
             builder: (context, snapshot) {
               Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
-              calendar.forEach((k,v) => _events[k] = [v]);
+              calendar.forEach((k,v) => _events[k] = v);
 
               print(_events);
 
@@ -141,6 +141,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
+
+          print(index);
           return Container(
             decoration: BoxDecoration(
               border: Border(
