@@ -136,10 +136,9 @@ class Streams {
 
     for (int k = 0; k < 365; k++) {
       var added_day = day_of_the_year.add(Duration(days: k));
-      per_day[DateTime(year, month, day)] = {'name': 'NoNO', 'isDone': false};
+      per_day[DateTime(year, month, day)] = {'name': 'NoNO', 'icon': '😊', 'isDone': false, 'days': null, 'alert_time': null};
 //        per_day[[year, month, day]] = [];
     }
-//    print(per_day.runtimeType);
 
 
     // Per task in the total task list
@@ -151,7 +150,7 @@ class Streams {
         var month = date.month;
         var year = date.year;
 
-        per_day[DateTime(year, month, day)] = {'name': tasks[i].title, 'isDone': false};
+        per_day[DateTime(year, month, day)] = {'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time};
 //        per_day[[year, month, day]] = tasks[i];
       }
 
@@ -168,7 +167,7 @@ class Streams {
             var month = day_of_the_year.month;
             var year = day_of_the_year.year;
 
-            per_day[DateTime(year, month, day)] = {'name': tasks[i].title, 'isDone': false};
+            per_day[DateTime(year, month, day)] = {'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time};
 //            per_day[[year, month, day]] = tasks[i];
           }
 
