@@ -3,10 +3,12 @@ class user_db {
   final String email;
   final List groups;
   final String profile_picture;
-  final List personal_tasks;
+  final List personal_repeated_tasks;
+  final List personal_single_tasks;
 
 
-  user_db({this.email, this.name, this.groups, this.profile_picture, this.personal_tasks});
+
+  user_db({this.email, this.name, this.groups, this.profile_picture, this.personal_repeated_tasks, this.personal_single_tasks});
 
   factory user_db.fromMap(Map data) {
     data = data ?? {};
@@ -15,7 +17,8 @@ class user_db {
       email: data['email'] ?? '',
       groups: data['groups'] ?? [],
       profile_picture: data['profile_picture'] ?? null,
-      personal_tasks: data['personal_tasks'] ?? []
+      personal_repeated_tasks: data['personal_repeated_tasks'] ?? [],
+      personal_single_tasks: data['personal_single_tasks'] ?? []
     );
   }
 

@@ -6,8 +6,10 @@ class repeated_task {
   final String alert_time;
   final String creator;
   final String assignee;
+  final bool shared;
+  final bool repeated;
 
-  repeated_task({this.icon, this.id, this.title, this.days, this.creator, this.alert_time, this.assignee});
+  repeated_task({this.icon, this.id, this.title, this.days, this.creator, this.alert_time, this.assignee, this.shared, this.repeated});
 
 
   factory repeated_task.fromMap(Map data) {
@@ -20,6 +22,8 @@ class repeated_task {
         days: data['days'] ?? null,
         alert_time: data['alert_time'] ?? null,
         assignee: data['assignee'] ?? '',
+        shared: data['shared'] ?? false,
+        repeated: data['repeated'] ?? false
     );
   }
 }

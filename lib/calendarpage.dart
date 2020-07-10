@@ -55,8 +55,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
               Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
               calendar.forEach((k,v) => _events[k] = v);
 
-              print(_events);
-
               if (snapshot.hasData && !snapshot.hasError) {
                 return Container(
                   width: double.infinity,
