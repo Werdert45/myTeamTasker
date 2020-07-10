@@ -75,6 +75,112 @@ class Streams {
 
     return userWithTasks;
   }
+  
+  getCalendar(uid) async {
+
+    final Map<DateTime, dynamic> per_day = new Map();
+//    per_day = Map<DateTime, dynamic>.from(per_day);
+//    print(per_day.runtimeType);
+    
+    // Get the user data and set model
+    var userdata = await usersCollection.document(uid).get();
+    var user = user_db.fromMap(userdata.data);
+
+    // Check for the personal tasks
+    var tasks = [];
+    user.personal_tasks.isNotEmpty ? tasks.add(user.personal_tasks) : null;
+
+    var repeated_tasks = [];
+    var single_tasks = [];
+
+    var groups = [];
+
+    var repeated_full = [];
+    var single_full = [];
+
+    // Get all of the groups
+    for (var i = 0; i < user.groups.length; i++) {
+      var groupdata = await groupsCollection.document(user.groups[i]).get();
+      var spec_group = group.fromMap(groupdata.data);
+      groups.add(spec_group);
+      repeated_tasks = repeated_tasks + spec_group.repeated_tasks;
+      single_tasks = single_tasks + spec_group.single_tasks;
+    }
+
+    // Get all of the repeated tasks
+    for (var i = 0; i < repeated_tasks.length; i++) {
+      var repeated_tasks_data = await repeatedTasksCollection.document(repeated_tasks[i]).get();
+      var spec_repeated_task = repeated_task.fromMap(repeated_tasks_data.data);
+
+      var today = DateTime.now().weekday;
+
+      repeated_full.add(spec_repeated_task);
+    }
+
+    for (var i = 0; i < single_tasks.length; i++) {
+      var single_tasks_data = await singleTasksCollection.document(single_tasks[i]).get();
+      var spec_single_task = single_task.fromMap(single_tasks_data.data);
+
+      var today = DateTime.now();
+      var date = DateTime.fromMillisecondsSinceEpoch(int.parse(spec_single_task.date));
+
+      single_full.add(spec_single_task);
+    }
+
+    tasks = repeated_full + single_full;
+
+    var day_of_the_year = DateTime.now();
+    var day = day_of_the_year.day;
+    var month = day_of_the_year.month;
+    var year = day_of_the_year.year;
+
+    for (int k = 0; k < 365; k++) {
+      var added_day = day_of_the_year.add(Duration(days: k));
+      per_day[DateTime(year, month, day)] = {'name': 'NoNO', 'isDone': false};
+//        per_day[[year, month, day]] = [];
+    }
+//    print(per_day.runtimeType);
+
+
+    // Per task in the total task list
+    for (int i = 0; i < tasks.length; i++) {
+      // If task is a single task
+      if (tasks[i].days == null) {
+        var date = DateTime.fromMillisecondsSinceEpoch(int.parse(tasks[i].date));
+        var day = date.day;
+        var month = date.month;
+        var year = date.year;
+
+        per_day[DateTime(year, month, day)] = {'name': tasks[i].title, 'isDone': false};
+//        per_day[[year, month, day]] = tasks[i];
+      }
+
+      else {
+
+        // Set day of today
+        var day_of_the_year = DateTime.now();
+
+        // Loop over a whole year
+        for (int j = 0; j < 364; j++) {
+
+          if (tasks[i].days[day_of_the_year.weekday - 1]) {
+            var day = day_of_the_year.day;
+            var month = day_of_the_year.month;
+            var year = day_of_the_year.year;
+
+            per_day[DateTime(year, month, day)] = {'name': tasks[i].title, 'isDone': false};
+//            per_day[[year, month, day]] = tasks[i];
+          }
+
+          day_of_the_year = day_of_the_year.add(Duration(days: 1));
+        }
+      }
+
+    }
+
+    // Return a map with the days of the next year 
+    return per_day;
+  }
 
 
   Stream<DocumentSnapshot> get users {

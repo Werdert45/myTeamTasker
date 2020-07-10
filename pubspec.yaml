@@ -35,7 +35,7 @@ dependencies:
   provider:
   uuid: 2.2.0
   firebase_image: ^0.1.6
-
+  flutter_clean_calendar: ^1.0.2+1
 
 
   # The following adds the Cupertino Icons font to your application.
