@@ -171,9 +171,9 @@ class Streams {
 
         if (per_day.containsKey(DateTime(year, month, day))) {
           // Second task
-          per_day[DateTime(year, month, day)] += {'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time};
+          per_day[DateTime(year, month, day)] += {'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time};
         } else {
-          per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+          per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
         }
 
 //        per_day[[year, month, day]] = tasks[i];
@@ -192,9 +192,9 @@ class Streams {
             var year = day_of_the_year.year;
 
             if (per_day.containsKey(DateTime(year, month, day))) {
-              per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+              per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
             } else {
-              per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': false, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+              per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
             }
           }
 
@@ -288,7 +288,8 @@ class DatabaseService {
       'id': taskID,
       'title': title,
       'shared': shared,
-      'repeated': false
+      'repeated': false,
+      'finished': false
     });
   }
 
@@ -302,7 +303,8 @@ class DatabaseService {
       'id': taskID,
       'title': title,
       'shared': shared,
-      'repeated': true
+      'repeated': true,
+      'finished': false
     });
   }
 
@@ -339,6 +341,18 @@ class DatabaseService {
     else {
       print("No clue");
     }
+  }
+
+  Future updateFinishedStatusSingle(taskID, status) async {
+    await singleTasksCollection.document(taskID).updateData({
+      'finished': status
+    });
+  }
+
+  Future updateFinishedStatusRepeated(taskID, status) async {
+    await repeatedTasksCollection.document(taskID).updateData({
+      'finished': status
+    });
   }
 
   Future createUser(puid, name, email) async {

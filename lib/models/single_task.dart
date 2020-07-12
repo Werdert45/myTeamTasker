@@ -9,8 +9,9 @@ class single_task {
   final List days;
   final bool shared;
   final bool repeated;
+  final bool finished;
 
-  single_task({this.icon, this.id, this.title, this.date, this.alert_time, this.creator, this.assignee, this.days, this.shared, this.repeated});
+  single_task({this.icon, this.id, this.title, this.date, this.alert_time, this.creator, this.assignee, this.days, this.shared, this.repeated, this.finished});
 
 
   factory single_task.fromMap(Map data) {
@@ -25,7 +26,8 @@ class single_task {
       creator: data['creator'] ?? '',
       assignee: data['assignee'] ?? '',
       shared: data['shared'] ?? false,
-      repeated: data['repeated'] ?? false
+      repeated: data['repeated'] ?? false,
+      finished: data['finished'] ?? false
     );
   }
 }
