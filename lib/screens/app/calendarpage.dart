@@ -140,7 +140,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
 
-          print(index);
           return Container(
             decoration: BoxDecoration(
               border: Border(

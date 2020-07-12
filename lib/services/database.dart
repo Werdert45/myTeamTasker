@@ -153,6 +153,7 @@ class Streams {
     }
 
     tasks = repeated_full + single_full;
+    print(tasks);
 
 
     var day_of_the_year = DateTime.now();
@@ -162,8 +163,12 @@ class Streams {
 
     // Per task in the total task list
     for (int i = 0; i < tasks.length; i++) {
+//      print(tasks[i] == single_task);
+//      print(per_day);
+      print(tasks[i]);
+
       // If task is a single task
-      if (tasks[i].days == null) {
+      if (!tasks[i].repeated) {
         var date = DateTime.fromMillisecondsSinceEpoch(int.parse(tasks[i].date));
         var day = date.day;
         var month = date.month;
@@ -171,12 +176,10 @@ class Streams {
 
         if (per_day.containsKey(DateTime(year, month, day))) {
           // Second task
-          per_day[DateTime(year, month, day)] += {'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time};
+          per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': null, 'alert_time': tasks[i].alert_time}];
         } else {
-          per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+          per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': null, 'alert_time': tasks[i].alert_time}];
         }
-
-//        per_day[[year, month, day]] = tasks[i];
       }
 
       else {
@@ -201,7 +204,6 @@ class Streams {
           day_of_the_year = day_of_the_year.add(Duration(days: 1));
         }
       }
-
     }
 
     // Return a map with the days of the next year 
