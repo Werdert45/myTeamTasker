@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/models/complete_user.dart';
+import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class EmoIconState extends State<EmoIcon> {
     widget.task.alert_time != null ? setAlert = true : setAlert = false;
     isShowSticker = false;
     categories = Emoji(name: 'Sailboat', emoji: widget.task.icon);
-    checkedValue = false;
+    checkedValue = widget.task.finished;
     task_name = widget.task.title;
     _controller = new TextEditingController(text: task_name);
     _dateTime = DateTime.now();
@@ -84,6 +85,20 @@ class EmoIconState extends State<EmoIcon> {
       setState(() {
         _time = picked;
       });
+    }
+  }
+
+  updateFinishedStatus(taskID, status) async {
+    if (widget.task is repeated_task) {
+      await database.updateFinishedStatusRepeated(taskID, status);
+    }
+
+    else if (widget.task is single_task) {
+      await database.updateFinishedStatusSingle(taskID, status);
+    }
+
+    else {
+      print('Houston we have a problem');
     }
   }
 
@@ -145,6 +160,8 @@ class EmoIconState extends State<EmoIcon> {
     }
     var init_days = widget.task.days;
 
+
+
     return Stack(
       children: <Widget>[
         Column(
@@ -156,319 +173,327 @@ class EmoIconState extends State<EmoIcon> {
                   width: MediaQuery.of(context).size.width - 30,
                   height: expanded ? 400.0 : 60.0,
                   duration: Duration(milliseconds: 500),
-                  child: Column(
+                  child: Stack(
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(top: 15),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  checkedValue = ! checkedValue;
-                                });
-                              },
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                    color: checkedValue ? Colors.green : Colors.grey,
-                                    border: Border.all(width: 3, color: Colors.blueGrey),
-                                    borderRadius: new BorderRadius.all(
-                                        Radius.circular(6)
-                                    )
+                      Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(top: 15),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    checkedValue = ! checkedValue;
+
+                                    updateFinishedStatus(widget.task.id, checkedValue);
+
+                                  });
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      color: checkedValue ? Colors.green : Colors.grey,
+                                      border: Border.all(width: 3, color: Colors.blueGrey),
+                                      borderRadius: new BorderRadius.all(
+                                          Radius.circular(6)
+                                      )
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 20),
-                          Column(
-                            children: [
-                              SizedBox(height: 15),
-                              Container(
-                                  child: buildInput("t", 25.0)
-                              )
-                            ],
-                          ),
-                          SizedBox(width: 25),
-                          Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            SizedBox(width: 20),
+                            Column(
                               children: [
-                                SizedBox(height: 10),
-                                (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: Color(0xFF572f8c), fontSize: 20))) : Text("Loading ...")),
+                                SizedBox(height: 15),
+                                Container(
+                                    child: buildInput("t", 25.0)
+                                )
+                              ],
+                            ),
+                            SizedBox(width: 25),
+                            Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 10),
+                                  (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: Color(0xFF572f8c), fontSize: 20))) : Text("Loading ...")),
 //                      SizedBox(height: 3),
-                                Text("8 AM to 12 AM", style: TextStyle(color: Color(0xFFc6bed2), fontSize: 12))
-                              ]
-                          ),
-                          FlatButton(
-                            onPressed: editTask,
-                            child: expanded ? GestureDetector(
-                                child: Text("SAVE"),
-                                onTap: () async {
-                                  var title = task_name;
-                                  var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-                                  var id = widget.task.id;
-                                  var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-                                  var puid = widget.puid;
-                                  var date = _dateTime.millisecondsSinceEpoch.toString();
-                                  var group = widget.group.code;
-                                  var init_shared = widget.task.shared;
-                                  var init_repeated = widget.task.repeated;
+                                  Text("8 AM to 12 AM", style: TextStyle(color: Color(0xFFc6bed2), fontSize: 12))
+                                ]
+                            ),
+                            FlatButton(
+                              onPressed: editTask,
+                              child: expanded ? GestureDetector(
+                                  child: Text("SAVE"),
+                                  onTap: () async {
+                                    var title = task_name;
+                                    var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                                    var id = widget.task.id;
+                                    var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                                    var puid = widget.puid;
+                                    var date = _dateTime.millisecondsSinceEpoch.toString();
+                                    var group = widget.group.code;
+                                    var init_shared = widget.task.shared;
+                                    var init_repeated = widget.task.repeated;
 
-                                  await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated);
-                                  await saveTask();
+                                    await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated);
+                                    await saveTask();
 
 //                                  Navigator.pushReplacementNamed(
 //                                      context, '/homepage');
-                                }) : Text("EDIT"),
-                          )
-                        ],
-                      ),
-                      Container(
-                        height: expanded ? 340 : 0,
-                        width: MediaQuery.of(context).size.width - 50,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 1.5,
-                                  child: TextField(
-                                    autofocus: false,
-                                    onChanged: (val) {
-                                      setState(() => task_name = val);
-                                    },
-                                    controller: _controller,
-                                    decoration: InputDecoration(
-                                      hintText: "Task Name",
-                                      border: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                      enabledBorder: InputBorder.none,
-                                      errorBorder: InputBorder.none,
-                                      disabledBorder: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                buildInput('t', 25.0)
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            SizedBox(height: 5),
-                            Row(
-                                children: [
-                                  Text("Single Time Task"),
-                                  Switch(
-                                    activeColor: Colors.grey,
-                                    onChanged: (bool value) {
-                                      setState(() {
-                                        repeated = ! repeated;
-
-                                        if (repeated) {
-                                          days_show = [false, false, false, false, false, false, false];
-                                        }
-                                        else {
-                                          days_show = null;
-                                        }
-                                      });
-
-                                    },
-                                    value: repeated,
-                                  ),
-                                  Text("Repeated Task"),
-                                ]
-                            ),
-                            Container(
-                              child: repeated ? Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text("Mon"),
-                                      Checkbox(
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            days_show[0] = value;
-                                          });
-                                        },
-                                        value: days_show[0],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("Tue"),
-                                      Checkbox(
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            days_show[1] = value;
-                                          });
-                                        },
-                                        value: days_show[1],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("Wed"),
-                                      Checkbox(
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            days_show[2] = value;
-                                          });
-                                        },
-                                        value: days_show[2],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("Thu"),
-                                      Checkbox(
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            days_show[3] = value;
-                                          });
-                                        },
-                                        value: days_show[3],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("Fri"),
-                                      Checkbox(
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            days_show[4] = value;
-                                          });
-                                        },
-                                        value: days_show[4],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("Sat"),
-                                      Checkbox(
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            days_show[5] = value;
-                                          });
-                                        },
-                                        value: days_show[5],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("Sun"),
-                                      Checkbox(
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            days_show[6] = value;
-                                          });
-                                        },
-                                        value: days_show[6],
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ) :
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text("Task date: " + _dateTime.day.toString() + " " + months_in_year[_dateTime.month] + " " + _dateTime.year.toString()),
-                                  GestureDetector(
-                                    child: Text("EDIT"),
-                                    onTap: () {selectDate(context);},
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            setAlert = value;
-                                          });
-                                        },
-                                        value: setAlert,
-                                      ),
-                                      SizedBox(width: 5),
-                                      Text("Receive alert:  " + (setAlert ? _time.hour.toString() + ":" + _time.minute.toString() : "")),
-                                    ],
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      selectTime(context);
-                                    },
-                                    child: Text("EDIT"),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-
-                                children: [
-                                  Text("Personal Task"),
-                                  Switch(
-                                    activeColor: Colors.grey,
-                                    onChanged: (bool value) {
-                                      setState(() {
-                                        shared = !shared;
-                                      });
-                                    },
-                                    value: shared,
-                                  ),
-                                  Text("Shared Task"),
-                                ]
-                            ),
-                            SizedBox(height: 5),
-                            RaisedButton(
-                              onPressed: () {
-                                if (repeated) {
-                                  database.removeRepeatedTask(widget.task.id);
-                                  database.removeRepeatedTaskFromGroup(widget.task.id, widget.group.code);
-                                  widget.parent.setState(() {
-                                    widget.parent.tasks.removeWhere((item) => item == widget.task.id);
-                                  });
-                                }
-                                else {
-                                  database.removeSingleTask(widget.task.id);
-                                  database.removeSingleTaskFromGroup(widget.task.id, widget.group.code);
-                                }
-
-//                                Navigator.pushReplacementNamed(
-//                                    context, '/homepage');
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width - 50,
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.delete),
-                                    SizedBox(width: 8),
-                                    Text("Delete Task")
-                                  ],
-                                ),
-                              ),
+                                  }) : Text("EDIT"),
                             )
                           ],
                         ),
-                      )
-                    ],
+                        Container(
+                          height: expanded ? 340 : 0,
+                          width: MediaQuery.of(context).size.width - 50,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width / 1.5,
+                                    child: TextField(
+                                      autofocus: false,
+                                      onChanged: (val) {
+                                        setState(() => task_name = val);
+                                      },
+                                      controller: _controller,
+                                      decoration: InputDecoration(
+                                        hintText: "Task Name",
+                                        border: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        errorBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                  buildInput('t', 25.0)
+                                ],
+                              ),
+                              SizedBox(height: 5),
+                              SizedBox(height: 5),
+                              Row(
+                                  children: [
+                                    Text("Single Time Task"),
+                                    Switch(
+                                      activeColor: Colors.grey,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          repeated = ! repeated;
+
+                                          if (repeated) {
+                                            days_show = [false, false, false, false, false, false, false];
+                                          }
+                                          else {
+                                            days_show = null;
+                                          }
+                                        });
+
+                                      },
+                                      value: repeated,
+                                    ),
+                                    Text("Repeated Task"),
+                                  ]
+                              ),
+                              Container(
+                                child: repeated ? Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text("Mon"),
+                                        Checkbox(
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              days_show[0] = value;
+                                            });
+                                          },
+                                          value: days_show[0],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text("Tue"),
+                                        Checkbox(
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              days_show[1] = value;
+                                            });
+                                          },
+                                          value: days_show[1],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text("Wed"),
+                                        Checkbox(
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              days_show[2] = value;
+                                            });
+                                          },
+                                          value: days_show[2],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text("Thu"),
+                                        Checkbox(
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              days_show[3] = value;
+                                            });
+                                          },
+                                          value: days_show[3],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text("Fri"),
+                                        Checkbox(
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              days_show[4] = value;
+                                            });
+                                          },
+                                          value: days_show[4],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text("Sat"),
+                                        Checkbox(
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              days_show[5] = value;
+                                            });
+                                          },
+                                          value: days_show[5],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text("Sun"),
+                                        Checkbox(
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              days_show[6] = value;
+                                            });
+                                          },
+                                          value: days_show[6],
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ) :
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text("Task date: " + _dateTime.day.toString() + " " + months_in_year[_dateTime.month] + " " + _dateTime.year.toString()),
+                                    GestureDetector(
+                                      child: Text("EDIT"),
+                                      onTap: () {selectDate(context);},
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Checkbox(
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              setAlert = value;
+                                            });
+                                          },
+                                          value: setAlert,
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text("Receive alert:  " + (setAlert ? _time.hour.toString() + ":" + _time.minute.toString() : "")),
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        selectTime(context);
+                                      },
+                                      child: Text("EDIT"),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+
+                                  children: [
+                                    Text("Personal Task"),
+                                    Switch(
+                                      activeColor: Colors.grey,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          shared = !shared;
+                                        });
+                                      },
+                                      value: shared,
+                                    ),
+                                    Text("Shared Task"),
+                                  ]
+                              ),
+                              SizedBox(height: 5),
+                              RaisedButton(
+                                onPressed: () {
+                                  if (repeated) {
+                                    database.removeRepeatedTask(widget.task.id);
+                                    database.removeRepeatedTaskFromGroup(widget.task.id, widget.group.code);
+                                    widget.parent.setState(() {
+                                      widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                    });
+                                  }
+                                  else {
+                                    database.removeSingleTask(widget.task.id);
+                                    database.removeSingleTaskFromGroup(widget.task.id, widget.group.code);
+                                  }
+
+//                                Navigator.pushReplacementNamed(
+//                                    context, '/homepage');
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width - 50,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.delete),
+                                      SizedBox(width: 8),
+                                      Text("Delete Task")
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                      (checkedValue ? Padding(padding: EdgeInsets.only(top: 30, left: 40, right: 10), child: Container(color: Colors.pink, width: MediaQuery.of(context).size.width, height: 3)) : SizedBox()),
+                    ]
                   )
               ),
             ),
