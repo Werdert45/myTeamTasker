@@ -6,7 +6,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:provider/provider.dart';
 
-import 'services/usermanagement.dart';
+import '../../services/usermanagement.dart';
 
 import 'package:flutter/material.dart';
 

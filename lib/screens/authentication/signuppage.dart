@@ -1,5 +1,5 @@
 import 'package:collaborative_repitition/components/button.dart';
-import 'package:collaborative_repitition/selectprofpic.dart';
+import 'package:collaborative_repitition/screens/authentication/selectprofpic.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
