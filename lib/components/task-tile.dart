@@ -3,7 +3,7 @@ import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:emoji_picker/emoji_picker.dart';
-import 'components/button.dart';
+import 'button.dart';
 
 class EmoIcon extends StatefulWidget {
   final task;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'components/button.dart';
+import '../../components/button.dart';
 
 class WelcomePage extends StatefulWidget {
   @override

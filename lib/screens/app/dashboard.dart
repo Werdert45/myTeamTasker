@@ -8,9 +8,9 @@ import 'package:firebase_image/firebase_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'task-tile.dart';
-import 'components/button.dart';
-import 'services/auth.dart';
+import '../../components/task-tile.dart';
+import '../../components/button.dart';
+import '../../services/auth.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
