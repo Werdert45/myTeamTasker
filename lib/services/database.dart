@@ -153,7 +153,6 @@ class Streams {
     }
 
     tasks = repeated_full + single_full;
-    print(tasks);
 
 
     var day_of_the_year = DateTime.now();
