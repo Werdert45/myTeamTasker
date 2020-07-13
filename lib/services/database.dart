@@ -163,10 +163,6 @@ class Streams {
 
     // Per task in the total task list
     for (int i = 0; i < tasks.length; i++) {
-//      print(tasks[i] == single_task);
-//      print(per_day);
-      print(tasks[i]);
-
       // If task is a single task
       if (!tasks[i].repeated) {
         var date = DateTime.fromMillisecondsSinceEpoch(int.parse(tasks[i].date));
