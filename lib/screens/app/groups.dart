@@ -121,17 +121,76 @@ class _GroupsPageState extends State<GroupsPage> {
 
   Widget GroupPage(snapshot, user) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 5),
           child: Text("Group Tasks", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
+        ),
+        SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0, top: 20),
+          child: Text("Single Tasks", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
         ),
         ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
-              if (tasks[index].shared) {
+              if (tasks[index].shared && !tasks[index].repeated) {
+                return Container(
+                  width: double.infinity,
+                  child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
+                );
+              }
+              else {
+                return SizedBox();
+              }
+            }
+        ),
+        IconButton(
+          icon: Icon(Icons.add_circle),
+          onPressed: () async {
+            var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
+            var alertTime = '14:15';
+            var assignee = user.uid;
+            var puid = user.uid;
+//                      var days = [false, false, false, false, false, false, false];
+            var icon = "😇";
+            var title = "New Task";
+            var group_id = snapshot.data.groups[0].code;
+            var date = DateTime.now().millisecondsSinceEpoch.toString();
+            var shared = false;
+
+            await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
+
+            await database.addSingleTask(taskID, puid, group_id, shared);
+
+            setState(() {
+              var new_task = single_task.fromMap({
+                'icon': icon,
+                'id': taskID,
+                'title': title,
+                'creator': user.uid,
+                'days': null,
+                'date': date,
+                'alert_time': alertTime,
+              });
+              tasks.add(new_task);
+
+            });
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0, top: 20),
+          child: Text("Repeated Tasks", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
+        ),
+        ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: snapshot.data.tasks.length,
+            itemBuilder: (context, index) {
+              if (tasks[index].shared && tasks[index].repeated) {
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -181,17 +240,23 @@ class _GroupsPageState extends State<GroupsPage> {
 
   Widget PersonalPage(snapshot, user) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
           child: Text("Personal Tasks", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
+        ),
+        SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0, top: 20),
+          child: Text("Single Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
         ),
         ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
-              if (!tasks[index].shared) {
+              if (!tasks[index].shared && !tasks[index].repeated) {
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -234,7 +299,60 @@ class _GroupsPageState extends State<GroupsPage> {
 
             });
           },
-        )
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0, top: 20),
+          child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
+        ),
+        ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: snapshot.data.tasks.length,
+            itemBuilder: (context, index) {
+              if (!tasks[index].shared && tasks[index].repeated) {
+                return Container(
+                  width: double.infinity,
+                  child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
+                );
+              }
+              else {
+                return SizedBox();
+              }
+            }
+        ),
+        IconButton(
+          icon: Icon(Icons.add_circle),
+          onPressed: () async {
+            var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
+            var alertTime = '14:15';
+            var assignee = user.uid;
+            var puid = user.uid;
+//                      var days = [false, false, false, false, false, false, false];
+            var icon = "😇";
+            var title = "New Task";
+            var group_id = snapshot.data.groups[0].code;
+            var date = DateTime.now().millisecondsSinceEpoch.toString();
+            var shared = false;
+
+            await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
+
+            await database.addSingleTask(taskID, puid, group_id, shared);
+
+            setState(() {
+              var new_task = single_task.fromMap({
+                'icon': icon,
+                'id': taskID,
+                'title': title,
+                'creator': user.uid,
+                'days': null,
+                'date': date,
+                'alert_time': alertTime,
+              });
+              tasks.add(new_task);
+
+            });
+          },
+        ),
       ],
     );
   }
