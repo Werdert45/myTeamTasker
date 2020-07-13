@@ -32,6 +32,15 @@ class _GroupsPageState extends State<GroupsPage> {
     tasks = [];
   }
 
+  addTaskWidget() {
+    return Hero(
+      child: Scaffold(
+        appBar: AppBar(),
+      ),
+      tag: "add_task"
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,73 +54,93 @@ class _GroupsPageState extends State<GroupsPage> {
           tasks = snapshot.data.tasks;
 
           return Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 30, bottom: 10),
-                          child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+//            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
+            child: Stack(
+              children: [Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 30, bottom: 10),
+                            child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    height: MediaQuery.of(context).size.height / 4.5,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0xFF572f8c),
+                        border: Border(
+                        ),
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                    ),
                   ),
-                  height: MediaQuery.of(context).size.height / 4.5,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Color(0xFF572f8c),
-                      border: Border(
-                      ),
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
-                  ),
-                ),
 
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          new OutlineButton(
-                              child: Row(
-                                children: <Widget>[
-                                  IconButton(icon: Icon(Icons.account_circle)),
-                                  Text("Personal Tasks"),
-                                  SizedBox(width: 8)
-                                ],
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  showPersonal = true;
-                                });
-                              },
-                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                          ),
-                          new OutlineButton(
-                              child: Row(
-                                children: <Widget>[
-                                  IconButton(icon: Icon(Icons.group)),
-                                  Text("Group Tasks"),
-                                  SizedBox(width: 8)
-                                ],
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  showPersonal = false;
-                                });
-                              },
-                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                          ),
-                        ],
-                      )
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            new OutlineButton(
+                                child: Row(
+                                  children: <Widget>[
+                                    IconButton(icon: Icon(Icons.account_circle)),
+                                    Text("Personal Tasks"),
+                                    SizedBox(width: 8)
+                                  ],
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    showPersonal = true;
+                                  });
+                                },
+                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                            ),
+                            new OutlineButton(
+                                child: Row(
+                                  children: <Widget>[
+                                    IconButton(icon: Icon(Icons.group)),
+                                    Text("Group Tasks"),
+                                    SizedBox(width: 8)
+                                  ],
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    showPersonal = false;
+                                  });
+                                },
+                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                            ),
+                          ],
+                        )
+                    ),
                   ),
-                ),
-                showPersonal ? PersonalPage(snapshot, user) : GroupPage(snapshot, user)
-              ],
+                  showPersonal ? PersonalPage(snapshot, user) : GroupPage(snapshot, user),
+                ],
+              ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 70, right: 20),
+                    child: FloatingActionButton(
+                      onPressed: () {
+//                        addTaskWidget;
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => addTaskWidget()));
+                      },
+                      child: Icon(Icons.add),
+                      backgroundColor: Colors.deepPurple,
+                      heroTag: "add_task",
+                    ),
+                  ),
+                )
+              ]
             ),
           );
         }
@@ -130,7 +159,7 @@ class _GroupsPageState extends State<GroupsPage> {
         SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Single Tasks", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
+          child: Text("Single Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
         ),
         ListView.builder(
             shrinkWrap: true,
@@ -148,42 +177,9 @@ class _GroupsPageState extends State<GroupsPage> {
               }
             }
         ),
-        IconButton(
-          icon: Icon(Icons.add_circle),
-          onPressed: () async {
-            var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
-            var alertTime = '14:15';
-            var assignee = user.uid;
-            var puid = user.uid;
-//                      var days = [false, false, false, false, false, false, false];
-            var icon = "😇";
-            var title = "New Task";
-            var group_id = snapshot.data.groups[0].code;
-            var date = DateTime.now().millisecondsSinceEpoch.toString();
-            var shared = false;
-
-            await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
-
-            await database.addSingleTask(taskID, puid, group_id, shared);
-
-            setState(() {
-              var new_task = single_task.fromMap({
-                'icon': icon,
-                'id': taskID,
-                'title': title,
-                'creator': user.uid,
-                'days': null,
-                'date': date,
-                'alert_time': alertTime,
-              });
-              tasks.add(new_task);
-
-            });
-          },
-        ),
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Repeated Tasks", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
+          child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
         ),
         ListView.builder(
             shrinkWrap: true,
@@ -200,39 +196,6 @@ class _GroupsPageState extends State<GroupsPage> {
                 return SizedBox();
               }
             }
-        ),
-        IconButton(
-          icon: Icon(Icons.add_circle),
-          onPressed: () async {
-            var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
-            var alertTime = '14:15';
-            var assignee = user.uid;
-            var puid = user.uid;
-//                      var days = [false, false, false, false, false, false, false];
-            var icon = "😇";
-            var title = "New Task";
-            var group_id = snapshot.data.groups[0].code;
-            var date = DateTime.now().millisecondsSinceEpoch.toString();
-            var shared = false;
-
-            await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
-
-            await database.addSingleTask(taskID, puid, group_id, shared);
-
-            setState(() {
-              var new_task = single_task.fromMap({
-                'icon': icon,
-                'id': taskID,
-                'title': title,
-                'creator': user.uid,
-                'days': null,
-                'date': date,
-                'alert_time': alertTime,
-              });
-              tasks.add(new_task);
-
-            });
-          },
         ),
       ],
     );
@@ -267,39 +230,6 @@ class _GroupsPageState extends State<GroupsPage> {
               }
             }
         ),
-        IconButton(
-          icon: Icon(Icons.add_circle),
-          onPressed: () async {
-            var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
-            var alertTime = '14:15';
-            var assignee = user.uid;
-            var puid = user.uid;
-//                      var days = [false, false, false, false, false, false, false];
-            var icon = "😇";
-            var title = "New Task";
-            var group_id = snapshot.data.groups[0].code;
-            var date = DateTime.now().millisecondsSinceEpoch.toString();
-            var shared = false;
-
-            await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
-
-            await database.addSingleTask(taskID, puid, group_id, shared);
-
-            setState(() {
-              var new_task = single_task.fromMap({
-                'icon': icon,
-                'id': taskID,
-                'title': title,
-                'creator': user.uid,
-                'days': null,
-                'date': date,
-                'alert_time': alertTime,
-              });
-              tasks.add(new_task);
-
-            });
-          },
-        ),
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
           child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
@@ -319,39 +249,6 @@ class _GroupsPageState extends State<GroupsPage> {
                 return SizedBox();
               }
             }
-        ),
-        IconButton(
-          icon: Icon(Icons.add_circle),
-          onPressed: () async {
-            var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
-            var alertTime = '14:15';
-            var assignee = user.uid;
-            var puid = user.uid;
-//                      var days = [false, false, false, false, false, false, false];
-            var icon = "😇";
-            var title = "New Task";
-            var group_id = snapshot.data.groups[0].code;
-            var date = DateTime.now().millisecondsSinceEpoch.toString();
-            var shared = false;
-
-            await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
-
-            await database.addSingleTask(taskID, puid, group_id, shared);
-
-            setState(() {
-              var new_task = repeated_task.fromMap({
-                'icon': icon,
-                'id': taskID,
-                'title': title,
-                'creator': user.uid,
-                'days': null,
-                'date': date,
-                'alert_time': alertTime,
-              });
-              tasks.add(new_task);
-
-            });
-          },
         ),
       ],
     );
