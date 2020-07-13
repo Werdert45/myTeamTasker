@@ -31,3 +31,40 @@ class single_task {
     );
   }
 }
+
+//
+//IconButton(
+//icon: Icon(Icons.add_circle),
+//onPressed: () async {
+//var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
+//var alertTime = '14:15';
+//var assignee = user.uid;
+//var puid = user.uid;
+////                      var days = [false, false, false, false, false, false, false];
+//var icon = "😇";
+//var title = "New Task";
+//var group_id = snapshot.data.groups[0].code;
+//var date = DateTime.now().millisecondsSinceEpoch.toString();
+//var shared = false;
+//var repeated = false;
+//
+//await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
+//
+//await database.addSingleTask(taskID, puid, group_id, shared);
+//
+//setState(() {
+//var new_task = single_task.fromMap({
+//'icon': icon,
+//'id': taskID,
+//'title': title,
+//'creator': user.uid,
+//'days': null,
+//'date': date,
+//'alert_time': alertTime,
+//'repeated': false
+//});
+//tasks.add(new_task);
+//
+//});
+//},
+//),
