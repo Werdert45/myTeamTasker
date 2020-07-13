@@ -339,7 +339,7 @@ class _GroupsPageState extends State<GroupsPage> {
             await database.addSingleTask(taskID, puid, group_id, shared);
 
             setState(() {
-              var new_task = single_task.fromMap({
+              var new_task = repeated_task.fromMap({
                 'icon': icon,
                 'id': taskID,
                 'title': title,
