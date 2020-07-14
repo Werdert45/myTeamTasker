@@ -145,15 +145,10 @@ class Streams {
     for (var i = 0; i < single_tasks.length; i++) {
       var single_tasks_data = await singleTasksCollection.document(single_tasks[i]).get();
       var spec_single_task = single_task.fromMap(single_tasks_data.data);
-
-      var today = DateTime.now();
-      var date = DateTime.fromMillisecondsSinceEpoch(int.parse(spec_single_task.date));
-
       single_full.add(spec_single_task);
     }
 
     tasks = repeated_full + single_full;
-
 
     var day_of_the_year = DateTime.now();
     var day = day_of_the_year.day;
@@ -301,7 +296,8 @@ class DatabaseService {
       'title': title,
       'shared': shared,
       'repeated': true,
-      'finished': false
+      'finished': false,
+//      'description': description
     });
   }
 

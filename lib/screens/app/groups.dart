@@ -5,9 +5,11 @@ import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:emoji_picker/emoji_picker.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:collaborative_repitition/components/add_task.dart';
 
 class GroupsPage extends StatefulWidget {
   @override
@@ -16,6 +18,8 @@ class GroupsPage extends StatefulWidget {
 
 class _GroupsPageState extends State<GroupsPage> {
   bool checkedValue;
+  bool isShowSticker;
+  var categories;
 
   final AuthService _auth = AuthService();
   final Streams streams = Streams();
@@ -29,18 +33,23 @@ class _GroupsPageState extends State<GroupsPage> {
     super.initState();
     checkedValue = false;
 
+    isShowSticker = false;
+    categories = Emoji(name: 'Sailboat', emoji: '👑');
+
     tasks = [];
   }
 
-  addTaskWidget() {
-    return Hero(
-      child: Scaffold(
-        appBar: AppBar(),
-      ),
-      tag: "add_task"
-    );
-  }
+  Future<bool> onBackPress() {
+    if (isShowSticker) {
+      setState(() {
+        isShowSticker = false;
+      });
+    } else {
+      Navigator.pop(context);
+    }
 
+    return Future.value(false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +141,7 @@ class _GroupsPageState extends State<GroupsPage> {
                     child: FloatingActionButton(
                       onPressed: () {
 //                        addTaskWidget;
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => addTaskWidget()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
                       },
                       child: Icon(Icons.add),
                       backgroundColor: Colors.deepPurple,
@@ -253,6 +262,7 @@ class _GroupsPageState extends State<GroupsPage> {
       ],
     );
   }
+
 }
 
 
