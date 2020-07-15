@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage>
         children: <Widget>[
           DashboardPage(),
           CalendarScreen(),
-          GroupsPage(),
+          TaskManagerPage(),
           ProfilePage()
         ],
       ),

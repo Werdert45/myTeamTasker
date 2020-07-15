@@ -1,22 +1,18 @@
 import 'package:collaborative_repitition/components/active-task-tile.dart';
-import 'package:collaborative_repitition/components/task-tile.dart';
-import 'package:collaborative_repitition/models/repeated_task.dart';
-import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:emoji_picker/emoji_picker.dart';
-import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:collaborative_repitition/components/add_task.dart';
 
-class GroupsPage extends StatefulWidget {
+class TaskManagerPage extends StatefulWidget {
   @override
-  _GroupsPageState createState() => _GroupsPageState();
+  _TaskManagerPageState createState() => _TaskManagerPageState();
 }
 
-class _GroupsPageState extends State<GroupsPage> {
+class _TaskManagerPageState extends State<TaskManagerPage> {
   bool checkedValue;
   bool isShowSticker;
   var categories;
@@ -56,108 +52,101 @@ class _GroupsPageState extends State<GroupsPage> {
 
     var user = Provider.of<User>(context);
 
-    return SingleChildScrollView(
-      child: FutureBuilder(
-        future: streams.getCompleteUser(user.uid),
-        builder: (context, snapshot) {
-          tasks = snapshot.data.tasks;
-
-          return Container(
-//            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            child: Stack(
-              children: [Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 30, bottom: 10),
-                            child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+    return Scaffold(
+        body: SingleChildScrollView(
+          child: FutureBuilder(
+              future: streams.getAllTasks(user.uid),
+              builder: (context, snapshot) {
+                tasks = snapshot.data.tasks;
+                return Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 30, bottom: 10),
+                                    child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            height: MediaQuery.of(context).size.height / 4.5,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF572f8c),
+                                border: Border(
+                                ),
+                                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    height: MediaQuery.of(context).size.height / 4.5,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Color(0xFF572f8c),
-                        border: Border(
-                        ),
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
-                    ),
-                  ),
 
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            new OutlineButton(
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Container(
                                 child: Row(
-                                  children: <Widget>[
-                                    IconButton(icon: Icon(Icons.account_circle)),
-                                    Text("Personal Tasks"),
-                                    SizedBox(width: 8)
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    new OutlineButton(
+                                        child: Row(
+                                          children: <Widget>[
+                                            IconButton(icon: Icon(Icons.account_circle)),
+                                            Text("Personal Tasks"),
+                                            SizedBox(width: 8)
+                                          ],
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            showPersonal = true;
+                                          });
+                                        },
+                                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                                    ),
+                                    new OutlineButton(
+                                        child: Row(
+                                          children: <Widget>[
+                                            IconButton(icon: Icon(Icons.group)),
+                                            Text("Group Tasks"),
+                                            SizedBox(width: 8)
+                                          ],
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            showPersonal = false;
+                                          });
+                                        },
+                                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                                    ),
                                   ],
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    showPersonal = true;
-                                  });
-                                },
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                                )
                             ),
-                            new OutlineButton(
-                                child: Row(
-                                  children: <Widget>[
-                                    IconButton(icon: Icon(Icons.group)),
-                                    Text("Group Tasks"),
-                                    SizedBox(width: 8)
-                                  ],
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    showPersonal = false;
-                                  });
-                                },
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                            ),
-                          ],
-                        )
-                    ),
-                  ),
-                  showPersonal ? PersonalPage(snapshot, user) : GroupPage(snapshot, user),
-                ],
-              ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 70, right: 20),
-                    child: FloatingActionButton(
-                      onPressed: () {
+                          ),
+                          showPersonal ? PersonalPage(snapshot, user) : GroupPage(snapshot, user),
+                        ],
+                      ),
+                    ]
+                );
+              }
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
 //                        addTaskWidget;
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
-                      },
-                      child: Icon(Icons.add),
-                      backgroundColor: Colors.deepPurple,
-                      heroTag: "add_task",
-                    ),
-                  ),
-                )
-              ]
-            ),
-          );
-        }
-      ),
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.deepPurple,
+          heroTag: "add_task",
+        ),
     );
   }
 
   Widget GroupPage(snapshot, user) {
+    print(snapshot.data.tasks);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,6 +185,7 @@ class _GroupsPageState extends State<GroupsPage> {
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
               if (tasks[index].shared && tasks[index].repeated) {
+                print("RETURN NOW");
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
