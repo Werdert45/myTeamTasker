@@ -99,16 +99,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Container(
                                     width: 200,
                                     height: 200,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Align(
-                                            alignment: Alignment.center,
-                                            heightFactor: 0.5,
-                                            widthFactor: 1,
-                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + snapshot.data.profile_picture.toString()))),
-                                      ),
+                                    child: Align(
+                                        alignment: Alignment.center,
+                                        heightFactor: 0.5,
+                                        widthFactor: 1,
+                                        child: Container(
+                                          width: 200,
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + snapshot.data.profile_picture.toString(),
+                                                  ), fit: BoxFit.cover
+                                              ),
+                                              borderRadius: BorderRadius.all(Radius.circular(110.0)),
+                                          ),
+                                        )
                                     ),
                                   ),
                                   Align(
@@ -187,6 +192,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         trailing: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
+                                            SizedBox(height: 12),
                                             Text("Tasks: " + snapshot.data.groups[index].repeated_tasks.length.toString()),
                                             SizedBox(height: 2),
                                             Text("Members: " + snapshot.data.groups[index].members.length.toString())

@@ -30,6 +30,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
     createGroup(uid, group_name, group_description) async {
       try {
         var check = await DatabaseService(uid: uid).createGroup(uid, group_name, group_description);
+        Navigator.popAndPushNamed(context, '/homepage');
       } catch (e) {
         return e;
       }

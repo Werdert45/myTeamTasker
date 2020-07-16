@@ -179,10 +179,12 @@ class _DashboardPageState extends State<DashboardPage> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data.tasks.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                width: double.infinity,
-                                child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
-                              );
+                              if (snapshot.data.tasks[index].title != "") {
+                                return Container(
+                                  width: double.infinity,
+                                  child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
+                                );
+                              }
                             }
                         ),
                       ],

@@ -5,11 +5,6 @@ admin.initializeApp();
 const database = admin.firestore();
 
 exports.finishedUpdate = functions.pubsub.schedule('0 3 * * *').timeZone('Europe/Amsterdam').onRun( async function (context) {
-//    var list = ['qfrxHTZAJZTJDQTpM3pA83fjsM031594388178695', 'qfrxHTZAJZTJDQTpM3pA83fjsM031594388217389'];
-//
-//    for (var i = 0; i < list.length; i++) {
-//        database.doc('repeated_tasks/' + list[i]).update({'finished': false});
-//    }
 
     // experimental
     const reference = database.collection('repeated_tasks/');
@@ -23,7 +18,6 @@ exports.finishedUpdate = functions.pubsub.schedule('0 3 * * *').timeZone('Europe
         database.doc('repeated_tasks/' + doc.id).update({'finished': false});
     });
 
-//    database.doc('repeated_tasks/qfrxHTZAJZTJDQTpM3pA83fjsM031594388178695').update({'finished': false});
     return console.log("Done");
 })
 
