@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/screens/app/groups.dart';
 import 'package:collaborative_repitition/screens/authentication/create_group.dart';
 import 'package:collaborative_repitition/screens/authentication/select-group.dart';
 import 'package:collaborative_repitition/services/auth.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           '/creategroup': (BuildContext context) => new CreateGroupPage(),
           '/selectgroup': (BuildContext context) => new SelectGroupPage(),
           '/homepage': (BuildContext context) => new HomePage(),
+          '/taskmanager': (context) => new TaskManagerPage()
         },
       )
     );
