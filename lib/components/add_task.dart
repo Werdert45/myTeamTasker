@@ -84,7 +84,7 @@ class _AddTaskState extends State<AddTask> {
     }
     else {
       await database.addSingleTask(taskID, puid, 'DfQpnO', shared);
-      await database.createSingleTask(taskID, alertTime, date.toString(), icon, assignee, title, puid, shared);
+      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
     }
   }
 
@@ -108,10 +108,13 @@ class _AddTaskState extends State<AddTask> {
                   var title = _title;
 //                  var description = "";
                   var date = _dateTime.millisecondsSinceEpoch;
+                  print(date);
 
                   addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date);
 
+                  // Not the correct navigator
                   Navigator.pop(context);
+                  setState(() {});
                 },
               )
             ],

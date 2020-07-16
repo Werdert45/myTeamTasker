@@ -26,3 +26,27 @@ exports.finishedUpdate = functions.pubsub.schedule('0 3 * * *').timeZone('Europe
 //    database.doc('repeated_tasks/qfrxHTZAJZTJDQTpM3pA83fjsM031594388178695').update({'finished': false});
     return console.log("Done");
 })
+
+exports.removeOldSingleTask = functions.pubsub.schedule('0 3 * * *')
+    .timeZone('Europe/Amsterdam').onRun( async function (context) {
+
+        var d = new Date();
+        var n = d.getTime();
+
+        const reference = database.collection('single_tasks/');
+        const snapshot = await reference.where('date', '<', n)
+//            .where('finished', '==', true)
+            .get();
+        if (snapshot.empty) {
+            console.log('no matching documents');
+            return ;
+        }
+
+        snapshot.forEach(doc => {
+            if (doc.finished) {
+                database.doc('single_tasks/' + doc.id).delete();
+            }
+        });
+
+        return console.log("Done");
+})

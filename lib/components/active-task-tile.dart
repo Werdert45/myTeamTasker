@@ -235,7 +235,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                         var id = widget.task.id;
                                         var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
                                         var puid = widget.puid;
-                                        var date = _dateTime.millisecondsSinceEpoch.toString();
+                                        var date = _dateTime.millisecondsSinceEpoch;
                                         var group = widget.group.code;
                                         var init_shared = widget.task.shared;
                                         var init_repeated = widget.task.repeated;
@@ -460,17 +460,39 @@ class ActiveTaskState extends State<ActiveTask> {
                                   ),
                                   SizedBox(height: 5),
                                   RaisedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (repeated) {
-                                        database.removeRepeatedTask(widget.task.id);
-                                        database.removeRepeatedTaskFromGroup(widget.task.id, widget.group.code);
-                                        widget.parent.setState(() {
-                                          widget.parent.tasks.removeWhere((item) => item == widget.task.id);
-                                        });
+                                        if (widget.task.shared) {
+                                          await database.removeRepeatedTask(widget.task.id);
+                                          await database.removeRepeatedTaskFromGroup(widget.task.id, widget.group.code);
+                                          widget.parent.setState(() {
+                                            widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                          });
+                                        }
+                                        else {
+                                          await database.removeRepeatedTask(widget.task.id);
+                                          await database.removeRepeatedTaskFromUser(widget.task.id, widget.puid);
+                                          widget.parent.setState(() {
+                                            widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                          });
+                                        }
                                       }
                                       else {
-                                        database.removeSingleTask(widget.task.id);
-                                        database.removeSingleTaskFromGroup(widget.task.id, widget.group.code);
+                                        if (widget.task.shared) {
+                                          await database.removeSingleTask(widget.task.id);
+                                          await database.removeSingleTaskFromGroup(widget.task.id, widget.group.code);
+                                          widget.parent.setState(() {
+                                            widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                          });
+                                        }
+
+                                        else {
+                                          await database.removeSingleTask(widget.task.id);
+                                          await database.removeSingleTaskFromUser(widget.task.id, widget.puid);
+                                          widget.parent.setState(() {
+                                            widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                          });
+                                        }
                                       }
                                     },
                                     child: Container(

@@ -75,7 +75,7 @@ class Streams {
       var spec_single_task = single_task.fromMap(single_tasks_data.data);
 
       var today = DateTime.now();
-      var date = DateTime.fromMillisecondsSinceEpoch(int.parse(spec_single_task.date));
+      var date = DateTime.fromMillisecondsSinceEpoch(spec_single_task.date);
 
       if ((date.day == today.day) && (date.month == today.month) && (date.year == today.year)) {
         single_full.add(spec_single_task);
@@ -138,7 +138,7 @@ class Streams {
       var spec_single_task = single_task.fromMap(single_tasks_data.data);
 
       var today = DateTime.now();
-      var date = DateTime.fromMillisecondsSinceEpoch(int.parse(spec_single_task.date));
+      var date = DateTime.fromMillisecondsSinceEpoch(spec_single_task.date);
 
       single_full.add(spec_single_task);
     }
@@ -220,7 +220,7 @@ class Streams {
     for (int i = 0; i < tasks.length; i++) {
       // If task is a single task
       if (!tasks[i].repeated) {
-        var date = DateTime.fromMillisecondsSinceEpoch(int.parse(tasks[i].date));
+        var date = DateTime.fromMillisecondsSinceEpoch(tasks[i].date);
         var day = date.day;
         var month = date.month;
         var year = date.year;
@@ -329,6 +329,19 @@ class DatabaseService {
       'single_tasks': FieldValue.arrayRemove([taskID])
     });
   }
+
+  Future removeRepeatedTaskFromUser(taskID, puid) async {
+    await usersCollection.document(puid).updateData({
+      'personal_repeated_tasks': FieldValue.arrayRemove([taskID])
+    });
+  }
+
+  Future removeSingleTaskFromUser(taskID, puid) async {
+    await usersCollection.document(puid).updateData({
+      'personal_single_tasks': FieldValue.arrayRemove([taskID])
+    });
+  }
+
 
   Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared) async {
     await singleTasksCollection.document(taskID).setData({
