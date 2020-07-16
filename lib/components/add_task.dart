@@ -110,6 +110,8 @@ class _AddTaskState extends State<AddTask> {
                   var date = _dateTime.millisecondsSinceEpoch;
 
                   addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date);
+
+                  Navigator.pop(context);
                 },
               )
             ],

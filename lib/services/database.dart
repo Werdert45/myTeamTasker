@@ -342,7 +342,8 @@ class DatabaseService {
       'title': title,
       'shared': shared,
       'repeated': false,
-      'finished': false
+      'finished': false,
+      'finished_by': []
     });
   }
 
@@ -358,6 +359,7 @@ class DatabaseService {
       'shared': shared,
       'repeated': true,
       'finished': false,
+      'finished_by': []
 //      'description': description
     });
   }
@@ -397,15 +399,17 @@ class DatabaseService {
     }
   }
 
-  Future updateFinishedStatusSingle(taskID, status) async {
+  Future updateFinishedStatusSingle(taskID, status, puid) async {
     await singleTasksCollection.document(taskID).updateData({
-      'finished': status
+      'finished': status,
+      'finished_by': FieldValue.arrayUnion([puid])
     });
   }
 
-  Future updateFinishedStatusRepeated(taskID, status) async {
+  Future updateFinishedStatusRepeated(taskID, status, puid) async {
     await repeatedTasksCollection.document(taskID).updateData({
-      'finished': status
+      'finished': status,
+      'finished_by': FieldValue.arrayUnion([puid])
     });
   }
 
