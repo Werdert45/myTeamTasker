@@ -88,13 +88,13 @@ class ActiveTaskState extends State<ActiveTask> {
     }
   }
 
-  updateFinishedStatus(taskID, status) async {
+  updateFinishedStatus(taskID, status, puid) async {
     if (widget.task is repeated_task) {
-      await database.updateFinishedStatusRepeated(taskID, status);
+      await database.updateFinishedStatusRepeated(taskID, status, puid);
     }
 
     else if (widget.task is single_task) {
-      await database.updateFinishedStatusSingle(taskID, status);
+      await database.updateFinishedStatusSingle(taskID, status, puid);
     }
 
     else {
@@ -188,7 +188,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                       setState(() {
                                         checkedValue = ! checkedValue;
 
-                                        updateFinishedStatus(widget.task.id, checkedValue);
+                                        updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
 
                                       });
                                     },
