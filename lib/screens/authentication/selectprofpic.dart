@@ -43,7 +43,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
   }
 
   Future getImage() async {
-    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 800);
     setState(() {
       newProfilePic = tempImage;
     });
