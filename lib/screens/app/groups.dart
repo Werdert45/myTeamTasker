@@ -25,6 +25,13 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
 
   var showPersonal = true;
 
+  var single_shared = false;
+  var repeated_shared = false;
+
+  var single_personal = false;
+  var repeated_personal = false;
+
+
   void initState() {
     super.initState();
     checkedValue = false;
@@ -165,6 +172,10 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
               if (tasks[index].shared && !tasks[index].repeated) {
+//                setState(() {
+//                  single_shared = true;
+//                });
+
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -175,6 +186,8 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
               }
             }
         ),
+        (single_shared ? SizedBox() : Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Text("No Single Tasks yet, add one using the big button"))),
+
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
           child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
@@ -184,8 +197,13 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
+
+
               if (tasks[index].shared && tasks[index].repeated) {
-                print("RETURN NOW");
+//                setState(() {
+//                  repeated_shared = true;
+//                });
+
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -196,6 +214,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
               }
             }
         ),
+        (repeated_shared ? SizedBox() : Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Text("No Repeated Tasks yet, add one using the big button"))),
       ],
     );
   }
@@ -219,6 +238,10 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
               if (!tasks[index].shared && !tasks[index].repeated) {
+//                setState(() {
+//                  single_personal = true;
+//                });
+
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -229,6 +252,8 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
               }
             }
         ),
+        (single_personal ? SizedBox() : Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Text("No Single Tasks yet, add one using the big button"))),
+        SizedBox(height: 15),
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
           child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
@@ -239,6 +264,11 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
               if (!tasks[index].shared && tasks[index].repeated) {
+
+//                setState(() {
+//                  repeated_personal = true;
+//                });
+
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -249,6 +279,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
               }
             }
         ),
+        (repeated_personal ? SizedBox() : Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Text("No Repeated Tasks yet, add one using the big button"))),
       ],
     );
   }

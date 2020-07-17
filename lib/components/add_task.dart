@@ -77,14 +77,14 @@ class _AddTaskState extends State<AddTask> {
 
 
   // Improve addTaskDB to also save to either group or personal + title not working
-  addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date) async {
+  addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name) async {
     if (repeated) {
       await database.addRepeatedTask(taskID, puid, 'DfQpnO', shared);
-      await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared);
+      await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name);
     }
     else {
       await database.addSingleTask(taskID, puid, 'DfQpnO', shared);
-      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
+      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name);
     }
   }
 
@@ -108,9 +108,10 @@ class _AddTaskState extends State<AddTask> {
                   var title = _title;
 //                  var description = "";
                   var date = _dateTime.millisecondsSinceEpoch;
-                  print(date);
+//                  var group_code = widget.group.code;
+//                  var group_name = widget.group.name;
 
-                  addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date);
+                  addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, 'QPMRGW', 'TEST NAME');
 
                   // Not the correct navigator
                   Navigator.pop(context);

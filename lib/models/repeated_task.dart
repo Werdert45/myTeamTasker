@@ -9,8 +9,9 @@ class repeated_task {
   final bool shared;
   final bool repeated;
   final bool finished;
+  final List belongs_to;
 
-  repeated_task({this.icon, this.id, this.title, this.days, this.creator, this.alert_time, this.assignee, this.shared, this.repeated, this.finished});
+  repeated_task({this.icon, this.id, this.title, this.days, this.creator, this.alert_time, this.assignee, this.shared, this.repeated, this.finished, this.belongs_to});
 
 
   factory repeated_task.fromMap(Map data) {
@@ -25,7 +26,8 @@ class repeated_task {
         assignee: data['assignee'] ?? '',
         shared: data['shared'] ?? false,
         repeated: data['repeated'] ?? false,
-        finished: data['finished'] ?? false
+        finished: data['finished'] ?? false,
+        belongs_to: data['belongs_to'] ?? null
     );
   }
 }
