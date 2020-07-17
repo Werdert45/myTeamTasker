@@ -69,6 +69,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                     child: GestureDetector(
                       onTap: () {
                         createGroup(user.uid, _group_name, _group_description);
+//                        Navigator.popAndPushNamed(context, '/homepage');
                       },
                       child: Text("CREATE", style: TextStyle(fontSize: 16, color: Color(0xFFc6bed2))),
                     )

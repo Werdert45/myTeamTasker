@@ -102,32 +102,32 @@ class ActiveTaskState extends State<ActiveTask> {
     }
   }
 
-  updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated) async {
+  updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated, group_code, group_name) async {
     // Remove all from the specific task
     await database.completeReplacementTask(id, group, puid, repeated, shared, init_repeated, init_shared);
 
     // Check the conditions and add accordingly
     if (repeated && shared) {
       // add to repeated in group
-      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared);
+      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared, group_code, group_name);
       await database.addRepeatedTask(id, puid, group, shared);
     }
 
     else if (repeated && !shared) {
       // add to repeated in user
-      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared);
+      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared, group_code, group_name);
       await database.addRepeatedTask(id, puid, group, shared);
     }
 
     else if (!repeated && shared) {
       // add to single in group
-      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared);
+      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared, group_code, group_name);
       await database.addSingleTask(id, puid, group, shared);
     }
 
     else if (!repeated && !shared) {
       // add to single in user
-      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared);
+      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared, group_code, group_name);
       await database.addSingleTask(id, puid, group, shared);
     }
   }
@@ -239,8 +239,10 @@ class ActiveTaskState extends State<ActiveTask> {
                                         var group = widget.group.code;
                                         var init_shared = widget.task.shared;
                                         var init_repeated = widget.task.repeated;
+                                        var group_code = widget.group.code;
+                                        var group_name = widget.group.name;
 
-                                        await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated);
+                                        await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated, group_code, group_name);
                                         await saveTask();
 
 //                                  Navigator.pushReplacementNamed(

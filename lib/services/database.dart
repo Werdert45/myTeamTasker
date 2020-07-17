@@ -51,8 +51,11 @@ class Streams {
       repeated_full.add(spec_group);
     }
 
-    for (var i = 0; i < user.groups.length; i++) {
-      var groupdata = await groupsCollection.document(user.groups[i]).get();
+    var group_list = user.groups.keys.toList();
+
+
+    for (var i = 0; i < group_list.length; i++) {
+      var groupdata = await groupsCollection.document(group_list[i]).get();
       var spec_group = group.fromMap(groupdata.data);
       groups.add(spec_group);
       repeated_tasks = repeated_tasks + spec_group.repeated_tasks;
@@ -118,8 +121,10 @@ class Streams {
       repeated_full.add(spec_group);
     }
 
-    for (var i = 0; i < user.groups.length; i++) {
-      var groupdata = await groupsCollection.document(user.groups[i]).get();
+    var group_list = user.groups.keys.toList();
+
+    for (var i = 0; i < group_list.length; i++) {
+      var groupdata = await groupsCollection.document(group_list[i]).get();
       var spec_group = group.fromMap(groupdata.data);
       groups.add(spec_group);
       repeated_tasks = repeated_tasks + spec_group.repeated_tasks;
@@ -343,7 +348,7 @@ class DatabaseService {
   }
 
 
-  Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared) async {
+  Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name) async {
     await singleTasksCollection.document(taskID).setData({
       'alert_time': alertTime,
       'date': date,
@@ -356,11 +361,12 @@ class DatabaseService {
       'shared': shared,
       'repeated': false,
       'finished': false,
-      'finished_by': []
+      'finished_by': [],
+      'belongs_to': [group_code, group_name]
     });
   }
 
-  Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title, shared) async {
+  Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title, shared, group_code, group_name) async {
     await repeatedTasksCollection.document(taskID).setData({
       'alert_time': alertTime,
       'assignee': assignee,
@@ -372,7 +378,8 @@ class DatabaseService {
       'shared': shared,
       'repeated': true,
       'finished': false,
-      'finished_by': []
+      'finished_by': [],
+      'belongs_to': [group_code, group_name]
 //      'description': description
     });
   }
@@ -432,7 +439,7 @@ class DatabaseService {
       'email': email,
       'name': name,
       'profile_picture': 'placeholder',
-      'groups': [],
+      'groups': {},
       'personal_repeated_tasks': [],
       'personal_single_tasks': []
     });
@@ -447,13 +454,16 @@ class DatabaseService {
 
   Future addToGroup(puid, group_code) async {
     try {
-      await groupsCollection.document(group_code).updateData({
-        'members': FieldValue.arrayUnion([puid])
+      var user = await usersCollection.document(puid).get();
+      var group = await groupsCollection.document(puid).get();
+
+      await groupsCollection.document(group_code).setData({
+        'members': {puid: user.data['name']},
       });
 
-      await usersCollection.document(puid).updateData({
-        'groups': FieldValue.arrayUnion([group_code])
-      });
+      await usersCollection.document(puid).setData({
+        'groups': {group_code: group.data['name']}
+      }, merge: true);
 
       return "finished";
     } catch (e) {
@@ -463,12 +473,13 @@ class DatabaseService {
 
   Future createGroup(puid, group_name, group_description) async {
     var group_code = puid.toString().substring(0,6).toUpperCase();
+    var user = await usersCollection.document(puid).get();
 
     await groupsCollection.document(group_code).setData({
       'code': group_code,
       'description': group_description,
       'id': puid.split('').reversed.join(),
-      'members': [puid],
+      'members': {puid: user.data['name']},
       'name': group_name,
       'single_tasks': [],
       'repeated_tasks': [],

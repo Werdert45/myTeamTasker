@@ -10,8 +10,9 @@ class single_task {
   final bool shared;
   final bool repeated;
   final bool finished;
+  final List belongs_to;
 
-  single_task({this.icon, this.id, this.title, this.date, this.alert_time, this.creator, this.assignee, this.days, this.shared, this.repeated, this.finished});
+  single_task({this.icon, this.id, this.title, this.date, this.alert_time, this.creator, this.assignee, this.days, this.shared, this.repeated, this.finished, this.belongs_to});
 
 
   factory single_task.fromMap(Map data) {
@@ -27,44 +28,8 @@ class single_task {
       assignee: data['assignee'] ?? '',
       shared: data['shared'] ?? false,
       repeated: data['repeated'] ?? false,
-      finished: data['finished'] ?? false
+      finished: data['finished'] ?? false,
+      belongs_to: data['belongs_to'] ?? null
     );
   }
 }
-
-//
-//IconButton(
-//icon: Icon(Icons.add_circle),
-//onPressed: () async {
-//var taskID = (user.uid + DateTime.now().millisecondsSinceEpoch.toString());
-//var alertTime = '14:15';
-//var assignee = user.uid;
-//var puid = user.uid;
-////                      var days = [false, false, false, false, false, false, false];
-//var icon = "😇";
-//var title = "New Task";
-//var group_id = snapshot.data.groups[0].code;
-//var date = DateTime.now().millisecondsSinceEpoch.toString();
-//var shared = false;
-//var repeated = false;
-//
-//await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared);
-//
-//await database.addSingleTask(taskID, puid, group_id, shared);
-//
-//setState(() {
-//var new_task = single_task.fromMap({
-//'icon': icon,
-//'id': taskID,
-//'title': title,
-//'creator': user.uid,
-//'days': null,
-//'date': date,
-//'alert_time': alertTime,
-//'repeated': false
-//});
-//tasks.add(new_task);
-//
-//});
-//},
-//),

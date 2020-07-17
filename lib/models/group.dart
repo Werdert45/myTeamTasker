@@ -2,7 +2,7 @@ class group {
   final String code;
   final String description;
   final String id;
-  final List members;
+  final Map members;
   final String name;
   final List repeated_tasks;
   final List single_tasks;
@@ -16,7 +16,7 @@ class group {
       code: data['code'] ?? '',
       description: data['description'] ?? '',
       id: data['id'] ?? '',
-      members: data['members'] ?? '',
+      members: data['members'] ?? {},
       repeated_tasks: data['repeated_tasks'] ?? [],
       single_tasks: data['single_tasks'] ?? []
     );
