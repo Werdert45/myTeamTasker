@@ -185,6 +185,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                   child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
                                 );
                               }
+                              else {
+                                return SizedBox();
+                              }
                             }
                         ),
                       ],

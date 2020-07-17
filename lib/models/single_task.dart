@@ -10,9 +10,10 @@ class single_task {
   final bool shared;
   final bool repeated;
   final bool finished;
+  final Map finished_by;
   final List belongs_to;
 
-  single_task({this.icon, this.id, this.title, this.date, this.alert_time, this.creator, this.assignee, this.days, this.shared, this.repeated, this.finished, this.belongs_to});
+  single_task({this.icon, this.id, this.title, this.date, this.alert_time, this.creator, this.assignee, this.days, this.shared, this.repeated, this.finished, this.finished_by, this.belongs_to});
 
 
   factory single_task.fromMap(Map data) {
@@ -29,6 +30,7 @@ class single_task {
       shared: data['shared'] ?? false,
       repeated: data['repeated'] ?? false,
       finished: data['finished'] ?? false,
+      finished_by: data['finished_by'] ?? {},
       belongs_to: data['belongs_to'] ?? null
     );
   }

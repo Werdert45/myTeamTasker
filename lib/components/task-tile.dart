@@ -161,7 +161,6 @@ class EmoIconState extends State<EmoIcon> {
                                       setState(() {
                                         checkedValue = ! checkedValue;
                                         updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
-
                                       });
                                     },
                                     child: Container(
@@ -215,6 +214,8 @@ class EmoIconState extends State<EmoIcon> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 15),
+                              (checkedValue ? Text("This task was completed by: " + widget.task.finished_by.values.toList()[0]) : SizedBox()),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
