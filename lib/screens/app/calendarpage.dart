@@ -55,7 +55,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
               calendar.forEach((k,v) => _events[k] = v);
 
-              if (snapshot.hasData && !snapshot.hasError) {
+              if (snapshot.connectionState == ConnectionState.done) {
                 return Container(
                   width: double.infinity,
                   height: 2000,
@@ -125,7 +125,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
               }
 
               else {
-                return CircularProgressIndicator();
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               }
             }
           ),
