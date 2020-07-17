@@ -361,7 +361,7 @@ class DatabaseService {
       'shared': shared,
       'repeated': false,
       'finished': false,
-      'finished_by': [],
+      'finished_by': {},
       'belongs_to': [group_code, group_name]
     });
   }
@@ -378,7 +378,7 @@ class DatabaseService {
       'shared': shared,
       'repeated': true,
       'finished': false,
-      'finished_by': [],
+      'finished_by': {},
       'belongs_to': [group_code, group_name]
 //      'description': description
     });
@@ -420,17 +420,21 @@ class DatabaseService {
   }
 
   Future updateFinishedStatusSingle(taskID, status, puid) async {
-    await singleTasksCollection.document(taskID).updateData({
+    var user = await usersCollection.document(puid).get();
+
+    await singleTasksCollection.document(taskID).setData({
       'finished': status,
-      'finished_by': FieldValue.arrayUnion([puid])
-    });
+      'finished_by': {puid: user.data['name']}
+    }, merge: true);
   }
 
   Future updateFinishedStatusRepeated(taskID, status, puid) async {
-    await repeatedTasksCollection.document(taskID).updateData({
+    var user = await usersCollection.document(puid).get();
+
+    await repeatedTasksCollection.document(taskID).setData({
       'finished': status,
-      'finished_by': FieldValue.arrayUnion([puid])
-    });
+      'finished_by': {puid: user.data['name']}
+    }, merge: true);
   }
 
   Future createUser(puid, name, email) async {
