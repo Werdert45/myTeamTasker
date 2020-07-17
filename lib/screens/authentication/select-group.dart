@@ -93,6 +93,8 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                         )
                     ),
                     SizedBox(height: 20),
+
+                    // NEW FUNCTION: CHECK IF GROUP EXISTS, IF SO, ADD THE USER
                     secondaryRoundButton(Color(0xFF572f8c), Colors.white, "JOIN", database.addToGroup(user.uid, _group_code), 310, 30),
                     SizedBox(height: 30),
                     Container(

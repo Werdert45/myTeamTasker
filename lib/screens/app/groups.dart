@@ -64,79 +64,90 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
           child: FutureBuilder(
               future: streams.getAllTasks(user.uid),
               builder: (context, snapshot) {
-                tasks = snapshot.data.tasks;
-                return Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 30, bottom: 10),
-                                    child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  tasks = snapshot.data.tasks;
+                  return Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 30, bottom: 10),
+                                      child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                              height: MediaQuery.of(context).size.height / 4.5,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF572f8c),
+                                  border: Border(
+                                  ),
+                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                              ),
                             ),
-                            height: MediaQuery.of(context).size.height / 4.5,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: Color(0xFF572f8c),
-                                border: Border(
-                                ),
-                                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
-                            ),
-                          ),
 
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    new OutlineButton(
-                                        child: Row(
-                                          children: <Widget>[
-                                            IconButton(icon: Icon(Icons.account_circle)),
-                                            Text("Personal Tasks"),
-                                            SizedBox(width: 8)
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            showPersonal = true;
-                                          });
-                                        },
-                                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                                    ),
-                                    new OutlineButton(
-                                        child: Row(
-                                          children: <Widget>[
-                                            IconButton(icon: Icon(Icons.group)),
-                                            Text("Group Tasks"),
-                                            SizedBox(width: 8)
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            showPersonal = false;
-                                          });
-                                        },
-                                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                                    ),
-                                  ],
-                                )
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      new OutlineButton(
+                                          child: Row(
+                                            children: <Widget>[
+                                              IconButton(icon: Icon(Icons.account_circle)),
+                                              Text("Personal Tasks"),
+                                              SizedBox(width: 8)
+                                            ],
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              showPersonal = true;
+                                            });
+                                          },
+                                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                                      ),
+                                      new OutlineButton(
+                                          child: Row(
+                                            children: <Widget>[
+                                              IconButton(icon: Icon(Icons.group)),
+                                              Text("Group Tasks"),
+                                              SizedBox(width: 8)
+                                            ],
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              showPersonal = false;
+                                            });
+                                          },
+                                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                                      ),
+                                    ],
+                                  )
+                              ),
                             ),
-                          ),
-                          showPersonal ? PersonalPage(snapshot, user) : GroupPage(snapshot, user),
-                        ],
-                      ),
-                    ]
-                );
+                            showPersonal ? PersonalPage(snapshot, user) : GroupPage(snapshot, user),
+                          ],
+                        ),
+                      ]
+                  );
+                }
+                else {
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
               }
           ),
         ),

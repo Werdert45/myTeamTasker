@@ -489,9 +489,9 @@ class DatabaseService {
       'repeated_tasks': [],
     });
 
-    await usersCollection.document(puid).updateData({
-      'groups': FieldValue.arrayUnion([group_code])
-    });
+    await usersCollection.document(puid).setData({
+      'groups': {'code': 'name'}
+    }, merge: true);
 
   }
 }
