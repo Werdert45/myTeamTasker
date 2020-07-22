@@ -33,8 +33,8 @@ class _HomePageState extends State<HomePage>
           tabs: <Widget>[
             new Tab(icon: Icon(Icons.home)),
             new Tab(icon: Icon(Icons.calendar_today)),
+            new Tab(icon: Icon(Icons.equalizer)),
             new Tab(icon: Icon(Icons.group)),
-            new Tab(icon: Icon(Icons.person)),
           ],
         ),
       ),
@@ -43,8 +43,8 @@ class _HomePageState extends State<HomePage>
         children: <Widget>[
           DashboardPage(),
           CalendarScreen(),
+          ProfilePage(),
           TaskManagerPage(),
-          ProfilePage()
         ],
       ),
         );

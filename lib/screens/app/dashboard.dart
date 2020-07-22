@@ -113,7 +113,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               children: [
                                 Container(
                                   width: MediaQuery.of(context).size.width / 3.5,
-                                  height: MediaQuery.of(context).size.width / 3.5,
+                                  height: 90,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.grey,
@@ -124,7 +124,7 @@ class _DashboardPageState extends State<DashboardPage> {
 //                                    mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text("Today", style: TextStyle(fontSize: 18)),
-                                        SizedBox(height: 20),
+                                        SizedBox(height: 10),
                                         Text("5 out of 10", style: TextStyle(fontSize: 14))
                                       ],
                                     ),
@@ -132,7 +132,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                                 Container(
                                   width: MediaQuery.of(context).size.width / 3.5,
-                                  height: MediaQuery.of(context).size.width / 3.5,
+                                  height: 90,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.grey,
@@ -143,7 +143,7 @@ class _DashboardPageState extends State<DashboardPage> {
 //                                    mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text("Next day", style: TextStyle(fontSize: 18)),
-                                        SizedBox(height: 20),
+                                        SizedBox(height: 10),
                                         Text("5 Tasks", style: TextStyle(fontSize: 14))
                                       ],
                                     ),
@@ -151,7 +151,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                                 Container(
                                   width: MediaQuery.of(context).size.width / 3.5,
-                                  height: MediaQuery.of(context).size.width / 3.5,
+                                  height: 90,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.grey,
@@ -162,7 +162,7 @@ class _DashboardPageState extends State<DashboardPage> {
 //                                    mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text("Groups", style: TextStyle(fontSize: 18)),
-                                        SizedBox(height: 20),
+                                        SizedBox(height: 10),
                                         Text("10 out of 15", style: TextStyle(fontSize: 14))
                                       ],
                                     ),
