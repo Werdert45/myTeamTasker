@@ -52,13 +52,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
           child: FutureBuilder(
             future: streams.getCalendar(user.uid),
             builder: (context, snapshot) {
-              Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
-              calendar.forEach((k,v) => _events[k] = v);
+                Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
+                calendar.forEach((k,v) => _events[k] = v);
 
-              if (snapshot.connectionState == ConnectionState.done) {
                 return Container(
                   width: double.infinity,
-                  height: 2000,
+                  height: MediaQuery.of(context).size.height,
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
@@ -123,17 +122,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
                 );
               }
-
-              else {
-                return Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-            }
           ),
         ),
       ),
