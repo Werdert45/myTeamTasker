@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/components/button.dart';
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
@@ -39,7 +40,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: Color(0xFFc6bed2),
+                          color: secondaryColor,
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -50,9 +51,9 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 4.5,
-                    color: Color(0xFF572f8c),
+                    color: primaryColor,
                     child: Center(
-                        child: Text("\n\nSELECT OR\nJOIN A GROUP", style: TextStyle(fontSize: 30, color: Color(0xFFc6bed2),
+                        child: Text("\n\nSELECT OR\nJOIN A GROUP", style: TextStyle(fontSize: 30, color: secondaryColor,
                             fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                     )
                 ),
@@ -62,7 +63,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: 30),
-                    Text("JOIN A GROUP", style: TextStyle(color: Color(0xFF572f8c))),
+                    Text("JOIN A GROUP", style: TextStyle(color: primaryColor)),
                     SizedBox(height: 30),
                     Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
@@ -74,19 +75,19 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                           decoration: InputDecoration(
                               prefixText: "df",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: Color(0xFFc6bed2),
-                              fillColor: Color(0xFFc6bed2),
+                              focusColor: secondaryColor,
+                              fillColor: secondaryColor,
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                  borderSide: BorderSide(color: secondaryColor, width: 2)
                               ),
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                  borderSide: BorderSide(color: secondaryColor, width: 2)
                               ),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                  borderSide: BorderSide(color: secondaryColor, width: 2)
                               ),
                               hintText: 'ENTER CODE'
                           ),
@@ -95,7 +96,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                     SizedBox(height: 20),
 
                     // NEW FUNCTION: CHECK IF GROUP EXISTS, IF SO, ADD THE USER
-                    secondaryRoundButton(Color(0xFF572f8c), Colors.white, "JOIN", database.addToGroup(user.uid, _group_code), 310, 30),
+                    secondaryRoundButton(primaryColor, Colors.white, "JOIN", database.addToGroup(user.uid, _group_code), 310, 30),
                     SizedBox(height: 30),
                     Container(
                       width: MediaQuery.of(context).size.width - 40,
@@ -121,7 +122,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                       onTap: () {
                         Navigator.popAndPushNamed(context, '/creategroup');
                       },
-                      child: Text("CREATE A GROUP", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
+                      child: Text("CREATE A GROUP", style: TextStyle(fontSize: 24, color: primaryColor)),
                     )
                   ],
                 ),
@@ -135,7 +136,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: Color(0xFFc6bed2),
+                          color: secondaryColor,
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -148,7 +149,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xFFc6bed2),
+                        color: secondaryColor,
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),

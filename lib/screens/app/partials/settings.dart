@@ -62,23 +62,23 @@ class _SettingsPageState extends State<SettingsPage> {
               prefixText: "df",
               labelStyle: TextStyle(color: Colors.grey),
               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-              focusColor: Color(0xFF572f8c),
-              fillColor: Color(0xFF572f8c),
+              focusColor: primaryColor,
+              fillColor: primaryColor,
               disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
-                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                  borderSide: BorderSide(color: primaryColor, width: 2)
               ),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
-                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                  borderSide: BorderSide(color: primaryColor, width: 2)
               ),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
-                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                  borderSide: BorderSide(color: primaryColor, width: 2)
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
-                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                  borderSide: BorderSide(color: primaryColor, width: 2)
               ),
             ),
           ),

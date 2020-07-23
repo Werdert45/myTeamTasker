@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return new Scaffold(
       bottomNavigationBar: new Material(
-        color: Color(0xFF572f8c),
+        color: primaryColor,
         child: TabBar(
           controller: tabController,
           tabs: <Widget>[

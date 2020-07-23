@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
@@ -220,9 +221,9 @@ class ActiveTaskState extends State<ActiveTask> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(height: 10),
-                                      (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: Color(0xFF572f8c), fontSize: 20))) : Text("Loading ...")),
+                                      (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: primaryColor, fontSize: 20))) : Text("Loading ...")),
 //                      SizedBox(height: 3),
-                                      Text("8 AM to 12 AM", style: TextStyle(color: Color(0xFFc6bed2), fontSize: 12))
+                                      Text("8 AM to 12 AM", style: TextStyle(color: secondaryColor, fontSize: 12))
                                     ]
                                 ),
                                 FlatButton(
