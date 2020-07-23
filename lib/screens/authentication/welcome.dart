@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:flutter/material.dart';
 import '../../components/button.dart';
 
@@ -24,7 +25,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xFFc6bed2),
+                        color: secondaryColor,
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),
@@ -36,7 +37,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xFFc6bed2),
+                        color: secondaryColor,
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),
@@ -48,7 +49,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xFFc6bed2),
+                        color: secondaryColor,
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),
@@ -60,7 +61,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   children: [
                     SizedBox(height: 40),
                     Text("WELCOME TO\nTaskCollab",
-                        style: TextStyle(fontSize: 20, color: Color(0xFF572f8c),
+                        style: TextStyle(fontSize: 20, color: primaryColor,
                             fontWeight: FontWeight.w400),
                         textAlign: TextAlign.center)
                   ],
@@ -71,9 +72,9 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      primaryRoundButton(Color(0xFF572f8c), Color(0xFFc6bed2), " LOG IN ", () { Navigator.pushNamed(context, '/login'); }, 260.0, 30.0),
+                      primaryRoundButton(primaryColor, secondaryColor, " LOG IN ", () { Navigator.pushNamed(context, '/login'); }, 260.0, 30.0),
                       SizedBox(height: 30),
-                      primaryRoundButton(Color(0xFFc6bed2), Color(0xFF572f8c), "SIGN UP", () { Navigator.pushNamed(context, '/signup'); }, 260.0, 30.0),
+                      primaryRoundButton(secondaryColor, primaryColor, "SIGN UP", () { Navigator.pushNamed(context, '/signup'); }, 260.0, 30.0),
                       SizedBox(height: 100)
                     ],
                   )

@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/components/active-task-tile.dart';
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
@@ -86,7 +87,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                               height: MediaQuery.of(context).size.height / 4.5,
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                  color: Color(0xFF572f8c),
+                                  color: primaryColor,
                                   border: Border(
                                   ),
                                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
@@ -170,12 +171,12 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 5),
-          child: Text("Group Tasks", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
+          child: Text("Group Tasks", style: TextStyle(fontSize: 24, color: primaryColor)),
         ),
         SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Single Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
+          child: Text("Single Tasks", style: TextStyle(fontSize: 18, color: primaryColor)),
         ),
         ListView.builder(
             shrinkWrap: true,
@@ -201,7 +202,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
 
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
+          child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: primaryColor)),
         ),
         ListView.builder(
             shrinkWrap: true,
@@ -236,12 +237,12 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Personal Tasks", style: TextStyle(fontSize: 24, color: Color(0xFF572f8c))),
+          child: Text("Personal Tasks", style: TextStyle(fontSize: 24, color: primaryColor)),
         ),
         SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Single Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
+          child: Text("Single Tasks", style: TextStyle(fontSize: 18, color: primaryColor)),
         ),
         ListView.builder(
             shrinkWrap: true,
@@ -267,7 +268,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
         SizedBox(height: 15),
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: Color(0xFF572f8c))),
+          child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: primaryColor)),
         ),
         ListView.builder(
             shrinkWrap: true,

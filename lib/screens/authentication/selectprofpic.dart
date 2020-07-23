@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -81,9 +82,9 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
           child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 4,
-              color: Color(0xFF572f8c),
+              color: primaryColor,
               child: Center(
-                  child: Text("WELCOME\n" + widget.user_name, style: TextStyle(fontSize: 34, color: Color(0xFFc6bed2),
+                  child: Text("WELCOME\n" + widget.user_name, style: TextStyle(fontSize: 34, color: secondaryColor,
                       fontWeight: FontWeight.w400), textAlign: TextAlign.center)
               )
           ),
@@ -104,19 +105,19 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                         height: 220.0,
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(color: Color(0xFF572f8c)),
+                            border: Border.all(color: primaryColor),
                             borderRadius: BorderRadius.all(Radius.circular(125.0)),
                             boxShadow: [
                               BoxShadow(blurRadius: 7.0, color: Colors.black)
                             ]),
-                        child: Icon(Icons.person, size: 130, color: Color(0xFFc6bed2)),
+                        child: Icon(Icons.person, size: 130, color: secondaryColor),
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
                           padding: EdgeInsets.only(right: 0, bottom: 0),
                           child: IconButton(
-                            icon: Icon(Icons.add_circle, color: Color(0xFF572f8c)),
+                            icon: Icon(Icons.add_circle, color: primaryColor),
                             onPressed: getImage,
                             iconSize: 50,
                             color: Colors.black,
@@ -131,7 +132,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                   'Choose an avatar',
                   style: TextStyle(
                       fontSize: 18.0,
-                      color: Color(0xFF572f8c),
+                      color: primaryColor,
                       fontFamily: 'Montserrat'),
                 ),
                 SizedBox(height: 55.0),
@@ -144,19 +145,19 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                   decoration: InputDecoration(
                     prefixText: "df",
                     prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                    focusColor: Color(0xFFc6bed2),
-                    fillColor: Color(0xFFc6bed2),
+                    focusColor: secondaryColor,
+                    fillColor: secondaryColor,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                        borderSide: BorderSide(color: secondaryColor, width: 2)
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                        borderSide: BorderSide(color: secondaryColor, width: 2)
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                        borderSide: BorderSide(color: secondaryColor, width: 2)
                     ),
                     hintText: 'Enter Email',
                   ),
@@ -170,12 +171,12 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
             padding: EdgeInsets.only(left: 30, bottom: 15),
             child: RaisedButton(
                 onPressed: getImage,
-                textColor: Color(0xFFc6bed2),
+                textColor: secondaryColor,
                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
-                color: Color(0xFF572f8c),
+                color: primaryColor,
                 child: Container(
                     child: Text("SELECT IMAGE", style: TextStyle(fontSize: 12))
                 )
@@ -190,7 +191,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
               onTap: () {},
               child: Text(
                 "SKIP",
-                style: TextStyle(color: Color(0xFF572f8c), fontWeight: FontWeight.w500),
+                style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -216,9 +217,9 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
           child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 4,
-              color: Color(0xFF572f8c),
+              color: primaryColor,
               child: Center(
-                  child: Text("CHOOSE PICTURE", style: TextStyle(fontSize: 34, color: Color(0xFFc6bed2),
+                  child: Text("CHOOSE PICTURE", style: TextStyle(fontSize: 34, color: secondaryColor,
                       fontWeight: FontWeight.w400), textAlign: TextAlign.center)
               )
           ),
@@ -250,7 +251,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                         child: Padding(
                           padding: EdgeInsets.only(right: 0, bottom: 0),
                           child: IconButton(
-                            icon: Icon(Icons.add_circle, color: Color(0xFF572f8c)),
+                            icon: Icon(Icons.add_circle, color: primaryColor),
                             onPressed: getImage,
                             iconSize: 50,
                             color: Colors.black,
@@ -268,19 +269,19 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                   decoration: InputDecoration(
                     prefixText: "df",
                     prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                    focusColor: Color(0xFFc6bed2),
-                    fillColor: Color(0xFFc6bed2),
+                    focusColor: secondaryColor,
+                    fillColor: secondaryColor,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                        borderSide: BorderSide(color: secondaryColor, width: 2)
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                        borderSide: BorderSide(color: secondaryColor, width: 2)
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                        borderSide: BorderSide(color: secondaryColor, width: 2)
                     ),
                     hintText: 'Enter Email',
                   ),
@@ -294,12 +295,12 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
             padding: EdgeInsets.only(left: 30, bottom: 15),
             child: RaisedButton(
                 onPressed: () {uploadImage(user.uid);},
-                textColor: Color(0xFFc6bed2),
+                textColor: secondaryColor,
                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
-                color: Color(0xFF572f8c),
+                color: primaryColor,
                 child: Container(
                     child: Text("CONTINUE", style: TextStyle(fontSize: 12))
                 )
@@ -314,7 +315,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
               onTap: getImage,
               child: Text(
                 "CHOOSE OTHER",
-                style: TextStyle(color: Color(0xFF572f8c), fontWeight: FontWeight.w500),
+                style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
               ),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
@@ -22,7 +23,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with
             width: 10,
             height: 10,
             decoration: BoxDecoration(
-                color: Color(0xFFc6bed2),
+                color: secondaryColor,
                 borderRadius: BorderRadius.circular(60.0))
         )));
     tabList.add(new Tab(
@@ -30,7 +31,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with
             width: 10,
             height: 10,
             decoration: BoxDecoration(
-                color: Color(0xFFc6bed2),
+                color: secondaryColor,
                 borderRadius: BorderRadius.circular(60.0))
         )));
     _tabController = new TabController(vsync: this, length:
@@ -107,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with
                               indicator: BubbleTabIndicator(
                                 indicatorHeight: 15.0,
                                 indicatorRadius: 20,
-                                indicatorColor: Color(0xFF572f8c),
+                                indicatorColor: primaryColor,
                                 tabBarIndicatorSize: TabBarIndicatorSize.tab,
                               ),
                               tabs: tabList

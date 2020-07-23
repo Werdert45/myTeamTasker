@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/components/button.dart';
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
@@ -48,9 +49,9 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 4.5,
-                      color: Color(0xFF572f8c),
+                      color: primaryColor,
                       child: Center(
-                          child: Text("\n\nCREATE GROUP", style: TextStyle(fontSize: 30, color: Color(0xFFc6bed2),
+                          child: Text("\n\nCREATE GROUP", style: TextStyle(fontSize: 30, color: secondaryColor,
                               fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                       )
                   ),
@@ -71,7 +72,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                         createGroup(user.uid, _group_name, _group_description);
 //                        Navigator.popAndPushNamed(context, '/homepage');
                       },
-                      child: Text("CREATE", style: TextStyle(fontSize: 16, color: Color(0xFFc6bed2))),
+                      child: Text("CREATE", style: TextStyle(fontSize: 16, color: secondaryColor)),
                     )
                 ),
                 Form(
@@ -84,7 +85,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 30),
-                          Text("Group name", style: TextStyle(fontSize: 14, color: Color(0xFFc6bed2))),
+                          Text("Group name", style: TextStyle(fontSize: 14, color: secondaryColor)),
                           SizedBox(height: 5),
                           Padding(
                               padding: EdgeInsets.only(left: 0),
@@ -97,26 +98,26 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                                     prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                    focusColor: Color(0xFFc6bed2),
-                                    fillColor: Color(0xFFc6bed2),
+                                    focusColor: secondaryColor,
+                                    fillColor: secondaryColor,
                                     enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                        borderSide: BorderSide(color: secondaryColor, width: 2)
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                        borderSide: BorderSide(color: secondaryColor, width: 2)
                                     ),
                                     border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                        borderSide: BorderSide(color: secondaryColor, width: 2)
                                     ),
                                     hintText: 'Enter group name'
                                 ),
                               )
                           ),
                           SizedBox(height: 30),
-                          Text("Description", style: TextStyle(fontSize: 14, color: Color(0xFFc6bed2))),
+                          Text("Description", style: TextStyle(fontSize: 14, color: secondaryColor)),
                           SizedBox(height: 5),
                           TextFormField(
                             onChanged: (val) {
@@ -129,25 +130,25 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: Color(0xFFc6bed2),
-                                fillColor: Color(0xFFc6bed2),
+                                focusColor: secondaryColor,
+                                fillColor: secondaryColor,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                    borderSide: BorderSide(color: secondaryColor, width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                    borderSide: BorderSide(color: secondaryColor, width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Color(0xFFc6bed2), width: 2)
+                                    borderSide: BorderSide(color: secondaryColor, width: 2)
                                 ),
                                 hintText: 'Put down a small description of the group here'
                             ),
                           ),
                           SizedBox(height: 20),
-                          Text("TASKS", style: TextStyle(fontSize: 14, color: Color(0xFFc6bed2))),
+                          Text("TASKS", style: TextStyle(fontSize: 14, color: secondaryColor)),
                           SizedBox(height: 5),
                           Container(height: MediaQuery.of(context).size.height / 4.5, width: double.infinity, color: Colors.red),
                         ],
@@ -162,7 +163,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: Color(0xFFc6bed2),
+                          color: secondaryColor,
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),

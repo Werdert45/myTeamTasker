@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/components/button.dart';
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/screens/authentication/selectprofpic.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
@@ -47,9 +48,9 @@ class _SignupPageState extends State<SignupPage> {
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 4.5,
-                    color: Color(0xFF572f8c),
+                    color: primaryColor,
                     child: Center(
-                        child: Text("\n\nSIGN UP", style: TextStyle(fontSize: 34, color: Color(0xFFc6bed2),
+                        child: Text("\n\nSIGN UP", style: TextStyle(fontSize: 34, color: secondaryColor,
                             fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                     )
                 ),
@@ -80,19 +81,19 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: InputDecoration(
                               prefixText: "df",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: Color(0xFF572f8c),
-                                fillColor: Color(0xFF572f8c),
+                                focusColor: primaryColor,
+                                fillColor: primaryColor,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 hintText: 'Enter your Name'
                             ),
@@ -110,19 +111,19 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: InputDecoration(
                                 prefixText: "df",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: Color(0xFF572f8c),
-                                fillColor: Color(0xFF572f8c),
+                                focusColor: primaryColor,
+                                fillColor: primaryColor,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 hintText: 'Enter Email'
                             ),
@@ -141,19 +142,19 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: InputDecoration(
                               prefixText: "df",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: Color(0xFF572f8c),
-                              fillColor: Color(0xFF572f8c),
+                              focusColor: primaryColor,
+                              fillColor: primaryColor,
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  borderSide: BorderSide(color: primaryColor, width: 2)
                               ),
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  borderSide: BorderSide(color: primaryColor, width: 2)
                               ),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  borderSide: BorderSide(color: primaryColor, width: 2)
                               ),
                               hintText: '*********',
                             ),
@@ -165,20 +166,20 @@ class _SignupPageState extends State<SignupPage> {
                           height: 6,
                           width: 30,
                           decoration: BoxDecoration(
-                              color: Color(0xFFc6bed2),
+                              color: secondaryColor,
                               borderRadius: BorderRadius.circular(3.0)
                           ),
                           child: SizedBox(),
                         ),
                       ),
-                      primaryRoundButton(Color(0xFF572f8c), Color(0xFFc6bed2), "SIGN UP", _signUpAction, 310, 30),
+                      primaryRoundButton(primaryColor, secondaryColor, "SIGN UP", _signUpAction, 310, 30),
                       SizedBox(height: 15),
                       GestureDetector(
                           onTap: () {
 //                            Navigator.pop(context);
                             Navigator.popAndPushNamed(context, '/login');
                           },
-                          child: Text("Already have an account? Log in here", style: TextStyle(color: Color(0xFF572f8c), fontSize: 10))
+                          child: Text("Already have an account? Log in here", style: TextStyle(color: primaryColor, fontSize: 10))
                       )
                     ],
                   ),
@@ -193,7 +194,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: Color(0xFFc6bed2),
+                          color: secondaryColor,
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -208,7 +209,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: Color(0xFFc6bed2),
+                          color: secondaryColor,
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -221,7 +222,7 @@ class _SignupPageState extends State<SignupPage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xFFc6bed2),
+                        color: secondaryColor,
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),

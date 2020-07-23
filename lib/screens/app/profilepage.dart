@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/partials/group_stats.dart';
@@ -88,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: MediaQuery.of(context).size.height / 6,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: Color(0xFF572f8c),
+                          color: primaryColor,
                           border: Border(
                           ),
                           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))

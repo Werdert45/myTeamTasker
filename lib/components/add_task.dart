@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:emoji_picker/emoji_picker.dart';
@@ -146,19 +147,19 @@ class _AddTaskState extends State<AddTask> {
                                 contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
 //                            labelText: "Task Title",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: Color(0xFF572f8c),
-                                fillColor: Color(0xFF572f8c),
+                                focusColor: primaryColor,
+                                fillColor: primaryColor,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 hintText: 'Task title'
                             ),
@@ -179,19 +180,19 @@ class _AddTaskState extends State<AddTask> {
                                 contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: Color(0xFF572f8c),
-                                fillColor: Color(0xFF572f8c),
+                                focusColor: primaryColor,
+                                fillColor: primaryColor,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 hintText: 'Write down a small description'
                             ),

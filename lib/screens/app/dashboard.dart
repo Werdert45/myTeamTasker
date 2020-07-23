@@ -1,5 +1,6 @@
 //import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
@@ -92,7 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       height: MediaQuery.of(context).size.height / 4.5,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: Color(0xFF572f8c),
+                          color: primaryColor,
                           border: Border(
                           ),
                           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))

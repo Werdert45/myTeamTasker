@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-// Prim: Color(0xFF572f8c)
-// Second: Color(0xFFc6bed2)
+// Prim: primaryColor
+// Second: secondaryColor
 
 
 Widget checkbox(size, primaryColor, secondaryColor, checked) {

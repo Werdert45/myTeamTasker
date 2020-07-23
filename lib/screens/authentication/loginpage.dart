@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/components/button.dart';
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -46,9 +47,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 4.5,
-                    color: Color(0xFF572f8c),
+                    color: primaryColor,
                     child: Center(
-                        child: Text("\n\nLOGIN", style: TextStyle(fontSize: 34, color: Color(0xFFc6bed2),
+                        child: Text("\n\nLOGIN", style: TextStyle(fontSize: 34, color: secondaryColor,
                             fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                     )
                 ),
@@ -80,19 +81,19 @@ class _LoginPageState extends State<LoginPage> {
                             decoration: InputDecoration(
                                 prefixText: "df",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: Color(0xFF572f8c),
-                                fillColor: Color(0xFF572f8c),
+                              focusColor: primaryColor,
+                                fillColor: primaryColor,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 hintText: 'Enter Email'
                             ),
@@ -111,19 +112,19 @@ class _LoginPageState extends State<LoginPage> {
                             decoration: InputDecoration(
                               prefixText: "df",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: Color(0xFF572f8c),
-                                fillColor: Color(0xFF572f8c),
+                                focusColor: primaryColor,
+                                fillColor: primaryColor,
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  borderSide: BorderSide(color: primaryColor, width: 2)
                               ),
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  borderSide: BorderSide(color: primaryColor, width: 2)
                               ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                    borderSide: BorderSide(color: primaryColor, width: 2)
                                 ),
                                 hintText: '*********',
                             ),
@@ -135,19 +136,19 @@ class _LoginPageState extends State<LoginPage> {
                           height: 6,
                           width: 30,
                           decoration: BoxDecoration(
-                              color: Color(0xFFc6bed2),
+                              color: secondaryColor,
                             borderRadius: BorderRadius.circular(3.0)
                           ),
                           child: SizedBox(),
                         ),
                       ),
-                      primaryRoundButton(Color(0xFF572f8c), Color(0xFFc6bed2), "LOG IN", _signInAction, 310, 30),
+                      primaryRoundButton(primaryColor, secondaryColor, "LOG IN", _signInAction, 310, 30),
                       SizedBox(height: 20),
                       GestureDetector(
                         onTap: () {
                           Navigator.popAndPushNamed(context, '/signup');
                         },
-                        child: Text("Don't have an account? Sign up here", style: TextStyle(color: Color(0xFF572f8c), fontSize: 10))
+                        child: Text("Don't have an account? Sign up here", style: TextStyle(color: primaryColor, fontSize: 10))
                       )
                     ],
                   ),
@@ -162,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: Color(0xFFc6bed2),
+                          color: secondaryColor,
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -177,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: Color(0xFFc6bed2),
+                          color: secondaryColor,
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -190,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xFFc6bed2),
+                        color: secondaryColor,
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),
