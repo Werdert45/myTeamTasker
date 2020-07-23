@@ -6,8 +6,9 @@ class group {
   final String name;
   final List repeated_tasks;
   final List single_tasks;
+  final Map tasks_history;
 
-  group({this.name, this.code, this.description, this.id, this.members, this.repeated_tasks, this.single_tasks});
+  group({this.name, this.code, this.description, this.id, this.members, this.repeated_tasks, this.single_tasks, this.tasks_history});
 
   factory group.fromMap(Map data) {
     data = data ?? {};
@@ -18,7 +19,8 @@ class group {
       id: data['id'] ?? '',
       members: data['members'] ?? {},
       repeated_tasks: data['repeated_tasks'] ?? [],
-      single_tasks: data['single_tasks'] ?? []
+      single_tasks: data['single_tasks'] ?? [],
+      tasks_history: data['tasks_history'] ?? {}
     );
   }
 }

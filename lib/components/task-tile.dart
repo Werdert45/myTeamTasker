@@ -12,8 +12,10 @@ class EmoIcon extends StatefulWidget {
   final puid;
   final group;
   final parent;
+  final tasks_history_pers;
+  final total_tasks;
 //
-  EmoIcon(this.task, this.puid, this.group, this.parent);
+  EmoIcon(this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks);
 
 
   @override
@@ -90,6 +92,24 @@ class EmoIconState extends State<EmoIcon> {
   }
 
   updateFinishedStatus(taskID, status, puid) async {
+    if (checkedValue) {
+      if (repeated) {
+        await database.addToSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
+      }
+      else {
+        await database.addToPersonalTaskHistory(puid, taskID, widget.tasks_history_pers, widget.total_tasks);
+      }
+    }
+    else {
+      if (repeated) {
+        await database.removeFromSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
+      }
+
+      else {
+        await database.removeFromPersonalTaskHistory(puid, taskID, widget.tasks_history_pers, widget.total_tasks);
+      }
+    }
+
     if (widget.task is repeated_task) {
       await database.updateFinishedStatusRepeated(taskID, status, puid);
     }

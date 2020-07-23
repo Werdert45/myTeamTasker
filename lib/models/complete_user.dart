@@ -4,9 +4,11 @@ class complete_user {
   final List groups;
   final String profile_picture;
   final List tasks;
+  final Map personal_history;
+  final Map group_history;
 
 
-  complete_user({this.email, this.name, this.groups, this.profile_picture, this.tasks});
+  complete_user({this.email, this.name, this.groups, this.profile_picture, this.tasks, this.personal_history, this.group_history});
 
   factory complete_user.fromMap(Map data) {
     data = data ?? {};
@@ -16,6 +18,8 @@ class complete_user {
         groups: data['groups'] ?? [],
         tasks: data['tasks'] ?? [],
         profile_picture: data['profile_picture'] ?? null,
+        personal_history: data['personal_history'] ?? {},
+        group_history: data['group_history'] ?? {}
     );
   }
 

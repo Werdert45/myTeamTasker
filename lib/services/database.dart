@@ -52,7 +52,8 @@ class Streams {
     }
 
     var group_list = user.groups.keys.toList();
-
+    var groupy = await groupsCollection.document(group_list[0]).get();
+    var group_data = group.fromMap(groupy.data);
 
     for (var i = 0; i < group_list.length; i++) {
       var groupdata = await groupsCollection.document(group_list[i]).get();
@@ -87,7 +88,7 @@ class Streams {
 
     tasks = repeated_full + single_full;
 
-    var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': groups, 'tasks': tasks});
+    var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': groups, 'tasks': tasks, 'personal_history': user.tasks_history, 'group_history': group_data.tasks_history});
 
     return userWithTasks;
   }
@@ -417,6 +418,75 @@ class DatabaseService {
     else {
       print("No clue");
     }
+  }
+
+  Future addToSharedTaskHistory(String puid, String taskID, String groupID, Map task_history) async {
+    var time = DateTime.now();
+    var date = "${time.year}-${time.month}-${time.day}";
+
+    // Update the list of finished tasks for the user (tasks_history)
+    if (task_history.containsKey(date)) {
+      if (task_history[date].containsKey(puid)) {
+        task_history[date][puid].add(taskID);
+      }
+      else {
+        task_history[date][puid] = [taskID];
+      }
+    }
+
+    else {
+      task_history[date] = {puid: []};
+      task_history[date][puid].add(taskID);
+    }
+
+    await groupsCollection.document(groupID).updateData({
+      'tasks_history': task_history
+    });
+  }
+
+
+  Future removeFromSharedTaskHistory(String puid, String taskID, String groupID, Map task_history) async {
+    var time = DateTime.now();
+    var date = "${time.year}-${time.month}-${time.day}";
+
+    // Note start using the uid of the user that finished the task before you (if it is the case that the task was done by someone else
+    // And you decided that it was not finished
+    task_history[date][puid].remove(taskID);
+
+
+    await usersCollection.document(puid).updateData({
+      'tasks_history': task_history
+    });
+  }
+
+
+  Future addToPersonalTaskHistory(String puid, String taskID, Map task_history, total_tasks) async {
+    var time = DateTime.now();
+    var date = "${time.year}-${time.month}-${time.day}";
+
+    if (task_history.containsKey(date)) {
+      task_history[date][0] += 1;
+    }
+
+    else {
+      task_history[date] = [1, total_tasks];
+    }
+
+
+    await usersCollection.document(puid).updateData({
+      'tasks_history': task_history
+    });
+  }
+
+  Future removeFromPersonalTaskHistory(String puid, String taskID, Map task_history, total_tasks) async {
+    var time = DateTime.now();
+    var date = "${time.year}-${time.month}-${time.day}";
+
+    task_history[date][0] -= 1;
+
+    await usersCollection.document(puid).updateData({
+      'tasks_history': task_history
+    });
   }
 
   Future updateFinishedStatusSingle(taskID, status, puid) async {
