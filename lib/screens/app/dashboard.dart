@@ -185,7 +185,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 if (snapshot.data.tasks[index].title != "") {
                                   return Container(
                                     width: double.infinity,
-                                    child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
+                                    child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, tasks.length),
                                   );
                                 }
                                 else {
