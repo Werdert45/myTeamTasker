@@ -55,6 +55,7 @@ class Streams {
     var groupy = await groupsCollection.document(group_list[0]).get();
     var group_data = group.fromMap(groupy.data);
 
+
     for (var i = 0; i < group_list.length; i++) {
       var groupdata = await groupsCollection.document(group_list[i]).get();
       var spec_group = group.fromMap(groupdata.data);
@@ -124,6 +125,7 @@ class Streams {
 
     var group_list = user.groups.keys.toList();
 
+
     for (var i = 0; i < group_list.length; i++) {
       var groupdata = await groupsCollection.document(group_list[i]).get();
       var spec_group = group.fromMap(groupdata.data);
@@ -150,6 +152,7 @@ class Streams {
     }
 
     tasks = repeated_full + single_full;
+
 
     var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': groups, 'tasks': tasks});
 
@@ -350,7 +353,6 @@ class DatabaseService {
 
 
   Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name) async {
-    if (shared) {
       await singleTasksCollection.document(taskID).setData({
         'alert_time': alertTime,
         'date': date,
@@ -366,33 +368,9 @@ class DatabaseService {
         'finished_by': {},
         'belongs_to': [group_code, group_name]
       });
-
-      await groupsCollection.document(group_code).updateData({
-        'single_tasks': FieldValue.arrayUnion([taskID])
-      });
-    }
-
-    else {
-      await singleTasksCollection.document(taskID).setData({
-        'alert_time': alertTime,
-        'date': date,
-        'creator': puid,
-        'assignee': assignee,
-        'days': null,
-        'icon': icon,
-        'id': taskID,
-        'title': title,
-        'shared': shared,
-        'repeated': false,
-        'finished': false,
-        'finished_by': {},
-        'belongs_to': [group_code, group_name]
-      });
-    }
   }
 
   Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title, shared, group_code, group_name) async {
-    if (shared) {
       await repeatedTasksCollection.document(taskID).setData({
         'alert_time': alertTime,
         'assignee': assignee,
@@ -408,29 +386,6 @@ class DatabaseService {
         'belongs_to': [group_code, group_name]
 //      'description': description
       });
-
-      await groupsCollection.document(group_code).updateData({
-        'repeated_tasks': FieldValue.arrayUnion([taskID])
-      });
-    }
-
-    else {
-      await repeatedTasksCollection.document(taskID).setData({
-        'alert_time': alertTime,
-        'assignee': assignee,
-        'creator': puid,
-        'days': days,
-        'icon': icon,
-        'id': taskID,
-        'title': title,
-        'shared': shared,
-        'repeated': true,
-        'finished': false,
-        'finished_by': {},
-        'belongs_to': [group_code, group_name]
-//      'description': description
-      });
-    }
   }
 
   Future removeSingleTask(taskID) async {

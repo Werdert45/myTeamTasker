@@ -121,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: TabBarView(
                                         children: [
                                           UserStatPage(snapshot.data.personal_history),
-                                          GroupStatPage(snapshot.data.group_history)
+                                          GroupStatPage(snapshot.data.group_history, snapshot.data.groups)
                                         ],
                                       ),
                                     )

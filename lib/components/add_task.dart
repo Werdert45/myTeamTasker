@@ -9,12 +9,15 @@ import 'package:provider/provider.dart';
 
 
 class AddTask extends StatefulWidget {
+
   @override
   _AddTaskState createState() => _AddTaskState();
 }
 
 class _AddTaskState extends State<AddTask> {
   @override
+  final Streams streams = Streams();
+
   bool isShowSticker;
   var categories;
   TimeOfDay _time = null;
@@ -80,11 +83,11 @@ class _AddTaskState extends State<AddTask> {
   // Improve addTaskDB to also save to either group or personal + title not working
   addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name) async {
     if (repeated) {
-      await database.addRepeatedTask(taskID, puid, 'DfQpnO', shared);
+      await database.addRepeatedTask(taskID, puid, group_code, shared);
       await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name);
     }
     else {
-      await database.addSingleTask(taskID, puid, 'DfQpnO', shared);
+      await database.addSingleTask(taskID, puid, group_code, shared);
       await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name);
     }
   }
@@ -99,25 +102,35 @@ class _AddTaskState extends State<AddTask> {
             centerTitle: true,
             title: Text("Add Task"),
             actions: [
-              IconButton(
-                icon: Icon(Icons.check, size: 30),
-                onPressed: () async {
-                  var puid = user.uid;
-                  var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-                  var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-                  var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
-                  var title = _title;
+              FutureBuilder(
+                future: streams.getCompleteUser(user.uid),
+                builder: (context, snapshot) {
+                  print(snapshot.data);
+
+                  return IconButton(
+                    icon: Icon(Icons.check, size: 30),
+                    onPressed: () async {
+                      var puid = user.uid;
+                      var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                      var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                      var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+                      var title = _title;
 //                  var description = "";
-                  var date = _dateTime.millisecondsSinceEpoch;
-//                  var group_code = widget.group.code;
-//                  var group_name = widget.group.name;
+                      var date = _dateTime.millisecondsSinceEpoch;
+                      var group_code = snapshot.data.groups[0].code;
+                      print("===================================");
+                      print(snapshot.data.groups);
+                      print("===================================");
+                      var group_name = snapshot.data.groups[0].name;
 
-                  addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, 'QPMRGW', 'TEST NAME');
+                      addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name);
 
-                  // Not the correct navigator
-                  Navigator.pop(context);
-                  setState(() {});
-                },
+                      // Not the correct navigator
+                      Navigator.pop(context);
+                      setState(() {});
+                    },
+                  );
+                }
               )
             ],
           ),
@@ -173,7 +186,7 @@ class _AddTaskState extends State<AddTask> {
                             maxLines: 4,
                             validator: (val) => val.isEmpty ? 'No description provided' : null,
                             onChanged: (val) {
-                            setState(() => _description = val);
+                              setState(() => _description = val);
                             },
                             textCapitalization: TextCapitalization.none,
                             decoration: InputDecoration(

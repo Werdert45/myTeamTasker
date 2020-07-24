@@ -70,7 +70,8 @@ timeSeriesPointsGroup(Map task_history, range) {
       var task_count = 0;
 
       // Loop through all of the users to get the length of the task list to add
-      task_history[day].forEach((k,v) => task_count += v[0]);
+
+      task_history[day].forEach((k,v) => task_count += v.length);
 
       seriesLine.add(TimeSeriesSales(DateTime(start.year, start.month, start.day), task_count));
     }
@@ -103,17 +104,19 @@ timeSeriesPointsGroup(Map task_history, range) {
 }
 
 
-pieChartGroup(Map task_history, members) {
+pieChartGroup(Map task_history, Map members) {
 
   List color_list = [charts.MaterialPalette.blue.shadeDefault, charts.MaterialPalette.red.shadeDefault, charts.MaterialPalette.green.shadeDefault, charts.MaterialPalette.yellow.shadeDefault];
 
   List<LinearSales> data = [];
   // Set all members contrib to zero
-  var member_contrib = Map.fromIterable(members, key: (v) => v, value: (v) => 0);
+  var member_contrib = {};
+
+  members.forEach((key, value) { member_contrib[key] = 0; });
 
 
   task_history.forEach((key, value) {
-    value.forEach((key, value) => member_contrib[key] += value[0]);
+    value.forEach((key, value) => member_contrib[key] += value.length);
   });
 
   // TODO change color to dart colors and
@@ -122,7 +125,7 @@ pieChartGroup(Map task_history, members) {
   var counter = 0;
 
   member_contrib.forEach((key, value) {
-    data.add(LinearSales(counter, value, key, color_list[counter]));
+    data.add(LinearSales(counter, value, members[key], color_list[counter]));
     counter += 1;
   });
 
