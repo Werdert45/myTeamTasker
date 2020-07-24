@@ -1,11 +1,17 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:collaborative_repitition/screens/app/partials/donutchart.dart';
+import 'package:collaborative_repitition/services/functions/stat_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:collaborative_repitition/screens/app/partials/timeseriesgraph.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 
 class GroupStatPage extends StatefulWidget {
+  final task_history;
+//  final group;
+
+  GroupStatPage(this.task_history);
+
   @override
   _GroupStatPageState createState() => _GroupStatPageState();
 }
@@ -17,7 +23,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
   Widget build(BuildContext context) {
     return Container(
         child: DefaultTabController(
-          initialIndex: 1,
+          initialIndex: 0,
           length: 2,
           child: Column(
             children: [
@@ -108,7 +114,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                             ),
                             Container(
                                 height: 280,
-                                child: TimeSeriesGraphScreen(createSampleData())
+                                child: TimeSeriesGraphScreen(timeSeriesPointsGroup(widget.task_history, 7))
                             ),
                           ],
                         ),
@@ -240,7 +246,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                             SizedBox(height: 10),
                             Container(
                                 height: 280,
-                                child: DonutPieChart(_createSampleData())
+                                child: DonutPieChart(pieChartGroup(widget.task_history, [""]))
                             ),
                           ],
                         ),

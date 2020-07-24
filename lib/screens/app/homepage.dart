@@ -1,5 +1,4 @@
 import 'package:collaborative_repitition/constants/colors.dart';
-import 'package:collaborative_repitition/screens/app/database_test.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,7 +44,7 @@ class _HomePageState extends State<HomePage>
         children: <Widget>[
           DashboardPage(),
           CalendarScreen(),
-          Testing(),
+          ProfilePage(),
           TaskManagerPage(),
         ],
       ),

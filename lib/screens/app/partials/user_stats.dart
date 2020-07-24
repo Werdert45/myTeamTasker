@@ -1,15 +1,23 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:collaborative_repitition/screens/app/partials/timeseriesgraph.dart';
+import 'package:collaborative_repitition/services/functions/stat_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class UserStatPage extends StatefulWidget {
+  final task_history;
+
+  UserStatPage(this.task_history);
+
   @override
+
   _UserStatPageState createState() => _UserStatPageState();
 }
 
 class _UserStatPageState extends State<UserStatPage> {
   List<bool> timeFrame = [true,false];
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +139,7 @@ class _UserStatPageState extends State<UserStatPage> {
                   ),
                   Container(
                     height: 280,
-                      child: TimeSeriesGraphScreen(createSampleData())
+                      child: TimeSeriesGraphScreen(timeSeriesPointsPers(widget.task_history, 7))
                   ),
                 ],
               ),
@@ -141,40 +149,4 @@ class _UserStatPageState extends State<UserStatPage> {
       )
     );
   }
-}
-
-List<charts.Series<TimeSeriesSales, DateTime>> createSampleData() {
-  final seriesLine = [
-    new TimeSeriesSales(new DateTime(2017, 9, 19), 2),
-    new TimeSeriesSales(new DateTime(2017, 9, 20), 3),
-    new TimeSeriesSales(new DateTime(2017, 9, 21), 5),
-    new TimeSeriesSales(new DateTime(2017, 9, 22), 8),
-    new TimeSeriesSales(new DateTime(2017, 9, 23), 5),
-    new TimeSeriesSales(new DateTime(2017, 9, 24), 9),
-    new TimeSeriesSales(new DateTime(2017, 9, 25), 4),
-  ];
-
-  return [
-    new charts.Series<TimeSeriesSales, DateTime>(
-      id: 'Line',
-      colorFn: (_, __) => charts.MaterialPalette.gray.shadeDefault,
-      domainFn: (TimeSeriesSales sales, _) => sales.time,
-      measureFn: (TimeSeriesSales sales, _) => sales.sales,
-      data: seriesLine,
-    ),
-    new charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Points',
-        colorFn: (_, __) => charts.MaterialPalette.black,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: seriesLine)
-      ..setAttribute(charts.rendererIdKey, 'customPoint'),
-  ];
-}
-
-class TimeSeriesSales {
-  final DateTime time;
-  final int sales;
-
-  TimeSeriesSales(this.time, this.sales);
 }

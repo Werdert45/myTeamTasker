@@ -15,12 +15,10 @@ timeSeriesPointsPers(Map task_history, range) {
 
   var start = now.add(start_day);
 
-  for (var i = 0; i < range; i++) {
+  for (var i = 0; i <= range; i++) {
 
     var day = "${start.year}-${start.month}-${start.day}";
 
-    // Increment day
-    start = start.add(Duration(days: 1));
 
     if (task_history.containsKey(day)) {
       seriesLine.add(TimeSeriesSales(DateTime(start.year, start.month, start.day), task_history[day][0]));
@@ -31,6 +29,8 @@ timeSeriesPointsPers(Map task_history, range) {
       seriesLine.add(TimeSeriesSales(DateTime(start.year, start.month, start.day), 0));
 
     }
+
+    start = start.add(Duration(days: 1));
   }
 
   return [
@@ -62,12 +62,9 @@ timeSeriesPointsGroup(Map task_history, range) {
 
   var start = now.add(start_day);
 
-  for (var i = 0; i < range; i++) {
+  for (var i = 0; i <= range; i++) {
 
     var day = "${start.year}-${start.month}-${start.day}";
-
-    // Increment day
-    start = start.add(Duration(days: 1));
 
     if (task_history.containsKey(day)) {
       var task_count = 0;
@@ -81,8 +78,10 @@ timeSeriesPointsGroup(Map task_history, range) {
     else {
       // return a point with (day, 0)
       seriesLine.add(TimeSeriesSales(DateTime(start.year, start.month, start.day), 0));
-
     }
+
+    // Increment day
+    start = start.add(Duration(days: 1));
   }
 
   return [
