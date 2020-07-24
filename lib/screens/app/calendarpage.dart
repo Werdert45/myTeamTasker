@@ -4,7 +4,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/models/user_db.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
-import 'package:collaborative_repitition/services/date-functions.dart';
+import 'package:collaborative_repitition/services/functions/date-functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
