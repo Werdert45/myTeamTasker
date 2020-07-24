@@ -165,7 +165,6 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
   }
 
   Widget GroupPage(snapshot, user) {
-    print(snapshot.data.tasks);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

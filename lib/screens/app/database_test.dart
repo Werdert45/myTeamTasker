@@ -20,13 +20,12 @@ class _TestingState extends State<Testing> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
-    var test_data = {"2020-7-23": [1,1]};
+    return FutureBuilder(
+      future: streams.getCompleteUser(user.uid),
+      builder: (context, snapshot) {
 
-    var test_data2 = {"2020-7-22": {"puid": [2], "puid2": [3]}, "2020-7-23": {"puid": [2], "puid2": [4]}};
-
-    print(pieChartGroup(test_data2, ["puid", "puid2"]));
-    return Container(
-      child: DonutPieChart(pieChartGroup(test_data2, ["puid", "puid2"])),
+        return Container();
+      }
     );
   }
 }

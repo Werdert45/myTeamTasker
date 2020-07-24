@@ -8,9 +8,9 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class GroupStatPage extends StatefulWidget {
   final task_history;
-//  final group;
+  final groups;
 
-  GroupStatPage(this.task_history);
+  GroupStatPage(this.task_history, this.groups);
 
   @override
   _GroupStatPageState createState() => _GroupStatPageState();
@@ -246,7 +246,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                             SizedBox(height: 10),
                             Container(
                                 height: 280,
-                                child: DonutPieChart(pieChartGroup(widget.task_history, [""]))
+                                child: DonutPieChart(pieChartGroup(widget.task_history, widget.groups[0].members))
                             ),
                           ],
                         ),
