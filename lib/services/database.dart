@@ -350,39 +350,87 @@ class DatabaseService {
 
 
   Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name) async {
-    await singleTasksCollection.document(taskID).setData({
-      'alert_time': alertTime,
-      'date': date,
-      'creator': puid,
-      'assignee': assignee,
-      'days': null,
-      'icon': icon,
-      'id': taskID,
-      'title': title,
-      'shared': shared,
-      'repeated': false,
-      'finished': false,
-      'finished_by': {},
-      'belongs_to': [group_code, group_name]
-    });
+    if (shared) {
+      await singleTasksCollection.document(taskID).setData({
+        'alert_time': alertTime,
+        'date': date,
+        'creator': puid,
+        'assignee': assignee,
+        'days': null,
+        'icon': icon,
+        'id': taskID,
+        'title': title,
+        'shared': shared,
+        'repeated': false,
+        'finished': false,
+        'finished_by': {},
+        'belongs_to': [group_code, group_name]
+      });
+
+      await groupsCollection.document(group_code).updateData({
+        'single_tasks': FieldValue.arrayUnion([taskID])
+      });
+    }
+
+    else {
+      await singleTasksCollection.document(taskID).setData({
+        'alert_time': alertTime,
+        'date': date,
+        'creator': puid,
+        'assignee': assignee,
+        'days': null,
+        'icon': icon,
+        'id': taskID,
+        'title': title,
+        'shared': shared,
+        'repeated': false,
+        'finished': false,
+        'finished_by': {},
+        'belongs_to': [group_code, group_name]
+      });
+    }
   }
 
   Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title, shared, group_code, group_name) async {
-    await repeatedTasksCollection.document(taskID).setData({
-      'alert_time': alertTime,
-      'assignee': assignee,
-      'creator': puid,
-      'days': days,
-      'icon': icon,
-      'id': taskID,
-      'title': title,
-      'shared': shared,
-      'repeated': true,
-      'finished': false,
-      'finished_by': {},
-      'belongs_to': [group_code, group_name]
+    if (shared) {
+      await repeatedTasksCollection.document(taskID).setData({
+        'alert_time': alertTime,
+        'assignee': assignee,
+        'creator': puid,
+        'days': days,
+        'icon': icon,
+        'id': taskID,
+        'title': title,
+        'shared': shared,
+        'repeated': true,
+        'finished': false,
+        'finished_by': {},
+        'belongs_to': [group_code, group_name]
 //      'description': description
-    });
+      });
+
+      await groupsCollection.document(group_code).updateData({
+        'repeated_tasks': FieldValue.arrayUnion([taskID])
+      });
+    }
+
+    else {
+      await repeatedTasksCollection.document(taskID).setData({
+        'alert_time': alertTime,
+        'assignee': assignee,
+        'creator': puid,
+        'days': days,
+        'icon': icon,
+        'id': taskID,
+        'title': title,
+        'shared': shared,
+        'repeated': true,
+        'finished': false,
+        'finished_by': {},
+        'belongs_to': [group_code, group_name]
+//      'description': description
+      });
+    }
   }
 
   Future removeSingleTask(taskID) async {
