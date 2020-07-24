@@ -2,11 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
-import 'package:collaborative_repitition/screens/app/partials/group_stats.dart';
-import 'package:collaborative_repitition/screens/app/partials/user_stats.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
@@ -53,102 +50,164 @@ class _ProfilePageState extends State<ProfilePage> {
       child: FutureBuilder(
         future: streams.getCompleteUser(user.uid),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            tasks = snapshot.data.tasks;
+          tasks = snapshot.data.tasks;
 
-            _controller = new TextEditingController(text: snapshot.data.name);
+          _controller = new TextEditingController(text: snapshot.data.name);
 
-            return Container(
-                child: Stack(
-                  children: [
-                    Container(
-                      child: Stack(
-                        children: [
-                          Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 10, top: 30),
-                                child: IconButton(
-                                  icon: Icon(Icons.exit_to_app, color: Colors.white, size: 30),
-                                  onPressed: () async {
-                                    await _auth.signOut();
-                                    Navigator.pushReplacementNamed(context, '/landingpage');
-                                  },
-                                ),
-                              )
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
+          return Container(
+              child: Stack(
+                children: [
+                  Container(
+                    child: Stack(
+                      children: [
+                        Align(
+                            alignment: Alignment.topRight,
                             child: Padding(
-                              padding: EdgeInsets.only(left: 30, bottom: 10, top: 30),
-                              child: Text("Statistics", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
-                            ),
-                          ),
-                        ],
-                      ),
-                      height: MediaQuery.of(context).size.height / 6,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: primaryColor,
-                          border: Border(
-                          ),
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
-                      ),
+                              padding: EdgeInsets.only(right: 10, top: 30),
+                              child: IconButton(
+                                icon: Icon(Icons.exit_to_app, color: Colors.white, size: 30),
+                                onPressed: () async {
+                                  await _auth.signOut();
+                                  Navigator.pushReplacementNamed(context, '/landingpage');
+                                },
+                              ),
+                            )
+                        )
+                      ],
                     ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(height: MediaQuery.of(context).size.height / 8),
-                              DefaultTabController(
-                                length: 2,
-                                initialIndex: 0,
-                                child: Column(
+                    height: MediaQuery.of(context).size.height / 5,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0xFF572f8c),
+                        border: Border(
+                        ),
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 7),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 200,
+                              height: 200,
+                              child: Stack(
                                   children: [
-                                    TabBar(
-
-                                      tabs: [
-                                        Tab(icon: Icon(Icons.account_circle, color: Colors.black)),
-                                        Tab(icon: Icon(Icons.group, color: Colors.black))
-                                      ],
-                                    ),
                                     Container(
-                                      height: MediaQuery.of(context).size.height * 0.7,
-//                                      color: Colors.red,
-                                      child: TabBarView(
-                                        children: [
-                                          UserStatPage(snapshot.data.personal_history),
-                                          GroupStatPage(snapshot.data.group_history, snapshot.data.groups)
-                                        ],
+                                      width: 200,
+                                      height: 200,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(100),
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Align(
+                                              alignment: Alignment.center,
+                                              heightFactor: 0.5,
+                                              widthFactor: 1,
+                                              child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + snapshot.data.profile_picture.toString()))),
+                                        ),
                                       ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: IconButton(
+                                        icon: Icon(Icons.add_circle, size: 40),
+                                        onPressed: () {
+                                        },
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              width: 250,
+                              child: TextField(
+                                autofocus: false,
+                                onChanged: (val) {
+                                  setState(() => name = val);
+                                },
+                                controller: _controller,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                                  labelText: "Name",
+                                  prefixText: "df",
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
+                                  focusColor: Color(0xFF572f8c),
+                                  fillColor: Color(0xFF572f8c),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 40),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Personal Tasks", style: TextStyle(fontSize: 24)),
+//                                    ListView.builder(
+//                                        shrinkWrap: true,
+//                                        physics: NeverScrollableScrollPhysics(),
+//                                        itemCount: snapshot.data.tasks.length,
+//                                        itemBuilder: (context, index) {
+//                                          return Container(
+//                                            width: double.infinity,
+//                                            child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
+//                                          );
+//                                        }
+//                                    ),
+                                    SizedBox(height: 20),
+                                    Text("Groups", style: TextStyle(fontSize: 24)),
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: snapshot.data.groups.length,
+                                        itemBuilder: (context, index) {
+                                          return ListTile(
+                                            title: Text(snapshot.data.groups[index].name),
+                                            subtitle: Text(snapshot.data.groups[index].description),
+                                            trailing: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Tasks: " + snapshot.data.groups[index].repeated_tasks.length.toString()),
+                                                SizedBox(height: 2),
+                                                Text("Members: " + snapshot.data.groups[index].members.length.toString())
+                                              ],
+                                            ),
+                                          );
+                                        }
                                     )
                                   ],
                                 ),
                               ),
-
-                            ],
-                          )
-                      ),
-                    )
-                  ],
-                )
-            );
-          }
-          else {
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+                            )
+                          ],
+                        )
+                    ),
+                  )
+                ],
+              )
+          );
         },
       ),
     );
   }
 }
-
