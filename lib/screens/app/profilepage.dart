@@ -23,9 +23,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool checkedValue;
-  var _controller;
-  var name;
   var picture;
+  bool showGroupPage = false;
 
   final AuthService _auth = AuthService();
   final Streams streams = Streams();
@@ -51,8 +50,6 @@ class _ProfilePageState extends State<ProfilePage> {
         future: streams.getCompleteUser(user.uid),
         builder: (context, snapshot) {
           tasks = snapshot.data.tasks;
-
-          _controller = new TextEditingController(text: snapshot.data.name);
 
           return Container(
               child: Stack(
@@ -87,20 +84,20 @@ class _ProfilePageState extends State<ProfilePage> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 7),
+                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              width: 200,
-                              height: 200,
+                              width: 150,
+                              height: 150,
                               child: Stack(
                                   children: [
                                     Container(
-                                      width: 200,
-                                      height: 200,
+                                      width: 150,
+                                      height: 150,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius: BorderRadius.circular(75),
                                         child: FittedBox(
                                           fit: BoxFit.scaleDown,
                                           child: Align(
@@ -122,82 +119,36 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ]
                               ),
                             ),
-                            SizedBox(height: 20),
-                            Container(
-                              width: 250,
-                              child: TextField(
-                                autofocus: false,
-                                onChanged: (val) {
-                                  setState(() => name = val);
-                                },
-                                controller: _controller,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                                  labelText: "Name",
-                                  prefixText: "df",
-                                  labelStyle: TextStyle(color: Colors.grey),
-                                  prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                  focusColor: Color(0xFF572f8c),
-                                  fillColor: Color(0xFF572f8c),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                            SizedBox(height: 40),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        showGroupPage = false;
+                                      });
+                                    },
+                                      child: !showGroupPage ? Text("User", style: TextStyle(fontSize: 17)) : Text("User", style: TextStyle(fontSize: 16, color: Colors.grey))
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
+                                  SizedBox(width: 30),
+                                  GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          showGroupPage = true;
+                                        });
+                                      },
+                                      child: showGroupPage ? Text("Groups", style: TextStyle(fontSize: 17)) : Text("Groups", style: TextStyle(fontSize: 16, color: Colors.grey))
                                   ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide(color: Color(0xFF572f8c), width: 2)
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
-                            SizedBox(height: 40),
+                            SizedBox(height: 10),
                             Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Personal Tasks", style: TextStyle(fontSize: 24)),
-//                                    ListView.builder(
-//                                        shrinkWrap: true,
-//                                        physics: NeverScrollableScrollPhysics(),
-//                                        itemCount: snapshot.data.tasks.length,
-//                                        itemBuilder: (context, index) {
-//                                          return Container(
-//                                            width: double.infinity,
-//                                            child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this),
-//                                          );
-//                                        }
-//                                    ),
-                                    SizedBox(height: 20),
-                                    Text("Groups", style: TextStyle(fontSize: 24)),
-                                    ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemCount: snapshot.data.groups.length,
-                                        itemBuilder: (context, index) {
-                                          return ListTile(
-                                            title: Text(snapshot.data.groups[index].name),
-                                            subtitle: Text(snapshot.data.groups[index].description),
-                                            trailing: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Tasks: " + snapshot.data.groups[index].repeated_tasks.length.toString()),
-                                                SizedBox(height: 2),
-                                                Text("Members: " + snapshot.data.groups[index].members.length.toString())
-                                              ],
-                                            ),
-                                          );
-                                        }
-                                    )
-                                  ],
-                                ),
-                              ),
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              color: showGroupPage ? Colors.blue : Colors.green
                             )
                           ],
                         )
