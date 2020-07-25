@@ -12,8 +12,6 @@ class UserSettings extends StatefulWidget {
 }
 
 class _UserSettingsState extends State<UserSettings> {
-  var _controller;
-  var _controller_email;
   var _controller_pwd = new TextEditingController(text: "Password");
   var name;
   var email;
@@ -24,9 +22,6 @@ class _UserSettingsState extends State<UserSettings> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    var _controller = new TextEditingController(text: widget.name);
-    var _controller_email = new TextEditingController(text: widget.email);
   }
 
   @override
@@ -37,6 +32,9 @@ class _UserSettingsState extends State<UserSettings> {
 
   @override
   Widget build(BuildContext context) {
+    var controller = new TextEditingController(text: widget.name);
+    var controller_email = new TextEditingController(text: widget.email);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
@@ -51,7 +49,7 @@ class _UserSettingsState extends State<UserSettings> {
               onChanged: (val) {
                 setState(() => name = val);
               },
-              controller: _controller,
+              controller: controller,
               decoration: InputDecoration(
 //                labelText: "Name",
                 labelStyle: TextStyle(color: Colors.grey),
@@ -71,7 +69,7 @@ class _UserSettingsState extends State<UserSettings> {
               onChanged: (val) {
                 setState(() => email = val);
               },
-              controller: _controller_email,
+              controller: controller_email,
               decoration: InputDecoration(
 //                labelText: "Name",
                 labelStyle: TextStyle(color: Colors.grey),
