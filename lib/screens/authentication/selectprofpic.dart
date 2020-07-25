@@ -66,6 +66,12 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
   UserManagement userManagement = new UserManagement();
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 

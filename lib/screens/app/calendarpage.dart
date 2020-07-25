@@ -41,6 +41,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
@@ -52,6 +58,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           child: FutureBuilder(
             future: streams.getCalendar(user.uid),
             builder: (context, snapshot) {
+
                 Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
                 calendar.forEach((k,v) => _events[k] = v);
 

@@ -21,9 +21,10 @@ class _TestingState extends State<Testing> {
     var user = Provider.of<User>(context);
 
     return FutureBuilder(
-      future: streams.getCompleteUser(user.uid),
+      future: streams.getCalendar(user.uid),
       builder: (context, snapshot) {
 
+        print(snapshot);
         return Container();
       }
     );

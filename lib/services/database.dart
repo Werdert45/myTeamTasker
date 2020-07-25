@@ -124,7 +124,8 @@ class Streams {
     }
 
     var group_list = user.groups.keys.toList();
-
+    var groupy = await groupsCollection.document(group_list[0]).get();
+    var group_data = group.fromMap(groupy.data);
 
     for (var i = 0; i < group_list.length; i++) {
       var groupdata = await groupsCollection.document(group_list[i]).get();
@@ -173,6 +174,7 @@ class Streams {
     var repeated_tasks = [];
     var single_tasks = [];
 
+    var group_codes = [];
     var groups = [];
 
     var repeated_full = [];
@@ -192,10 +194,13 @@ class Streams {
       repeated_full.add(spec_group);
     }
 
+    user.groups.forEach((key, value) { group_codes.add(key); });
 
+
+    print(groups);
     // Get all of the groups
-    for (var i = 0; i < user.groups.length; i++) {
-      var groupdata = await groupsCollection.document(user.groups[i]).get();
+    for (var i = 0; i < group_codes.length; i++) {
+      var groupdata = await groupsCollection.document(group_codes[i]).get();
       var spec_group = group.fromMap(groupdata.data);
       groups.add(spec_group);
       repeated_tasks = repeated_tasks + spec_group.repeated_tasks;

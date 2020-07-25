@@ -69,6 +69,7 @@ class EmoIconState extends State<EmoIcon> {
 
   }
 
+
   Future<Null> selectDate(BuildContext context) async {
     var picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime(2100));
     if (picked != null && picked != _dateTime) {
@@ -133,6 +134,13 @@ class EmoIconState extends State<EmoIcon> {
     }
 
     return Future.value(false);
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
