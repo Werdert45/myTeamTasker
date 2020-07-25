@@ -1,11 +1,12 @@
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/screens/app/profilepage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 import 'dashboard.dart';
-import 'profilepage.dart';
+import 'statisticspage.dart';
 import 'calendarpage.dart';
 import 'groups.dart';
 
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    tabController = new TabController(length: 4, vsync: this);
+    tabController = new TabController(length: 5, vsync: this);
   }
 
   @override
@@ -34,8 +35,9 @@ class _HomePageState extends State<HomePage>
           tabs: <Widget>[
             new Tab(icon: Icon(Icons.home)),
             new Tab(icon: Icon(Icons.calendar_today)),
-            new Tab(icon: Icon(Icons.equalizer)),
-            new Tab(icon: Icon(Icons.group)),
+            new Tab(icon: Icon(Icons.account_balance)),
+            new Tab(icon: Icon(Icons.insert_chart)),
+            new Tab(icon: Icon(Icons.settings))
           ],
         ),
       ),
@@ -44,8 +46,9 @@ class _HomePageState extends State<HomePage>
         children: <Widget>[
           DashboardPage(),
           CalendarScreen(),
-          ProfilePage(),
           TaskManagerPage(),
+          StatisticsPage(),
+          ProfilePage()
         ],
       ),
         );
