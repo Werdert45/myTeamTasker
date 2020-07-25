@@ -52,6 +52,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           child: FutureBuilder(
             future: streams.getCalendar(user.uid),
             builder: (context, snapshot) {
+
                 Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
                 calendar.forEach((k,v) => _events[k] = v);
 

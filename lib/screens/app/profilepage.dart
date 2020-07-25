@@ -9,13 +9,8 @@ import 'package:collaborative_repitition/screens/app/partials/usersettings.dart'
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
-import 'package:collaborative_repitition/components/task-tile.dart';
 import 'package:firebase_image/firebase_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -37,9 +32,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     checkedValue = false;
-
-
     tasks = [];
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
 
