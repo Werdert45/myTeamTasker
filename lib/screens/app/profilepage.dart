@@ -4,6 +4,8 @@ import 'dart:math';
 
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/screens/app/partials/groupsettings.dart';
+import 'package:collaborative_repitition/screens/app/partials/usersettings.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
@@ -119,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ]
                               ),
                             ),
-                            SizedBox(height: 40),
+                            SizedBox(height: 30),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
@@ -148,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Container(
                               width: double.infinity,
                               height: MediaQuery.of(context).size.height * 0.5,
-                              color: showGroupPage ? Colors.blue : Colors.green
+                              child: showGroupPage ? GroupSettings(snapshot.data.groups) : UserSettings(snapshot.data.name, snapshot.data.email)
                             )
                           ],
                         )

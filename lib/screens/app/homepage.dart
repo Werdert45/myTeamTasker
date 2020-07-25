@@ -36,8 +36,8 @@ class _HomePageState extends State<HomePage>
             new Tab(icon: Icon(Icons.home)),
             new Tab(icon: Icon(Icons.calendar_today)),
             new Tab(icon: Icon(Icons.account_balance)),
-            new Tab(icon: Icon(Icons.equalizer)),
-            new Tab(icon: Icon(Icons.group))
+            new Tab(icon: Icon(Icons.insert_chart)),
+            new Tab(icon: Icon(Icons.settings))
           ],
         ),
       ),
