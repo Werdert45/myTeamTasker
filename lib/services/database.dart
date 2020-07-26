@@ -435,7 +435,13 @@ class DatabaseService {
     // Update the list of finished tasks for the user (tasks_history)
     if (task_history.containsKey(date)) {
       if (task_history[date].containsKey(puid)) {
-        task_history[date][puid].add(taskID);
+        var list = [];
+
+        list += task_history[date][puid];
+        list.add(taskID);
+
+        task_history[date][puid] = list;
+        print(task_history[date][puid]);
       }
       else {
         task_history[date][puid] = [taskID];
@@ -459,10 +465,18 @@ class DatabaseService {
 
     // Note start using the uid of the user that finished the task before you (if it is the case that the task was done by someone else
     // And you decided that it was not finished
-    task_history[date][puid].remove(taskID);
+    print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+
+    var list = [];
+    list += task_history[date][puid];
 
 
-    await usersCollection.document(puid).updateData({
+    list.remove(taskID);
+
+    print(list);
+    task_history[date][puid] = list;
+
+    await groupsCollection.document(groupID).updateData({
       'tasks_history': task_history
     });
   }
