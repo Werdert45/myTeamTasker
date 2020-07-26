@@ -269,7 +269,7 @@ class EmoIconState extends State<EmoIcon> {
                                               Text("Belongs to group: "),
                                               Text(widget.group.name)
                                             ],
-                                          ) : null,
+                                          ) : SizedBox(),
                                           SizedBox(height: 15),
                                           (widget.task.repeated) ? Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

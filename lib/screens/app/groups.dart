@@ -158,15 +158,6 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
               }
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-//                        addTaskWidget;
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.deepPurple,
-          heroTag: "add_task",
-        ),
     );
   }
 

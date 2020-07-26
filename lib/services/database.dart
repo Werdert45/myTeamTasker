@@ -197,7 +197,6 @@ class Streams {
     user.groups.forEach((key, value) { group_codes.add(key); });
 
 
-    print(groups);
     // Get all of the groups
     for (var i = 0; i < group_codes.length; i++) {
       var groupdata = await groupsCollection.document(group_codes[i]).get();

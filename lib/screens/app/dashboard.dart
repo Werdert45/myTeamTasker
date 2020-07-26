@@ -93,7 +93,17 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ),
                                 )
                             ),
-                          )
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 30.0, top: 10),
+                              child: IconButton(
+                                icon: Icon(Icons.settings, color: Colors.white),
+                                onPressed: () {},
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       height: MediaQuery.of(context).size.height / 4.5,
@@ -188,6 +198,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data.tasks.length,
                               itemBuilder: (context, index) {
+                                print(snapshot.data.tasks);
                                 if (snapshot.data.tasks[index].title != "") {
                                   return Container(
                                     width: double.infinity,
