@@ -464,15 +464,11 @@ class DatabaseService {
 
     // Note start using the uid of the user that finished the task before you (if it is the case that the task was done by someone else
     // And you decided that it was not finished
-    print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
 
     var list = [];
     list += task_history[date][puid];
-
-
     list.remove(taskID);
 
-    print(list);
     task_history[date][puid] = list;
 
     await groupsCollection.document(groupID).updateData({

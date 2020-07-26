@@ -21,6 +21,9 @@ class _UserStatPageState extends State<UserStatPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    print(timeSeriesPointsPers(widget.task_history, 7));
+
     return Container(
       height: 500,
       color: Colors.white,
@@ -47,7 +50,7 @@ class _UserStatPageState extends State<UserStatPage> {
                                   Icon(Icons.check_circle, size: 28),
                                   Container(
                                     width: 50,
-                                    child: Text("153 Tasks", style: TextStyle(fontSize: 16),),
+                                    child: Text("153 Tasks", style: TextStyle(fontSize: 16)),
                                   )
                                 ],
                               ),

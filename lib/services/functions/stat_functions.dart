@@ -19,15 +19,17 @@ timeSeriesPointsPers(Map task_history, range) {
 
     var day = "${start.year}-${start.month}-${start.day}";
 
+    print(start.day);
 
     if (task_history.containsKey(day)) {
+      print("Yes");
+
       seriesLine.add(TimeSeriesSales(DateTime(start.year, start.month, start.day), task_history[day][0]));
     }
 
     else {
       // return a point with (day, 0)
       seriesLine.add(TimeSeriesSales(DateTime(start.year, start.month, start.day), 0));
-
     }
 
     start = start.add(Duration(days: 1));

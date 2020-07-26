@@ -96,7 +96,7 @@ class EmoIconState extends State<EmoIcon> {
 
   updateFinishedStatus(taskID, status, puid) async {
     if (checkedValue) {
-      if (repeated) {
+      if (shared) {
         await database.addToSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
       }
       else {
@@ -104,7 +104,7 @@ class EmoIconState extends State<EmoIcon> {
       }
     }
     else {
-      if (repeated) {
+      if (shared) {
         await database.removeFromSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
       }
 
@@ -147,6 +147,9 @@ class EmoIconState extends State<EmoIcon> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.task.shared);
+
+
     editTask() {
       setState(() {
         expanded = ! expanded;
@@ -160,8 +163,6 @@ class EmoIconState extends State<EmoIcon> {
       });
     }
     var init_days = widget.task.days;
-
-    print(checkedValue);
 
     return Slidable(
       // Set the slidable to be able to be accepted when not checked, when checked show undo
@@ -387,6 +388,8 @@ class EmoIconState extends State<EmoIcon> {
   }
 
   Widget buildInput(initialIcon, size) {
+    print(widget.task.shared);
+
     return Container(
       width: size,
       height: size + 20,
