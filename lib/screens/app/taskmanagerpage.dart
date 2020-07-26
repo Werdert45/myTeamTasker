@@ -6,7 +6,6 @@ import 'package:collaborative_repitition/services/database.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:collaborative_repitition/components/add_task.dart';
 
 class TaskManagerPage extends StatefulWidget {
   @override
@@ -157,15 +156,6 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                 }
               }
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-//                        addTaskWidget;
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.deepPurple,
-          heroTag: "add_task",
         ),
     );
   }
