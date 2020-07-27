@@ -245,7 +245,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     ).toList(),
                   ),
                 ),
-
+                Container(
+                  width: MediaQuery.of(context).size.width - 50,
+                  height: 1,
+                  color: Colors.grey
+                ),
+                ListTile(
+                  leading: Icon(Icons.library_books),
+                  title: Text("Licensing"),
+                )
               ],
             ),
           ),
