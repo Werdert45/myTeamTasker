@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/screens/app/database_test.dart';
+import 'package:collaborative_repitition/screens/app/settingsPage.dart';
 import 'package:collaborative_repitition/screens/app/taskmanagerpage.dart';
 import 'package:collaborative_repitition/screens/authentication/create_group.dart';
 import 'package:collaborative_repitition/screens/authentication/select-group.dart';
@@ -36,11 +37,10 @@ class MyApp extends StatelessWidget {
             '/landingpage': (BuildContext context) => new MyApp(),
             '/signup': (BuildContext context) => new SignupPage(),
             '/login': (BuildContext context) => new LoginPage(),
-//          '/selectpic': (BuildContext context) => new SelectprofilepicPage(name),
             '/creategroup': (BuildContext context) => new CreateGroupPage(),
             '/selectgroup': (BuildContext context) => new SelectGroupPage(),
             '/homepage': (BuildContext context) => new HomePage(),
-            '/taskmanager': (context) => new TaskManagerPage()
+            '/taskmanager': (context) => new TaskManagerPage(),
           },
         )
       ),

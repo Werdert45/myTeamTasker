@@ -83,13 +83,13 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
-                                      padding: EdgeInsets.only(left: 30, bottom: 10),
+                                      padding: EdgeInsets.only(left: 30, top: 20),
                                       child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
                                     ),
                                   ),
                                 ],
                               ),
-                              height: MediaQuery.of(context).size.height / 4.5,
+                              height: 120,
                               width: double.infinity,
                               decoration: BoxDecoration(
                                   color: primaryColor,

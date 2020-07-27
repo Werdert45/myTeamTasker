@@ -5,6 +5,7 @@ import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/partials/horizontalbarchart.dart';
+import 'package:collaborative_repitition/screens/app/settingsPage.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -124,7 +125,12 @@ class _DashboardPageState extends State<DashboardPage> {
                               padding: const EdgeInsets.only(left: 15.0, top: 55),
                               child: IconButton(
                                 icon: Icon(Icons.settings, color: Colors.white, size: 28),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SettingsPage(snapshot.data))
+                                  );
+                                },
                               ),
                             ),
                           ),

@@ -73,7 +73,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Container(
-                          height: 100,
+                          height: 102,
                           width: MediaQuery.of(context).size.width - 30,
                           decoration: BoxDecoration(
                             color: Colors.grey,
