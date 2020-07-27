@@ -28,8 +28,8 @@ class _HomePageState extends State<HomePage>
   var pages = <Widget>[
     DashboardPage(),
     CalendarScreen(),
-    TaskManagerPage(),
     StatisticsPage(),
+    TaskManagerPage(),
   ];
 
 
@@ -63,12 +63,15 @@ class _HomePageState extends State<HomePage>
         child: Scaffold(
           bottomNavigationBar: FABBottomAppBar(
             onTabSelected: _selectPage,
+            color: primaryColor,
+            selectedColor: Colors.black,
+//            backgroundColor: Colors.grey,
             notchedShape: CircularNotchedRectangle(),
             items: [
               FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
               FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
-              FABBottomAppBarItem(iconData: Icons.account_balance, text: "Manager"),
-              FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics")
+              FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics"),
+              FABBottomAppBarItem(iconData: Icons.edit, text: "Manager"),
             ],
           ),
           body: pages[_page],

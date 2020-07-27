@@ -168,10 +168,11 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 15.0, top: 5),
+          padding: const EdgeInsets.only(left: 15.0, top: 20),
           child: Text("Group Tasks", style: TextStyle(fontSize: 24, color: primaryColor)),
         ),
         ListView.builder(
+          padding: EdgeInsets.all(0),
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data.tasks.length,
@@ -200,6 +201,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
           child: Text("Personal Tasks", style: TextStyle(fontSize: 24, color: primaryColor)),
         ),
         ListView.builder(
+          padding: EdgeInsets.all(0),
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data.tasks.length,

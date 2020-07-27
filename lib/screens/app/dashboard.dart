@@ -194,6 +194,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: Text("Your Tasks", style: TextStyle(fontSize: 24, color: Colors.grey)),
                           ),
                           ListView.builder(
+                            padding: EdgeInsets.only(top: 10),
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data.tasks.length,

@@ -1,4 +1,5 @@
 import 'package:circular_check_box/circular_check_box.dart';
+import 'package:collaborative_repitition/components/edit_task.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/repeated_task.dart';
@@ -377,6 +378,7 @@ class EmoIconState extends State<EmoIcon> {
           ),
           onTap: () {
             setState(() {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
 //              checkedValue = false;
 //              updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
             });
