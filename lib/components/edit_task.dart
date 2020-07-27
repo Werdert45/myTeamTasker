@@ -101,40 +101,6 @@ class _EditTaskState extends State<EditTask> {
     var user = Provider.of<User>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Add Task"),
-        actions: [
-          FutureBuilder(
-            future: streams.getCompleteUser(user.uid),
-            builder: (context, snapshot) {
-              print(snapshot.data);
-
-              return IconButton(
-                icon: Icon(Icons.check, size: 30),
-                onPressed: () async {
-                  var puid = user.uid;
-                  var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-                  var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-                  var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
-                  var title = _title;
-//                  var description = "";
-                  var date = _dateTime.millisecondsSinceEpoch;
-                  var group_code = snapshot.data.groups[0].code;
-
-                  var group_name = snapshot.data.groups[0].name;
-
-                  addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name);
-
-                  // Not the correct navigator
-                  Navigator.pop(context);
-                  setState(() {});
-                },
-              );
-            }
-          )
-        ],
-      ),
       body: SafeArea(
         child: Form(
           child: Container(
@@ -142,40 +108,77 @@ class _EditTaskState extends State<EditTask> {
             width: MediaQuery.of(context).size.width,
             child: Stack(
               children: [
+                Positioned(
+                  left: 10,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios, size: 24),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                      SizedBox(height: 20),
+//                          Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
                       SizedBox(height: 5),
-                      TextFormField(
-                        controller: _titleController,
-                        validator: (val) => val.isEmpty ? 'Enter an email' : null,
-                        onChanged: (val) {
-                          setState(() => _title = val);
-                          print(_title);
-                        },
-                        textCapitalization: TextCapitalization.none,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          Text("ICON", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                        ],
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width - 100,
+                              child: TextFormField(
+                                controller: _titleController,
+                                validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                                onChanged: (val) {
+                                  setState(() => _title = val);
+                                  print(_title);
+                                },
+                                textCapitalization: TextCapitalization.none,
+                                decoration: InputDecoration(
+//                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
 //                            labelText: "Task Title",
-                            prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                            focusColor: primaryColor,
-                            fillColor: primaryColor,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: BorderSide(color: primaryColor, width: 2)
+                                  prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
+                                  focusColor: primaryColor,
+                                  fillColor: Color(0xFFE0E0E0),
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                  ),
+                                  hintText: 'Title',
+                                ),
+                              ),
                             ),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: BorderSide(color: primaryColor, width: 2)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    child: buildInput("t", 40.0)
+                                ),
+                              ],
                             ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: BorderSide(color: primaryColor, width: 2)
-                            ),
-                            hintText: 'Task title'
+                          ],
                         ),
                       ),
                       SizedBox(height: 20),
@@ -195,38 +198,28 @@ class _EditTaskState extends State<EditTask> {
 //                            labelText: "Task Title",
                             prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
                             focusColor: primaryColor,
-                            fillColor: primaryColor,
+                            fillColor: Color(0xFFE0E0E0),
+                            filled: true,
                             enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: BorderSide(color: primaryColor, width: 2)
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
                             ),
                             focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: BorderSide(color: primaryColor, width: 2)
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
                             ),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: BorderSide(color: primaryColor, width: 2)
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
                             ),
                             hintText: 'Write down a small description'
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("ICON", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                              SizedBox(height: 5),
-                              Container(
-                                  child: buildInput("t", 25.0)
-                              ),
-
-                            ],
-                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -297,7 +290,7 @@ class _EditTaskState extends State<EditTask> {
                             ),
                             Container(
                               width: double.infinity,
-                              height: 190,
+                              height: 200,
                               child: TabBarView(
                                 children: [
                                   singleTask(),
@@ -309,6 +302,58 @@ class _EditTaskState extends State<EditTask> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  left: 15,
+                  child: FutureBuilder(
+                      future: streams.getCompleteUser(user.uid),
+                      builder: (context, snapshot) {
+                        print(snapshot.data);
+                        return RaisedButton(
+                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+//                                      side: BorderSide(color: Colors.green)
+                          ),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width - 60,
+                            height: 50,
+                            child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.edit, color: Colors.white),
+                                    SizedBox(width: 5),
+                                    Text("EDIT TASK", style: TextStyle(color: Colors.white, fontSize: 18))
+                                  ],
+                                )
+                            ),
+                          ),
+                          onPressed: () async {
+
+                            // TODO Dont think that this changes it, but rather adds one
+
+                            var puid = user.uid;
+                            var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                            var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                            var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+                            var title = _title;
+//                  var description = "";
+                            var date = _dateTime.millisecondsSinceEpoch;
+                            var group_code = snapshot.data.groups[0].code;
+
+                            var group_name = snapshot.data.groups[0].name;
+
+                            addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name);
+
+                            // Not the correct navigator
+                            Navigator.pop(context);
+                            setState(() {});
+                          },
+                        );
+                      }
                   ),
                 ),
                 Positioned(

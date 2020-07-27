@@ -456,6 +456,8 @@ class ActiveTaskState extends State<ActiveTask> {
                                                   RaisedButton(
                                                     color: Colors.blue,
                                                     onPressed: () {
+                                                      print("Showing EditTask");
+
                                                       Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
                                                     },
                                                     child: Container(
