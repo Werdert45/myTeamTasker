@@ -103,14 +103,14 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                               padding: const EdgeInsets.all(15.0),
                               child: Container(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       new OutlineButton(
                                           child: Row(
                                             children: <Widget>[
-                                              IconButton(icon: Icon(Icons.account_circle)),
+//                                              IconButton(icon: Icon(Icons.account_circle)),
                                               Text("Personal Tasks"),
-                                              SizedBox(width: 8)
+//                                              SizedBox(width: 8)
                                             ],
                                           ),
                                           onPressed: () {
@@ -118,14 +118,16 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                                               showPersonal = true;
                                             });
                                           },
+                                          color: showPersonal ? Colors.blue : Colors.white,
                                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
                                       ),
+                                      SizedBox(width: 40),
                                       new OutlineButton(
                                           child: Row(
                                             children: <Widget>[
-                                              IconButton(icon: Icon(Icons.group)),
+//                                              IconButton(icon: Icon(Icons.group)),
                                               Text("Group Tasks"),
-                                              SizedBox(width: 8)
+//                                                SizedBox(width: 8)
                                             ],
                                           ),
                                           onPressed: () {
@@ -133,6 +135,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                                               showPersonal = false;
                                             });
                                           },
+                                          color: !showPersonal ? Colors.blue : Colors.white,
                                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
                                       ),
                                     ],
@@ -168,21 +171,12 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
           padding: const EdgeInsets.only(left: 15.0, top: 5),
           child: Text("Group Tasks", style: TextStyle(fontSize: 24, color: primaryColor)),
         ),
-        SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Single Tasks", style: TextStyle(fontSize: 18, color: primaryColor)),
-        ),
         ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
-              if (tasks[index].shared && !tasks[index].repeated) {
-//                setState(() {
-//                  single_shared = true;
-//                });
-
+              if (tasks[index].shared) {
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -193,35 +187,6 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
               }
             }
         ),
-        (single_shared ? SizedBox() : Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Text("No Single Tasks yet, add one using the big button"))),
-
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: primaryColor)),
-        ),
-        ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: snapshot.data.tasks.length,
-            itemBuilder: (context, index) {
-
-
-              if (tasks[index].shared && tasks[index].repeated) {
-//                setState(() {
-//                  repeated_shared = true;
-//                });
-
-                return Container(
-                  width: double.infinity,
-                  child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
-                );
-              }
-              else {
-                return SizedBox();
-              }
-            }
-        ),
-        (repeated_shared ? SizedBox() : Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Text("No Repeated Tasks yet, add one using the big button"))),
       ],
     );
   }
@@ -234,21 +199,12 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
           padding: const EdgeInsets.only(left: 15.0, top: 20),
           child: Text("Personal Tasks", style: TextStyle(fontSize: 24, color: primaryColor)),
         ),
-        SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Single Tasks", style: TextStyle(fontSize: 18, color: primaryColor)),
-        ),
         ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data.tasks.length,
             itemBuilder: (context, index) {
-              if (!tasks[index].shared && !tasks[index].repeated) {
-//                setState(() {
-//                  single_personal = true;
-//                });
-
+              if (!tasks[index].shared) {
                 return Container(
                   width: double.infinity,
                   child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
@@ -259,34 +215,6 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
               }
             }
         ),
-        (single_personal ? SizedBox() : Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Text("No Single Tasks yet, add one using the big button"))),
-        SizedBox(height: 15),
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Repeated Tasks", style: TextStyle(fontSize: 18, color: primaryColor)),
-        ),
-        ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: snapshot.data.tasks.length,
-            itemBuilder: (context, index) {
-              if (!tasks[index].shared && tasks[index].repeated) {
-
-//                setState(() {
-//                  repeated_personal = true;
-//                });
-
-                return Container(
-                  width: double.infinity,
-                  child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
-                );
-              }
-              else {
-                return SizedBox();
-              }
-            }
-        ),
-        (repeated_personal ? SizedBox() : Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Text("No Repeated Tasks yet, add one using the big button"))),
       ],
     );
   }
