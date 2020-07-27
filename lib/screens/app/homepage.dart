@@ -5,6 +5,7 @@ import 'package:collaborative_repitition/screens/app/profilepage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'dashboard.dart';
@@ -57,27 +58,30 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      bottomNavigationBar: FABBottomAppBar(
-        onTabSelected: _selectPage,
-        notchedShape: CircularNotchedRectangle(),
-        items: [
-          FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
-          FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
-          FABBottomAppBarItem(iconData: Icons.account_balance, text: "Manager"),
-          FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics")
-        ],
-      ),
-      body: pages[_page],
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: primaryColor,
-        heroTag: "add_task",
-        onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
-  },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        );
+    return new AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark,
+        child: Scaffold(
+          bottomNavigationBar: FABBottomAppBar(
+            onTabSelected: _selectPage,
+            notchedShape: CircularNotchedRectangle(),
+            items: [
+              FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
+              FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
+              FABBottomAppBarItem(iconData: Icons.account_balance, text: "Manager"),
+              FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics")
+            ],
+          ),
+          body: pages[_page],
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            backgroundColor: primaryColor,
+            heroTag: "add_task",
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
+            },
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        )
+    );
   }
 }

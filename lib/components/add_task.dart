@@ -98,42 +98,38 @@ class _AddTaskState extends State<AddTask> {
 
     return Hero(
         child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text("Add Task"),
-            actions: [
-              FutureBuilder(
-                future: streams.getCompleteUser(user.uid),
-                builder: (context, snapshot) {
-                  print(snapshot.data);
-
-                  return IconButton(
-                    icon: Icon(Icons.check, size: 30),
-                    onPressed: () async {
-                      var puid = user.uid;
-                      var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-                      var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-                      var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
-                      var title = _title;
-//                  var description = "";
-                      var date = _dateTime.millisecondsSinceEpoch;
-                      var group_code = snapshot.data.groups[0].code;
-                      print("===================================");
-                      print(snapshot.data.groups);
-                      print("===================================");
-                      var group_name = snapshot.data.groups[0].name;
-
-                      addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name);
-
-                      // Not the correct navigator
-                      Navigator.pop(context);
-                      setState(() {});
-                    },
-                  );
-                }
-              )
-            ],
-          ),
+//          appBar: AppBar(
+//            centerTitle: true,
+//            title: Text("Add Task"),
+//            actions: [
+//              FutureBuilder(
+//                future: streams.getCompleteUser(user.uid),
+//                builder: (context, snapshot) {
+//                  print(snapshot.data);
+//
+//                  return IconButton(
+//                    icon: Icon(Icons.check, size: 30),
+//                    onPressed: () async {
+//                      var puid = user.uid;
+//                      var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+//                      var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+//                      var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+//                      var title = _title;
+//                      var date = _dateTime.millisecondsSinceEpoch;
+//                      var group_code = snapshot.data.groups[0].code;
+//                      var group_name = snapshot.data.groups[0].name;
+//
+//                      addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name);
+//
+//                      // Not the correct navigator
+//                      Navigator.pop(context);
+//                      setState(() {});
+//                    },
+//                  );
+//                }
+//              )
+//            ],
+//          ),
           body: SafeArea(
             child: Form(
               child: Container(
@@ -141,40 +137,77 @@ class _AddTaskState extends State<AddTask> {
                 width: MediaQuery.of(context).size.width,
                 child: Stack(
                   children: [
+                    Positioned(
+                      left: 10,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back_ios, size: 24),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          SizedBox(height: 20),
+//                          Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
                           SizedBox(height: 5),
-                          TextFormField(
-                            controller: _titleController,
-                            validator: (val) => val.isEmpty ? 'Enter an email' : null,
-                            onChanged: (val) {
-                              setState(() => _title = val);
-                              print(_title);
-                            },
-                            textCapitalization: TextCapitalization.none,
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                              Text("ICON", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                            ],
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width - 100,
+                                  child: TextFormField(
+                                    controller: _titleController,
+                                    validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                                    onChanged: (val) {
+                                      setState(() => _title = val);
+                                      print(_title);
+                                    },
+                                    textCapitalization: TextCapitalization.none,
+                                    decoration: InputDecoration(
+//                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
 //                            labelText: "Task Title",
-                                prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: primaryColor,
-                                fillColor: primaryColor,
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                      prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
+                                      focusColor: primaryColor,
+                                      fillColor: Color(0xFFE0E0E0),
+                                      filled: true,
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                      ),
+                                      border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                      ),
+                                      hintText: 'Title',
+                                    ),
+                                  ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        child: buildInput("t", 40.0)
+                                    ),
+                                  ],
                                 ),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
-                                ),
-                                hintText: 'Task title'
+                              ],
                             ),
                           ),
                           SizedBox(height: 20),
@@ -194,38 +227,28 @@ class _AddTaskState extends State<AddTask> {
 //                            labelText: "Task Title",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
                                 focusColor: primaryColor,
-                                fillColor: primaryColor,
+                                fillColor: Color(0xFFE0E0E0),
+                                filled: true,
                                 enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
                                 ),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
                                 ),
                                 hintText: 'Write down a small description'
                             ),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("ICON", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                                  SizedBox(height: 5),
-                                  Container(
-                                      child: buildInput("t", 25.0)
-                                  ),
-
-                                ],
-                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -296,7 +319,7 @@ class _AddTaskState extends State<AddTask> {
                                 ),
                                 Container(
                                   width: double.infinity,
-                                  height: 190,
+                                  height: 200,
                                   child: TabBarView(
                                     children: [
                                       singleTask(),
@@ -308,6 +331,54 @@ class _AddTaskState extends State<AddTask> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      left: 15,
+                      child: FutureBuilder(
+                          future: streams.getCompleteUser(user.uid),
+                          builder: (context, snapshot) {
+                            print(snapshot.data);
+
+                            return RaisedButton(
+                              color: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+//                                      side: BorderSide(color: Colors.green)
+                              ),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 60,
+                                height: 50,
+                                child: Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.add, color: Colors.white),
+                                        SizedBox(width: 5),
+                                        Text("ADD TASK", style: TextStyle(color: Colors.white, fontSize: 18))
+                                      ],
+                                    )
+                                ),
+                              ),
+                              onPressed: () async {
+                                var puid = user.uid;
+                                var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                                var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                                var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+                                var title = _title;
+                                var date = _dateTime.millisecondsSinceEpoch;
+                                var group_code = snapshot.data.groups[0].code;
+                                var group_name = snapshot.data.groups[0].name;
+
+                                addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name);
+
+                                // Not the correct navigator
+                                Navigator.pop(context);
+                                setState(() {});
+                              },
+                            );
+                          }
                       ),
                     ),
                     Positioned(
@@ -382,7 +453,7 @@ class _AddTaskState extends State<AddTask> {
 
   Widget repeatedTask() {
     return Container(
-      height: 200,
+      height: 230,
       width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -395,102 +466,103 @@ class _AddTaskState extends State<AddTask> {
               Text("SELECT DAYS", style: TextStyle(fontSize: 16, color: Colors.grey)),
               SizedBox(height: 15),
               Container(
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        Text("Mon"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[0] = value;
-                            });
-                          },
-                          value: days_show[0],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Tue"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[1] = value;
-                            });
-                          },
-                          value: days_show[1],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Wed"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[2] = value;
-                            });
-                          },
-                          value: days_show[2],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Thu"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[3] = value;
-                            });
-                          },
-                          value: days_show[3],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Fri"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[4] = value;
-                            });
-                          },
-                          value: days_show[4],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Sat"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[5] = value;
-                            });
-                          },
-                          value: days_show[5],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Sun"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[6] = value;
-                            });
-                          },
-                          value: days_show[6],
-                        ),
-                      ],
-                    )
-                  ],
-                )
+                height: 65,
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          Text("Mon"),
+                          Checkbox(
+                            onChanged: (bool value) {
+                              setState(() {
+                                days_show[0] = value;
+                              });
+                            },
+                            value: days_show[0],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Tue"),
+                          Checkbox(
+                            onChanged: (bool value) {
+                              setState(() {
+                                days_show[1] = value;
+                              });
+                            },
+                            value: days_show[1],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Wed"),
+                          Checkbox(
+                            onChanged: (bool value) {
+                              setState(() {
+                                days_show[2] = value;
+                              });
+                            },
+                            value: days_show[2],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Thu"),
+                          Checkbox(
+                            onChanged: (bool value) {
+                              setState(() {
+                                days_show[3] = value;
+                              });
+                            },
+                            value: days_show[3],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Fri"),
+                          Checkbox(
+                            onChanged: (bool value) {
+                              setState(() {
+                                days_show[4] = value;
+                              });
+                            },
+                            value: days_show[4],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Sat"),
+                          Checkbox(
+                            onChanged: (bool value) {
+                              setState(() {
+                                days_show[5] = value;
+                              });
+                            },
+                            value: days_show[5],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Sun"),
+                          Checkbox(
+                            onChanged: (bool value) {
+                              setState(() {
+                                days_show[6] = value;
+                              });
+                            },
+                            value: days_show[6],
+                          ),
+                        ],
+                      )
+                    ],
+                  )
               ),
             ],
           ),
@@ -500,7 +572,6 @@ class _AddTaskState extends State<AddTask> {
               SizedBox(height: 5),
               Text("ASSIGN TO", style: TextStyle(fontSize: 16, color: Colors.grey)),
               Container(
-//                height: 100,
                 child: DropdownButton<String>(
                   value: dropdownValue,
                   icon: Icon(Icons.keyboard_arrow_down),
@@ -511,7 +582,7 @@ class _AddTaskState extends State<AddTask> {
                     setState(() {
                       dropdownValue = newValue;
                     });
-                  } : null,
+                  } : SizedBox(),
                   disabledHint: Text("SET TASK TO GROUP"),
                   items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
                       .map<DropdownMenuItem<String>>((String value) {
