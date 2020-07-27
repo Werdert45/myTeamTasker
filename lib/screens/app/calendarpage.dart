@@ -33,6 +33,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   final Map<DateTime, List> _events = {};
 
+  final AuthService _auth = AuthService();
 
   @override
   void initState() {
@@ -69,6 +70,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       SizedBox(height: 20),
+                      IconButton(
+                        icon: Icon(Icons.exit_to_app, color: Colors.white, size: 30),
+                        onPressed: () async {
+                          await _auth.signOut();
+                          Navigator.pushReplacementNamed(context, '/landingpage');
+                        },
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Container(

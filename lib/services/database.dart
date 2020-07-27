@@ -547,21 +547,30 @@ class DatabaseService {
     });
   }
 
-  Future addToGroup(puid, group_code) async {
+  Future addToGroup(puid, group_code, name) async {
     try {
       var user = await usersCollection.document(puid).get();
-      var group = await groupsCollection.document(puid).get();
+      var group_snap = await groupsCollection.document(group_code).get();
 
-      await groupsCollection.document(group_code).setData({
-        'members': {puid: user.data['name']},
+
+      var group_data = group.fromMap(group_snap.data);
+
+
+      Map members_data = group_data.members;
+      members_data[puid] = name;
+
+
+      await groupsCollection.document(group_code).updateData({
+        'members': members_data,
       });
 
       await usersCollection.document(puid).setData({
-        'groups': {group_code: group.data['name']}
+        'groups': {group_code: group_data.name}
       }, merge: true);
 
       return "finished";
     } catch (e) {
+      print(e);
       return e;
     }
   }

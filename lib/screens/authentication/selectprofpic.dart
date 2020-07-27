@@ -48,17 +48,16 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
     setState(() {
       newProfilePic = tempImage;
     });
+
+    print(newProfilePic);
   }
 
-  uploadImage(uid) {
+  uploadImage(uid) async {
     final firebaseStorageRef = FirebaseStorage.instance
         .ref()
         .child('profile_pictures/${uid.toString()}.jpg');
     StorageUploadTask task = firebaseStorageRef.putFile(newProfilePic);
-
-
-
-    _auth.setProfileImage(uid, 'profile_pictures/${uid.toString()}.jpg');
+    await _auth.setProfileImage(uid, 'profile_pictures/${uid.toString()}.jpg');
 
     Navigator.pushNamed(context, '/selectgroup');
   }
@@ -74,6 +73,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
+
 
     return new Scaffold(
         resizeToAvoidBottomInset: false,
@@ -217,7 +217,15 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
   Widget getUploadButton(user) {
     return new Stack(
       children: <Widget>[
-
+        Align(
+          alignment: Alignment.center,
+          child: IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              print(newProfilePic);
+            },
+          ),
+        ),
         Align(
           alignment: Alignment.topCenter,
           child: Container(
@@ -300,7 +308,9 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
           child: Padding(
             padding: EdgeInsets.only(left: 30, bottom: 15),
             child: RaisedButton(
-                onPressed: () {uploadImage(user.uid);},
+                onPressed: () {
+                  uploadImage(user.uid);
+                  },
                 textColor: secondaryColor,
                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                 shape: RoundedRectangleBorder(

@@ -18,9 +18,21 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
 
   final AuthService _auth = AuthService();
   final DatabaseService database = DatabaseService();
-  final _formkey = GlobalKey<FormState>();
 
-  String _group_code = "";
+  TextEditingController _controller;
+
+  var _group_code;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _group_code = "";
+
+    _controller = new TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +77,12 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                     SizedBox(height: 30),
                     Text("JOIN A GROUP", style: TextStyle(color: primaryColor)),
                     SizedBox(height: 30),
+
+                    // The error for iOS is in here
                     Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
                         child: TextField(
+                          controller: _controller,
                           onChanged: (val) {
                             setState(() => _group_code = val);
                           },
@@ -94,9 +109,22 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                         )
                     ),
                     SizedBox(height: 20),
-
-                    // NEW FUNCTION: CHECK IF GROUP EXISTS, IF SO, ADD THE USER
-                    secondaryRoundButton(primaryColor, Colors.white, "JOIN", database.addToGroup(user.uid, _group_code), 310, 30),
+                    RaisedButton(
+                        onPressed: () {
+                          database.addToGroup(user.uid, _group_code, "Ian Ronk");
+                          Navigator.popAndPushNamed(context, '/homepage');
+                        },
+                        textColor: primaryColor,
+                        padding: EdgeInsets.symmetric(horizontal: 310/2, vertical: 30/2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(310/2),
+                          side: BorderSide(color: primaryColor, width: 2),
+                        ),
+                        color: secondaryColor,
+                        child: Container(
+                            child: Text("JOIN", style: TextStyle(fontSize: 20))
+                        )
+                    ),
                     SizedBox(height: 30),
                     Container(
                       width: MediaQuery.of(context).size.width - 40,
