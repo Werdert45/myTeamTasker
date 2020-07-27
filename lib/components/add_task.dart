@@ -582,7 +582,7 @@ class _AddTaskState extends State<AddTask> {
                     setState(() {
                       dropdownValue = newValue;
                     });
-                  } : SizedBox(),
+                  } : null,
                   disabledHint: Text("SET TASK TO GROUP"),
                   items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
                       .map<DropdownMenuItem<String>>((String value) {

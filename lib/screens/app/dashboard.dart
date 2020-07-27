@@ -60,28 +60,28 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: Stack(
                         children: [
                           Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: EdgeInsets.only(left: 30, bottom: 10),
-                              child: Text("Hi, " + snapshot.data.name + "!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                                padding: EdgeInsets.only(left: 30, top: 70),
-                                child: Text("These are today's tasks", style: TextStyle(fontSize: 14, color: Colors.white))
+                              padding: EdgeInsets.only(right: 120, top: 15),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Hi, " + snapshot.data.name + "!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                                  Text("These are today's tasks", style: TextStyle(fontSize: 14, color: Colors.white))
+                                ],
+                              )
                             ),
                           ),
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                                padding: EdgeInsets.only(right: 30),
+                                padding: EdgeInsets.only(top: 40, right: 15),
                                 child: Container(
-                                  width: 50,
-                                  height: 50,
+                                  width: 80,
+                                  height: 80,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(20),
                                     child: FittedBox(
                                       fit: BoxFit.scaleDown,
                                       child: Align(
@@ -95,18 +95,18 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                           Align(
-                            alignment: Alignment.bottomRight,
+                            alignment: Alignment.topLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 30.0, top: 10),
+                              padding: const EdgeInsets.only(left: 15.0, top: 55),
                               child: IconButton(
-                                icon: Icon(Icons.settings, color: Colors.white),
+                                icon: Icon(Icons.settings, color: Colors.white, size: 28),
                                 onPressed: () {},
                               ),
                             ),
                           ),
                         ],
                       ),
-                      height: MediaQuery.of(context).size.height / 4.5,
+                      height: 160,
                       width: double.infinity,
                       decoration: BoxDecoration(
                           color: primaryColor,
