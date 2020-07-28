@@ -24,7 +24,7 @@ class repeated_task {
         title: data['title'] ?? '',
         description: data['description'] ?? '',
         creator: data['creator'] ?? '',
-        days: data['days'] ?? null,
+        days: data['days'] ?? [false, false, false, false, false, false, false],
         alert_time: data['alert_time'] ?? null,
         assignee: data['assignee'] ?? '',
         shared: data['shared'] ?? false,

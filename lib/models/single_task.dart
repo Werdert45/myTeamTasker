@@ -24,7 +24,7 @@ class single_task {
       id: data['id'] ?? '',
       title: data['title'] ?? '',
       description: data['description'] ?? '',
-      days: null,
+      days: [false, false, false, false, false, false, false],
       date: data['date'] ?? null,
       alert_time: data['alert_time'] ?? null,
       creator: data['creator'] ?? '',

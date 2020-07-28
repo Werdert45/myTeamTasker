@@ -1,6 +1,7 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/time.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -26,12 +27,12 @@ class _EditTaskState extends State<EditTask> {
   var categories;
   TimeOfDay _time = null;
   DateTime _dateTime = DateTime.now();
-  var shared = false;
-  var repeated = false;
+  var shared;
+  var repeated;
   String dropdownValue = 'Ian Ronk';
   List days = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
   Map months_in_year = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dec"};
-  var days_show = [false, false, false, false, false, false, false];
+  var days_show;
 
   var _titleController;
   var _descriptionController;
@@ -44,9 +45,19 @@ class _EditTaskState extends State<EditTask> {
   void initState() {
     super.initState();
     isShowSticker = false;
-    categories = Emoji(name: 'Sailboat', emoji: '👑');
+    // TODO: Some icons are 'cursed' they are either shifted or cant be displayed at all
+    categories = Emoji(name: 'Sailboat', emoji: widget.task_data.icon);
     _dateTime = DateTime.now();
-    _time = null;
+    _time = parsedAlertTime(widget.task_data.alert_time);
+
+    shared = widget.task_data.shared;
+    repeated = widget.task_data.repeated;
+
+    days_show = widget.task_data.days;
+
+    _titleController = new TextEditingController(text: widget.task_data.title);
+    _descriptionController = new TextEditingController(text: widget.task_data.description);
+
   }
 
   Future<Null> selectDate(BuildContext context) async {
@@ -267,6 +278,7 @@ class _EditTaskState extends State<EditTask> {
                       SizedBox(height: 10),
                       DefaultTabController(
                         length: 2,
+                        initialIndex: repeated ? 1 : 0,
                         child: Column(
                           children: [
                             TabBar(
@@ -289,7 +301,7 @@ class _EditTaskState extends State<EditTask> {
                               ],
                             ),
                             Container(
-                              width: double.infinity,
+                              width: MediaQuery.of(context).size.width,
                               height: 200,
                               child: TabBarView(
                                 children: [
@@ -307,54 +319,58 @@ class _EditTaskState extends State<EditTask> {
                 Positioned(
                   bottom: 10,
                   left: 15,
-                  child: FutureBuilder(
-                      future: streams.getCompleteUser(user.uid),
-                      builder: (context, snapshot) {
-                        print(snapshot.data);
-                        return RaisedButton(
-                          color: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    height: MediaQuery.of(context).size.width / 9,
+                    child: FutureBuilder(
+                        future: streams.getCompleteUser(user.uid),
+                        builder: (context, snapshot) {
+                          print(snapshot.data);
+                          return RaisedButton(
+                            color: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
 //                                      side: BorderSide(color: Colors.green)
-                          ),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width - 60,
-                            height: 50,
-                            child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.edit, color: Colors.white),
-                                    SizedBox(width: 5),
-                                    Text("EDIT TASK", style: TextStyle(color: Colors.white, fontSize: 18))
-                                  ],
-                                )
                             ),
-                          ),
-                          onPressed: () async {
+                            child: Container(
+                              width: MediaQuery.of(context).size.width - 40,
+                              height: 50,
+                              child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.edit, color: Colors.white),
+                                      SizedBox(width: 5),
+                                      Text("EDIT TASK", style: TextStyle(color: Colors.white, fontSize: 18))
+                                    ],
+                                  )
+                              ),
+                            ),
+                            onPressed: () async {
 
-                            // TODO Dont think that this changes it, but rather adds one
+                              // TODO Dont think that this changes it, but rather adds one
 
-                            var puid = user.uid;
-                            var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-                            var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-                            var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
-                            var title = _title;
-                            var description = _description;
-                            var date = _dateTime.millisecondsSinceEpoch;
-                            var group_code = snapshot.data.groups[0].code;
+                              var puid = user.uid;
+                              var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                              var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                              var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+                              var title = _title;
+                              var description = _description;
+                              var date = _dateTime.millisecondsSinceEpoch;
+                              var group_code = snapshot.data.groups[0].code;
 
-                            var group_name = snapshot.data.groups[0].name;
+                              var group_name = snapshot.data.groups[0].name;
 
 
-                            addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
+                              addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
 
-                            // Not the correct navigator
-                            Navigator.pop(context);
-                            setState(() {});
-                          },
-                        );
-                      }
+                              // Not the correct navigator
+                              Navigator.pop(context);
+                              setState(() {});
+                            },
+                          );
+                        }
+                    ),
                   ),
                 ),
                 Positioned(
@@ -427,7 +443,7 @@ class _EditTaskState extends State<EditTask> {
 
   Widget repeatedTask() {
     return Container(
-      height: 200,
+      height: 230,
       width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -438,10 +454,11 @@ class _EditTaskState extends State<EditTask> {
             children: [
               SizedBox(height: 20),
               Text("SELECT DAYS", style: TextStyle(fontSize: 16, color: Colors.grey)),
-              SizedBox(height: 15),
+              SizedBox(height: 5),
               Container(
-                width: double.infinity,
-                child: ListView.builder(
+                width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.width / 9,
+                  child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: days_show.length,
@@ -470,36 +487,6 @@ class _EditTaskState extends State<EditTask> {
               ),
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 5),
-              Text("ASSIGN TO", style: TextStyle(fontSize: 16, color: Colors.grey)),
-              Container(
-//                height: 100,
-                child: DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.deepPurple),
-                  onChanged: shared ? (String newValue) {
-                    setState(() {
-                      dropdownValue = newValue;
-                    });
-                  } : null,
-                  disabledHint: Text("SET TASK TO GROUP"),
-                  items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              )
-            ],
-          )
         ],
       ),
     );
