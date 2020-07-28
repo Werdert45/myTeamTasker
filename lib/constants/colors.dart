@@ -7,3 +7,7 @@ var secondaryColor = Color(0xFFc6bed2);
 var boxColor = Color.fromRGBO(21, 105, 94, 1);
 
 var mainTextColor = Colors.white;
+
+var selectedColor = Colors.green;
+
+var unselectedColor = Colors.red;
