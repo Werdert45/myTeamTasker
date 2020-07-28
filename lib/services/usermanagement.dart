@@ -21,6 +21,19 @@ class UserManagement {
     });
   }
 
+  Future updateEmail(email) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    user.updateEmail(email).then((_) {
+      print("Succesfully changed password");
+      return true;
+    }).catchError((error) {
+      print("Password wasn't changed, due to: " + error.toString());
+      return false;
+    });
+
+  }
+
   Future updateProfilePic(picUrl) async {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;

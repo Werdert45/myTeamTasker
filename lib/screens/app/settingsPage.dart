@@ -2,6 +2,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final AuthService _auth = AuthService();
+  final userManagement = UserManagement();
 
   bool isSwitched = false;
 
@@ -198,6 +200,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     leading: Icon(Icons.email),
                     title: Text("Change email"),
                     trailing: Text("ianronk0@gmail.com"),
+                    onTap: () async {
+
+                      // TODO Create seperate screens
+//                      userManagement.updateEmail('')
+                    }
                   ),
                   ListTile(
                     leading: Icon(Icons.lock),
