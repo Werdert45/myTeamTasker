@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage>
     super.initState();
     tabController = new TabController(length: 4, vsync: this);
 
-    _page = 1;
+    _page = 0;
   }
 
 
@@ -63,8 +63,8 @@ class _HomePageState extends State<HomePage>
         child: Scaffold(
           bottomNavigationBar: FABBottomAppBar(
             onTabSelected: _selectPage,
-            color: primaryColor,
-            selectedColor: Colors.black,
+            color: Colors.black,
+            selectedColor: boxColor,
 //            backgroundColor: Colors.grey,
             notchedShape: CircularNotchedRectangle(),
             items: [
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage>
           body: pages[_page],
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
-            backgroundColor: primaryColor,
+            backgroundColor: boxColor,
             heroTag: "add_task",
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));

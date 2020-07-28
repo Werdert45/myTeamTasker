@@ -41,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     width: MediaQuery.of(context).size.width - 40,
                     height: 170,
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(21, 105, 94, 1),
+                        color: boxColor,
                         borderRadius: BorderRadius.circular(30)
                     ),
                     child: Stack(

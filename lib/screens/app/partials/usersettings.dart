@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class UserSettings extends StatefulWidget {
@@ -54,8 +55,8 @@ class _UserSettingsState extends State<UserSettings> {
 //                labelText: "Name",
                 labelStyle: TextStyle(color: Colors.grey),
                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                focusColor: Color(0xFF572f8c),
-                fillColor: Color(0xFF572f8c),
+                focusColor: primaryColor,
+                fillColor: primaryColor,
 
               ),
             ),

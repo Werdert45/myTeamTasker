@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/main.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/models/user_db.dart';
 import 'package:collaborative_repitition/services/auth.dart';
@@ -20,6 +22,8 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   final Streams streams = Streams();
 
+  List months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
+
   void _handleNewDate(date) {
     setState(() {
       _selectedDay = date;
@@ -38,6 +42,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void initState() {
     super.initState();
+    var now = DateTime.now();
+    var today = DateTime(now.year, now.month, now.day);
+
+    _selectedDay = today;
+
+
     _selectedEvents = _events[_selectedDay] ?? [];
   }
 
@@ -51,6 +61,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
+
+
     Map<String, dynamic> per_day = new Map();
 
     return Scaffold(
@@ -59,9 +71,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
           child: FutureBuilder(
             future: streams.getCalendar(user.uid),
             builder: (context, snapshot) {
+                var today = DateTime.now();
 
                 Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
                 calendar.forEach((k,v) => _events[k] = v);
+
+                _selectedEvents = _events[_selectedDay];
 
                 return Container(
                   width: double.infinity,
@@ -73,14 +88,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Container(
-                          height: 102,
+                          height: 120,
                           width: MediaQuery.of(context).size.width - 30,
                           decoration: BoxDecoration(
-                            color: Colors.grey,
+                            color: boxColor,
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Padding(
-                            padding: EdgeInsets.only(left: 50, top: 8, bottom: 8, right: 35),
+                            padding: EdgeInsets.only(left: 50, top: 18, bottom: 6, right: 35),
                             child: Stack(
                               children: [
                                 Align(
@@ -88,14 +103,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("June", style: TextStyle(fontSize: 24, color: Colors.deepPurple)),
-                                      Text("02", style: TextStyle(fontSize: 48, color: Colors.deepPurple))
+                                      Text(months[today.month].toUpperCase(), style: TextStyle(fontSize: 28, color: mainTextColor)),
+                                      Text(today.day < 10 ? "0" + today.day.toString() : today.day.toString(), style: TextStyle(fontSize: 48, color: mainTextColor))
                                     ],
                                   ),
                                 ),
                                 Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text("Today you have\n4 things to do", style: TextStyle(fontSize: 22, color: Colors.deepPurple)),
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Text("Today you have\n4 things to do", style: TextStyle(fontSize: 26, color: mainTextColor)),
+                                  ),
                                 )
                               ],
                             ),
@@ -110,12 +128,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             startOnMonday: true,
                             weekDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
                             events: _events,
+                            hideTodayIcon: true,
                             onRangeSelected: (range) =>
                                 print("Range is ${range.from}, ${range.to}"),
                             onDateSelected: (date) => _handleNewDate(date),
-                            isExpandable: true,
+                            isExpandable: false,
                             eventDoneColor: Colors.green,
-                            selectedColor: Colors.pink,
+                            selectedColor: boxColor,
                             todayColor: Colors.blue,
                             eventColor: Colors.grey,
                             dayOfWeekStyle: TextStyle(
@@ -137,34 +156,60 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   Widget _buildEventList() {
-    return Expanded(
+    return _selectedEvents == null ?
+        Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: _selectedDay.difference(DateTime.now()).inMilliseconds < 0 ?
+            Center(
+                child: Container(
+                    width: 200,
+                    child: Center(child: Text("You don't need to look in the past, look in the future instead", style: (TextStyle(fontSize: 18)), textAlign: TextAlign.center)
+                    )
+                )
+            ) :
+            Center(
+                child: Container(
+                    width: 200,
+                    child: Text("No Tasks, for now, add one using the big button below", style: (TextStyle(fontSize: 18)), textAlign: TextAlign.center)
+                )
+            ),
+        )
+        :
+     Expanded(
       child: ListView.builder(
+
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-
-          return Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(width: 1.5, color: Colors.black12),
+          if (_selectedEvents.isNotEmpty) {
+            return Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(width: 1.5, color: Colors.black12),
+                ),
               ),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
-            child: ListTile(
-              leading: Text(_selectedEvents[index]['icon'], style: TextStyle(fontSize: 28)),
-              title: Text(_selectedEvents[index]['name']),
-              subtitle: (_selectedEvents[index]['days'] != null) ? Text("Repeated")  : Text("One Time"),
-              trailing: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: (_selectedEvents[index]['alert_time'] != null) ? Text("Alert at: " + _selectedEvents[index]['alert_time'].toString()) : Text("No Alert"),
+              padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
+              child: ListTile(
+                leading: Text(_selectedEvents[index]['icon'], style: TextStyle(fontSize: 28)),
+                title: Text(_selectedEvents[index]['name']),
+                subtitle: (_selectedEvents[index]['days'] != null) ? Text("Repeated")  : Text("One Time"),
+                trailing: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: (_selectedEvents[index]['alert_time'] != null) ? Text("Alert at: " + _selectedEvents[index]['alert_time'].toString()) : Text("No Alert"),
+                ),
+                onTap: () {
+                  print(_selectedDay);
+                  print(_selectedEvents[index]);
+                },
               ),
-              onTap: () {
-                print(_selectedDay);
-                print(_selectedEvents[index]);
-              },
-            ),
-          );
+            );
+          }
+          else {
+            return SizedBox(
+              child: Text("DONT BE AFRAID MY CHILD"),
+            );
+          }
         },
-        itemCount: _selectedEvents.length,
+        itemCount: _selectedEvents != null ? _selectedEvents.length : 0,
       ),
     );
   }

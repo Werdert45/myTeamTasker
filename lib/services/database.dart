@@ -460,7 +460,7 @@ class DatabaseService {
   }
 
 
-  Future removeFromSharedTaskHistory(String puid, String taskID, String groupID, Map task_history) async {
+  Future removeFromSharedTaskHistory(String puid, String taskID, String groupID, Map task_history, bool repeated) async {
     var time = DateTime.now();
     var date = "${time.year}-${time.month}-${time.day}";
 
@@ -478,6 +478,18 @@ class DatabaseService {
     await groupsCollection.document(groupID).updateData({
       'tasks_history': task_history
     });
+
+    if (repeated) {
+      await repeatedTasksCollection.document(taskID).updateData({
+        'finished_by': {}
+      });
+    }
+
+    else {
+      await singleTasksCollection.document(taskID).updateData({
+        'finished_by': {}
+      });
+    }
   }
 
 
@@ -499,7 +511,7 @@ class DatabaseService {
     });
   }
 
-  Future removeFromPersonalTaskHistory(String puid, String taskID, Map task_history, total_tasks) async {
+  Future removeFromPersonalTaskHistory(String puid, String taskID, Map task_history, total_tasks, bool repeated) async {
     var time = DateTime.now();
     var date = "${time.year}-${time.month}-${time.day}";
 
@@ -508,6 +520,19 @@ class DatabaseService {
     await usersCollection.document(puid).updateData({
       'tasks_history': task_history
     });
+
+
+    if (repeated) {
+      await repeatedTasksCollection.document(taskID).updateData({
+        'finished_by': {}
+      });
+    }
+
+    else {
+      await singleTasksCollection.document(taskID).updateData({
+        'finished_by': {}
+      });
+    }
   }
 
   Future updateFinishedStatusSingle(taskID, status, puid) async {
@@ -587,6 +612,7 @@ class DatabaseService {
       'name': group_name,
       'single_tasks': [],
       'repeated_tasks': [],
+      'tasks_history': {}
     });
 
     await usersCollection.document(puid).setData({

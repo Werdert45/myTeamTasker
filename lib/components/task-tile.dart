@@ -97,7 +97,7 @@ class EmoIconState extends State<EmoIcon> {
 
   updateFinishedStatus(taskID, status, puid) async {
     if (checkedValue) {
-      if (repeated) {
+      if (shared) {
         await database.addToSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
       }
       else {
@@ -105,12 +105,12 @@ class EmoIconState extends State<EmoIcon> {
       }
     }
     else {
-      if (repeated) {
-        await database.removeFromSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
+      if (shared) {
+        await database.removeFromSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history, widget.task.repeated);
       }
 
       else {
-        await database.removeFromPersonalTaskHistory(puid, taskID, widget.tasks_history_pers, widget.total_tasks);
+        await database.removeFromPersonalTaskHistory(puid, taskID, widget.tasks_history_pers, widget.total_tasks, widget.task.repeated);
       }
     }
 
@@ -161,8 +161,6 @@ class EmoIconState extends State<EmoIcon> {
       });
     }
     var init_days = widget.task.days;
-
-    print(checkedValue);
 
     return Slidable(
       // Set the slidable to be able to be accepted when not checked, when checked show undo
@@ -259,7 +257,7 @@ class EmoIconState extends State<EmoIcon> {
                                             ],
                                           ),
                                           SizedBox(height: 10),
-                                          (checkedValue ? Text("Completed by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: Colors.grey)) : SizedBox()),
+//                                          (widget.task.finished_by != {}) ? Text("Completed by: " + widget.task.finished_by.values.toList()[0].toString(), style: TextStyle(color: Colors.grey)) : SizedBox(),
                                           Divider(),
                                           SizedBox(height: 5),
                                           Text("Information", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
@@ -335,7 +333,6 @@ class EmoIconState extends State<EmoIcon> {
             setState(() {
               checkedValue = true;
               updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
-              print(checkedValue);
             });
           },
         ),
