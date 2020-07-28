@@ -417,36 +417,36 @@ class _AddTaskState extends State<AddTask> {
               )
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 20),
-              Text("ASSIGN TO", style: TextStyle(fontSize: 16, color: Colors.grey)),
-              Container(
-//                height: 100,
-                child: DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.deepPurple),
-                  onChanged: shared ? (String newValue) {
-                    setState(() {
-                      dropdownValue = newValue;
-                    });
-                  } : null,
-                  disabledHint: Text("SET TASK TO GROUP"),
-                  items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              )
-            ],
-          )
+//          Column(
+//            crossAxisAlignment: CrossAxisAlignment.start,
+//            children: [
+//              SizedBox(height: 20),
+//              Text("ASSIGN TO", style: TextStyle(fontSize: 16, color: Colors.grey)),
+//              Container(
+////                height: 100,
+//                child: DropdownButton<String>(
+//                  value: dropdownValue,
+//                  icon: Icon(Icons.keyboard_arrow_down),
+//                  iconSize: 24,
+//                  elevation: 16,
+//                  style: TextStyle(color: Colors.deepPurple),
+//                  onChanged: shared ? (String newValue) {
+//                    setState(() {
+//                      dropdownValue = newValue;
+//                    });
+//                  } : null,
+//                  disabledHint: Text("SET TASK TO GROUP"),
+//                  items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
+//                      .map<DropdownMenuItem<String>>((String value) {
+//                    return DropdownMenuItem<String>(
+//                      value: value,
+//                      child: Text(value),
+//                    );
+//                  }).toList(),
+//                ),
+//              )
+//            ],
+//          )
         ],
       ),
     );
@@ -465,135 +465,67 @@ class _AddTaskState extends State<AddTask> {
             children: [
               SizedBox(height: 20),
               Text("SELECT DAYS", style: TextStyle(fontSize: 16, color: Colors.grey)),
-              SizedBox(height: 15),
+              SizedBox(height: 5),
               Container(
-                height: 65,
+                  height: MediaQuery.of(context).size.width / 9,
                   width: double.infinity,
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          Text("Mon"),
-                          Checkbox(
-                            onChanged: (bool value) {
-                              setState(() {
-                                days_show[0] = value;
-                              });
-                            },
-                            value: days_show[0],
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: days_show.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 120),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              days_show[index] = !days_show[index];
+                            });
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 9,
+                            height: MediaQuery.of(context).size.width / 9,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: days_show[index] ? selectedColor : unselectedColor,
+                            ),
+                            child: Center(child: Text(days[index].substring(0,1))),
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Tue"),
-                          Checkbox(
-                            onChanged: (bool value) {
-                              setState(() {
-                                days_show[1] = value;
-                              });
-                            },
-                            value: days_show[1],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Wed"),
-                          Checkbox(
-                            onChanged: (bool value) {
-                              setState(() {
-                                days_show[2] = value;
-                              });
-                            },
-                            value: days_show[2],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Thu"),
-                          Checkbox(
-                            onChanged: (bool value) {
-                              setState(() {
-                                days_show[3] = value;
-                              });
-                            },
-                            value: days_show[3],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Fri"),
-                          Checkbox(
-                            onChanged: (bool value) {
-                              setState(() {
-                                days_show[4] = value;
-                              });
-                            },
-                            value: days_show[4],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Sat"),
-                          Checkbox(
-                            onChanged: (bool value) {
-                              setState(() {
-                                days_show[5] = value;
-                              });
-                            },
-                            value: days_show[5],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Sun"),
-                          Checkbox(
-                            onChanged: (bool value) {
-                              setState(() {
-                                days_show[6] = value;
-                              });
-                            },
-                            value: days_show[6],
-                          ),
-                        ],
-                      )
-                    ],
+                        ),
+                      );
+                    },
                   )
               ),
             ],
           ),
+          SizedBox(height: 25),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 5),
-              Text("ASSIGN TO", style: TextStyle(fontSize: 16, color: Colors.grey)),
-              Container(
-                child: DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.deepPurple),
-                  onChanged: shared ? (String newValue) {
-                    setState(() {
-                      dropdownValue = newValue;
-                    });
-                  } : null,
-                  disabledHint: Text("SET TASK TO GROUP"),
-                  items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              )
+//              Text("ASSIGN TO", style: TextStyle(fontSize: 16, color: Colors.grey)),
+//              Container(
+//                child: DropdownButton<String>(
+//                  value: dropdownValue,
+//                  icon: Icon(Icons.keyboard_arrow_down),
+//                  iconSize: 24,
+//                  elevation: 16,
+//                  style: TextStyle(color: Colors.deepPurple),
+//                  onChanged: shared ? (String newValue) {
+//                    setState(() {
+//                      dropdownValue = newValue;
+//                    });
+//                  } : null,
+//                  disabledHint: Text("SET TASK TO GROUP"),
+//                  items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
+//                      .map<DropdownMenuItem<String>>((String value) {
+//                    return DropdownMenuItem<String>(
+//                      value: value,
+//                      child: Text(value),
+//                    );
+//                  }).toList(),
+//                ),
+//              )
             ],
           )
         ],

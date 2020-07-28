@@ -441,100 +441,31 @@ class _EditTaskState extends State<EditTask> {
               SizedBox(height: 15),
               Container(
                 width: double.infinity,
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        Text("Mon"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[0] = value;
-                            });
-                          },
-                          value: days_show[0],
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: days_show.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 120),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            days_show[index] = !days_show[index];
+                          });
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 9,
+                          height: MediaQuery.of(context).size.width / 9,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: days_show[index] ? selectedColor : unselectedColor,
+                          ),
+                          child: Center(child: Text(days[index].substring(0,1))),
                         ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Tue"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[1] = value;
-                            });
-                          },
-                          value: days_show[1],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Wed"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[2] = value;
-                            });
-                          },
-                          value: days_show[2],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Thu"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[3] = value;
-                            });
-                          },
-                          value: days_show[3],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Fri"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[4] = value;
-                            });
-                          },
-                          value: days_show[4],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Sat"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[5] = value;
-                            });
-                          },
-                          value: days_show[5],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Sun"),
-                        Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              days_show[6] = value;
-                            });
-                          },
-                          value: days_show[6],
-                        ),
-                      ],
-                    )
-                  ],
+                      ),
+                    );
+                  },
                 )
               ),
             ],
