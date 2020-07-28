@@ -240,9 +240,9 @@ class Streams {
 
         if (per_day.containsKey(DateTime(year, month, day))) {
           // Second task
-          per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': null, 'alert_time': tasks[i].alert_time}];
+          per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'description': tasks[i].description, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': null, 'alert_time': tasks[i].alert_time}];
         } else {
-          per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': null, 'alert_time': tasks[i].alert_time}];
+          per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'description': tasks[i].description, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': null, 'alert_time': tasks[i].alert_time}];
         }
       }
 
@@ -259,9 +259,9 @@ class Streams {
             var year = day_of_the_year.year;
 
             if (per_day.containsKey(DateTime(year, month, day))) {
-              per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+              per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'description': tasks[i].description, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
             } else {
-              per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+              per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'description': tasks[i].description, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
             }
           }
 

@@ -177,10 +177,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
         :
      Expanded(
       child: ListView.builder(
-
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           if (_selectedEvents.isNotEmpty) {
+            print(_selectedEvents[index]);
+
             return Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -189,12 +190,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
               child: ListTile(
-                leading: Text(_selectedEvents[index]['icon'], style: TextStyle(fontSize: 28)),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    // Smaller and bigger icons show bigger (shifted to right for mountain
+                      child: Text(_selectedEvents[index]['icon'], style: TextStyle(fontSize: 28))
+                  ),
+                ),
                 title: Text(_selectedEvents[index]['name']),
-                subtitle: (_selectedEvents[index]['days'] != null) ? Text("Repeated")  : Text("One Time"),
+                subtitle: _selectedEvents[index]['description'].length < 30 ? Text(_selectedEvents[index]['description']) : Text(_selectedEvents[index]['description'].substring(0,27) + "..."),
+//                subtitle: (_selectedEvents[index]['days'] != null) ? Text("Repeated")  : Text("One Time"),
                 trailing: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: (_selectedEvents[index]['alert_time'] != null) ? Text("Alert at: " + _selectedEvents[index]['alert_time'].toString()) : Text("No Alert"),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      (_selectedEvents[index]['alert_time'] != null) ? Text("Alert at: " + _selectedEvents[index]['alert_time'].toString()) : Text("No Alert"),
+                      (_selectedEvents[index]['days'] != null) ? Text("Repeated")  : Text("One Time")
+                    ],
+                  ),
                 ),
                 onTap: () {
                   print(_selectedDay);
