@@ -356,7 +356,7 @@ class DatabaseService {
   }
 
 
-  Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name) async {
+  Future createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name, description) async {
       await singleTasksCollection.document(taskID).setData({
         'alert_time': alertTime,
         'date': date,
@@ -366,6 +366,7 @@ class DatabaseService {
         'icon': icon,
         'id': taskID,
         'title': title,
+        'description': description,
         'shared': shared,
         'repeated': false,
         'finished': false,
@@ -374,7 +375,7 @@ class DatabaseService {
       });
   }
 
-  Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title, shared, group_code, group_name) async {
+  Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title, shared, group_code, group_name, description) async {
       await repeatedTasksCollection.document(taskID).setData({
         'alert_time': alertTime,
         'assignee': assignee,
@@ -383,6 +384,7 @@ class DatabaseService {
         'icon': icon,
         'id': taskID,
         'title': title,
+        'description': description,
         'shared': shared,
         'repeated': true,
         'finished': false,
@@ -464,8 +466,6 @@ class DatabaseService {
 
     // Note start using the uid of the user that finished the task before you (if it is the case that the task was done by someone else
     // And you decided that it was not finished
-    print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-
     var list = [];
     list += task_history[date][puid];
 

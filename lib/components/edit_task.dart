@@ -85,14 +85,14 @@ class _EditTaskState extends State<EditTask> {
 
 
   // Improve addTaskDB to also save to either group or personal + title not working
-  addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name) async {
+  addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description) async {
     if (repeated) {
       await database.addRepeatedTask(taskID, puid, group_code, shared);
-      await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name);
+      await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
     }
     else {
       await database.addSingleTask(taskID, puid, group_code, shared);
-      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name);
+      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name, description);
     }
   }
 
@@ -340,13 +340,14 @@ class _EditTaskState extends State<EditTask> {
                             var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
                             var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
                             var title = _title;
-//                  var description = "";
+                            var description = _description;
                             var date = _dateTime.millisecondsSinceEpoch;
                             var group_code = snapshot.data.groups[0].code;
 
                             var group_name = snapshot.data.groups[0].name;
 
-                            addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name);
+
+                            addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
 
                             // Not the correct navigator
                             Navigator.pop(context);

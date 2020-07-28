@@ -1,6 +1,7 @@
 class single_task {
   final String icon;
   final String title;
+  final String description;
   final String id;
   final int date;
   final String alert_time;
@@ -13,7 +14,7 @@ class single_task {
   final Map finished_by;
   final List belongs_to;
 
-  single_task({this.icon, this.id, this.title, this.date, this.alert_time, this.creator, this.assignee, this.days, this.shared, this.repeated, this.finished, this.finished_by, this.belongs_to});
+  single_task({this.icon, this.id, this.title, this.description, this.date, this.alert_time, this.creator, this.assignee, this.days, this.shared, this.repeated, this.finished, this.finished_by, this.belongs_to});
 
 
   factory single_task.fromMap(Map data) {
@@ -22,6 +23,7 @@ class single_task {
       icon: data['icon'] ?? '',
       id: data['id'] ?? '',
       title: data['title'] ?? '',
+      description: data['description'] ?? '',
       days: null,
       date: data['date'] ?? null,
       alert_time: data['alert_time'] ?? null,
