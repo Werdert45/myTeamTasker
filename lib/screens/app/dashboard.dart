@@ -7,6 +7,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/partials/horizontalbarchart.dart';
 import 'package:collaborative_repitition/screens/app/settingsPage.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/progressbar.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
           if (snapshot.connectionState == ConnectionState.done) {
             tasks = snapshot.data.tasks;
+
+            var finished_tasks = progressBar(tasks);
+
 
             return Container(
                 child: Column(
@@ -155,9 +159,9 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: new LinearPercentIndicator(
                         width: MediaQuery.of(context).size.width - 40,
                         lineHeight: 20.0,
-                        percent: 0.5,
+                        percent: (finished_tasks[1].length / (finished_tasks[0].length + finished_tasks[1].length)),
                         center: Text(
-                          "50.0%",
+                          ((finished_tasks[1].length / (finished_tasks[0].length + finished_tasks[1].length))*100).toString() + "%",
                           style: new TextStyle(fontSize: 12.0),
                         ),
 //                        trailing: Icon(Icons.mood, size: 40),
