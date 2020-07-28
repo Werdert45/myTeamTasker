@@ -68,19 +68,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     Container(
                       child: Stack(
                         children: [
-                          Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 10, top: 30),
-                                child: IconButton(
-                                  icon: Icon(Icons.exit_to_app, color: Colors.white, size: 30),
-                                  onPressed: () async {
-                                    await _auth.signOut();
-                                    Navigator.pushReplacementNamed(context, '/landingpage');
-                                  },
-                                ),
-                              )
-                          ),
+
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
