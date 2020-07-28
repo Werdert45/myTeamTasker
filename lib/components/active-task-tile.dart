@@ -9,6 +9,9 @@ import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'button.dart';
 
+
+// TODO WE NEED CHANGES HERE
+
 class ActiveTask extends StatefulWidget {
   final task;
   final puid;
@@ -105,32 +108,32 @@ class ActiveTaskState extends State<ActiveTask> {
     }
   }
 
-  updateTaskDB(repeated, title, icon, id, days, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated, group_code, group_name) async {
+  updateTaskDB(repeated, title, description, icon, id, days, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated, group_code, group_name) async {
     // Remove all from the specific task
     await database.completeReplacementTask(id, group, puid, repeated, shared, init_repeated, init_shared);
 
     // Check the conditions and add accordingly
     if (repeated && shared) {
       // add to repeated in group
-      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared, group_code, group_name);
+      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared, group_code, group_name, description);
       await database.addRepeatedTask(id, puid, group, shared);
     }
 
     else if (repeated && !shared) {
       // add to repeated in user
-      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared, group_code, group_name);
+      await database.createRepeatedTask(id, alertTime, puid, puid, days, icon, title, shared, group_code, group_name, description);
       await database.addRepeatedTask(id, puid, group, shared);
     }
 
     else if (!repeated && shared) {
       // add to single in group
-      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared, group_code, group_name);
+      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared, group_code, group_name, description);
       await database.addSingleTask(id, puid, group, shared);
     }
 
     else if (!repeated && !shared) {
       // add to single in user
-      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared, group_code, group_name);
+      await database.createSingleTask(id, alertTime, date, icon, puid, title, puid, shared, group_code, group_name, description);
       await database.addSingleTask(id, puid, group, shared);
     }
   }
@@ -224,6 +227,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                 child: Text("SAVE"),
                                                 onTap: () async {
                                                   var title = task_name;
+                                                  var description = "";
                                                   var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
                                                   var id = widget.task.id;
                                                   var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
@@ -235,7 +239,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                   var group_code = widget.group.code;
                                                   var group_name = widget.group.name;
 
-                                                  await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated, group_code, group_name);
+                                                  await updateTaskDB(repeated, title, icon, id, days_show, init_days, alertTime, puid, date, group, shared, init_shared, init_repeated, group_code, group_name, description);
                                                   await saveTask();
                                                 }) : Padding(
                                               padding: const EdgeInsets.only(top: 8.0),

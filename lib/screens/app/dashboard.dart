@@ -169,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     SizedBox(height: 20),
                     Container(
                       width: double.infinity,
-                      height: MediaQuery.of(context).size.height- 650,
+//                      height: MediaQuery.of(context).size.height- 550,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -186,9 +186,12 @@ class _DashboardPageState extends State<DashboardPage> {
                               itemBuilder: (context, index) {
                                 print(snapshot.data.tasks);
                                 if (snapshot.data.tasks[index].title != "") {
-                                  return Container(
-                                    width: double.infinity,
-                                    child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, tasks.length),
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, tasks.length),
+                                    ),
                                   );
                                 }
                                 else {
@@ -199,28 +202,28 @@ class _DashboardPageState extends State<DashboardPage> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text("Tomorrow", style: TextStyle(fontSize: 24, color: Colors.grey)),
-                    ),
-                    ListView.builder(
-                        padding: EdgeInsets.only(top: 10),
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: snapshot.data.tasks.length,
-                        itemBuilder: (context, index) {
-                          print(snapshot.data.tasks);
-                          if (snapshot.data.tasks[index].title != "") {
-                            return Container(
-                              width: double.infinity,
-                              child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, tasks.length),
-                            );
-                          }
-                          else {
-                            return SizedBox();
-                          }
-                        }
-                    ),
+//                    Padding(
+//                      padding: EdgeInsets.only(left: 20),
+//                      child: Text("Tomorrow", style: TextStyle(fontSize: 24, color: Colors.grey)),
+//                    ),
+//                    ListView.builder(
+//                        padding: EdgeInsets.only(top: 10),
+//                        shrinkWrap: true,
+//                        physics: NeverScrollableScrollPhysics(),
+//                        itemCount: snapshot.data.tasks.length,
+//                        itemBuilder: (context, index) {
+//                          print(snapshot.data.tasks);
+//                          if (snapshot.data.tasks[index].title != "") {
+//                            return Container(
+//                              width: double.infinity,
+//                              child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, tasks.length),
+//                            );
+//                          }
+//                          else {
+//                            return SizedBox();
+//                          }
+//                        }
+//                    ),
                   ],
                 )
             );
