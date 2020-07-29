@@ -604,7 +604,7 @@ class DatabaseService {
 
   Future updateEmail(puid, email) async {
     await usersCollection.document(puid).updateData({
-      'email': email
+      'email': email.toLowerCase()
     });
   }
 

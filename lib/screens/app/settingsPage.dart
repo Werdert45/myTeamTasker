@@ -208,7 +208,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       height: 30,
                       child: Row(
                         children: [
-                          Text("ianronk0@gmail.com"),
+                          Text(widget.data.email.toLowerCase()),
                           SizedBox(width: 4,),
                           Icon(Icons.arrow_forward_ios, size: 12,)
                         ],
