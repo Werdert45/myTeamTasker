@@ -148,20 +148,6 @@ class EmoIconState extends State<EmoIcon> {
 
   @override
   Widget build(BuildContext context) {
-    editTask() {
-      setState(() {
-        expanded = ! expanded;
-      });
-
-    }
-
-    saveTask() {
-      setState(() {
-        expanded = ! expanded;
-      });
-    }
-    var init_days = widget.task.days;
-
     return Slidable(
       // Set the slidable to be able to be accepted when not checked, when checked show undo
       actionPane: SlidableDrawerActionPane(),
@@ -256,11 +242,12 @@ class EmoIconState extends State<EmoIcon> {
                                               Text(widget.task.icon, style: TextStyle(fontSize: 25))
                                             ],
                                           ),
-                                          SizedBox(height: 10),
-//                                          (widget.task.finished_by != {}) ? Text("Completed by: " + widget.task.finished_by.values.toList()[0].toString(), style: TextStyle(color: Colors.grey)) : SizedBox(),
-                                          Divider(),
                                           SizedBox(height: 5),
-                                          Text("Information", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                                          Container(
+                                            width: MediaQuery.of(context).size.width * 0.6,
+                                            child: Text(widget.task.description, style: TextStyle(color: Colors.grey)),
+                                          ),
+                                          Divider(),
                                           SizedBox(height: 10),
                                           widget.task.shared ? Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,7 +256,6 @@ class EmoIconState extends State<EmoIcon> {
                                               Text(widget.group.name)
                                             ],
                                           ) : SizedBox(),
-                                          SizedBox(height: 15),
                                           (widget.task.repeated) ? Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
@@ -286,7 +272,7 @@ class EmoIconState extends State<EmoIcon> {
                                               Text("14th of November 2010")
                                             ],
                                           ),
-                                          SizedBox(height: 30),
+                                          SizedBox(height: 10),
                                           Padding(
                                             padding: const EdgeInsets.only(right: 20.0),
                                             child: Row(
