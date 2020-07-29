@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:collaborative_repitition/constants/colors.dart';
-import 'package:collaborative_repitition/main.dart';
 import 'package:collaborative_repitition/models/user.dart';
-import 'package:collaborative_repitition/models/user_db.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/date-functions.dart';

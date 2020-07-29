@@ -1,5 +1,7 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/screens/app/settings_sub/changeEmail.dart';
+import 'package:collaborative_repitition/screens/app/settings_sub/changePassword.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
@@ -25,6 +27,8 @@ class _SettingsPageState extends State<SettingsPage> {
   final userManagement = UserManagement();
 
   bool isSwitched = false;
+
+  bool changePassword = false;
 
   @override
 
@@ -174,7 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         Container(
-          height: 200,
+          height: changePassword ? 400 : 200,
           child: ListView(
             primary: true,
             physics: NeverScrollableScrollPhysics(),
@@ -199,18 +203,43 @@ class _SettingsPageState extends State<SettingsPage> {
                   ListTile(
                     leading: Icon(Icons.email),
                     title: Text("Change email"),
-                    trailing: Text("ianronk0@gmail.com"),
-                    onTap: () async {
-
-                      // TODO Create seperate screens
-//                      userManagement.updateEmail('')
-                    }
+                    trailing: Container(
+                      width: 155,
+                      height: 30,
+                      child: Row(
+                        children: [
+                          Text("ianronk0@gmail.com"),
+                          SizedBox(width: 4,),
+                          Icon(Icons.arrow_forward_ios, size: 12,)
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeEmail(email: widget.data.email)));
+                    },
                   ),
                   ListTile(
                     leading: Icon(Icons.lock),
                     title: Text("Change password"),
-                    trailing: Text("********"),
-                  )
+                    trailing: Container(
+                      width: 94,
+                      height: 30,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text("************"),
+                          ),
+                          SizedBox(width: 4,),
+                          Icon(Icons.arrow_forward_ios, size: 12,)
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword(email: widget.data.email)));
+                    },
+                  ),
+//                  changePassword ? Container(height: 200, width: double.infinity, color: Colors.red) : SizedBox()
                 ]
             ).toList(),
           ),

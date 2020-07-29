@@ -602,6 +602,12 @@ class DatabaseService {
     }
   }
 
+  Future updateEmail(puid, email) async {
+    await usersCollection.document(puid).updateData({
+      'email': email
+    });
+  }
+
   Future createGroup(puid, group_name, group_description) async {
     var group_code = puid.toString().substring(0,6).toUpperCase();
     var user = await usersCollection.document(puid).get();

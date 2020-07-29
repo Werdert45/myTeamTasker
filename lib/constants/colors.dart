@@ -11,3 +11,5 @@ var mainTextColor = Colors.white;
 var selectedColor = Colors.green;
 
 var unselectedColor = Colors.red;
+
+var confirmColor = Colors.green;
