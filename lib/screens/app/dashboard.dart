@@ -161,7 +161,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         lineHeight: 20.0,
                         percent: (finished_tasks[1].length / (finished_tasks[0].length + finished_tasks[1].length)),
                         center: Text(
-                          ((finished_tasks[1].length / (finished_tasks[0].length + finished_tasks[1].length))*100).toString() + "%",
+                          ((finished_tasks[1].length / (finished_tasks[0].length + finished_tasks[1].length))*100).round().toString() + "%",
                           style: new TextStyle(fontSize: 12.0),
                         ),
 //                        trailing: Icon(Icons.mood, size: 40),

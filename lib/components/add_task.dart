@@ -82,6 +82,9 @@ class _AddTaskState extends State<AddTask> {
 
   // Improve addTaskDB to also save to either group or personal + title not working
   addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description) async {
+    print(shared);
+    print(group_code);
+
     if (repeated) {
       await database.addRepeatedTask(taskID, puid, group_code, shared);
       await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
@@ -133,7 +136,7 @@ class _AddTaskState extends State<AddTask> {
           body: SafeArea(
             child: Form(
               child: Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height - 20,
                 width: MediaQuery.of(context).size.width,
                 child: Stack(
                   children: [
@@ -319,7 +322,7 @@ class _AddTaskState extends State<AddTask> {
                                 ),
                                 Container(
                                   width: double.infinity,
-                                  height: 200,
+                                  height: 180,
                                   child: TabBarView(
                                     children: [
                                       singleTask(),
@@ -369,6 +372,7 @@ class _AddTaskState extends State<AddTask> {
                                 var title = _title;
                                 var description = _description;
                                 var date = _dateTime.millisecondsSinceEpoch;
+
                                 var group_code = snapshot.data.groups[0].code;
                                 var group_name = snapshot.data.groups[0].name;
 
@@ -398,7 +402,7 @@ class _AddTaskState extends State<AddTask> {
 
   Widget singleTask() {
     return Container(
-      height: 200,
+      height: 180,
       width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -454,7 +458,7 @@ class _AddTaskState extends State<AddTask> {
 
   Widget repeatedTask() {
     return Container(
-      height: 230,
+      height: 210,
       width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

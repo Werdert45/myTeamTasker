@@ -624,7 +624,7 @@ class DatabaseService {
     });
 
     await usersCollection.document(puid).setData({
-      'groups': {'code': 'name'}
+      'groups': {group_code: group_name}
     }, merge: true);
 
   }

@@ -150,224 +150,262 @@ class EmoIconState extends State<EmoIcon> {
   Widget build(BuildContext context) {
     return Slidable(
       // Set the slidable to be able to be accepted when not checked, when checked show undo
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.2,
-      child: Container(
-        child: Stack(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                  },
-                  child: ClipPath(
-                    clipper: ShapeBorderClipper(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10))
-                        )
-                    ),
-                    child: AnimatedContainer(
-                        width: MediaQuery.of(context).size.width - 40,
-                        height: expanded ? 280.0 : 60.0,
-                        duration: Duration(milliseconds: 500),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE8EDED),
-                            border: checkedValue ? Border(
-                                bottom: BorderSide(
-                                    color: Colors.green,
-                                    width: 5.0
-                                )
-                            ) : null
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Stack(
-                              children: [
-                                Column(
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.2,
+        child: Container(
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                    },
+                    child: ClipPath(
+                      clipper: ShapeBorderClipper(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10))
+                          )
+                      ),
+                      child: AnimatedContainer(
+                          width: MediaQuery.of(context).size.width - 40,
+                          height: expanded ? 280.0 : 60.0,
+                          duration: Duration(milliseconds: 500),
+                          decoration: BoxDecoration(
+                              color: Color(0xFFE8EDED),
+                              border: checkedValue ? Border(
+                                  bottom: BorderSide(
+                                      color: Colors.green,
+                                      width: 5.0
+                                  )
+                              ) : null
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  SizedBox(height: 6),
+                                                  Container(
+                                                      child: checkedValue ? Text(widget.task.icon, style: TextStyle(fontSize: 25, color: Colors.grey)) : Text(widget.task.icon, style: TextStyle(fontSize: 25))
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(width: 20),
+                                              Column(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(height: 10),
+                                                    (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: primaryColor, fontSize: 20, decoration: checkedValue ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
+//                      SizedBox(height: 3),
+                                                    checkedValue ? (
+                                                        widget.task.shared ? Text("Finished by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: secondaryColor, fontSize: 12)) :
+                                                        Text("Completed", style: TextStyle(color: secondaryColor, fontSize: 12))) :
+                                                    Text("Not finished", style: TextStyle(color: secondaryColor, fontSize: 12))
+                                                  ]
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 5.0),
+                                            child: IconButton(
+                                              icon: Icon(Icons.keyboard_arrow_down, size: 30),
+                                              onPressed: () {
+                                                setState(() {
+                                                  expanded = !expanded;
+                                                });
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Container(
+                                        height: expanded ? 220 : 0,
+                                        width: MediaQuery.of(context).size.width - 50,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                          Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Column(
                                               children: [
-                                                SizedBox(height: 6),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 10.0),
+                                                  child: Text(widget.task.title, style: TextStyle(fontSize: 20)),
+                                                ),
                                                 Container(
-                                                    child: checkedValue ? Text(widget.task.icon, style: TextStyle(fontSize: 25, color: Colors.grey)) : Text(widget.task.icon, style: TextStyle(fontSize: 25))
+                                                  width: MediaQuery.of(context).size.width * 0.6,
+                                                  child: Text(widget.task.description, style: TextStyle(color: Colors.grey)),
                                                 )
                                               ],
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                             ),
-                                            SizedBox(width: 20),
-                                            Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(height: 10),
-                                                  (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: primaryColor, fontSize: 20, decoration: checkedValue ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
-//                      SizedBox(height: 3),
-                                                  checkedValue ? Text("Completed", style: TextStyle(color: secondaryColor, fontSize: 12)) : Text("8 AM to 12 AM", style: TextStyle(color: secondaryColor, fontSize: 12))
-                                                ]
-                                            ),
+                                            Text(widget.task.icon, style: TextStyle(fontSize: 40))
                                           ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 5.0),
-                                          child: IconButton(
-                                            icon: Icon(Icons.keyboard_arrow_down, size: 30),
-                                            onPressed: () {
-                                              setState(() {
-                                                expanded = !expanded;
-                                              });
+                                        SizedBox(height: 5),
+                                        Divider(),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("ALERT AT", style: TextStyle(fontSize: 14)),
+                                                Text("19:05", style: TextStyle(fontSize: 24))
+                                              ],
+                                            ),
+                                            checkedValue ? (widget.task.shared ?
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("FINISHED BY", style: TextStyle(fontSize: 14)),
+                                                Text(widget.task.finished_by.values.toList()[0])
+                                              ],
+                                            ) :
+                                                Text("FINISHED", style: TextStyle(fontSize: 14))) :
+                                                Text("NOT FINISHED")
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context).size.width / 2 - 100,
+                                              height: 1,
+                                              color: Colors.grey,
+                                            ),
+                                            Text("REPEATED ON"),
+                                            Container(
+                                              width: MediaQuery.of(context).size.width / 2 - 100,
+                                              height: 1,
+                                              color: Colors.grey,
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Container(
+                                          width: MediaQuery.of(context).size.width - 40,
+                                          height: 40,
+                                          child: ListView.builder(
+                                            physics: NeverScrollableScrollPhysics(),
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: days_show.length,
+                                            itemBuilder: (context, index) {
+                                              return Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 120),
+                                                child: Container(
+                                                  width: MediaQuery.of(context).size.width / 10,
+                                                  height: MediaQuery.of(context).size.width / 10,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    color: days_show[index] ? selectedColor : unselectedColor,
+                                                  ),
+                                                  child: Center(child: Text(days[index].substring(0,1))),
+                                                ),
+                                              );
                                             },
                                           ),
                                         )
-                                      ],
-                                    ),
-                                    Container(
-                                      height: expanded ? 200 : 0,
-                                      width: MediaQuery.of(context).size.width - 50,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text(widget.task.title, style: TextStyle(fontSize: 18)),
-                                              ),
-                                              Text(widget.task.icon, style: TextStyle(fontSize: 25))
-                                            ],
-                                          ),
-                                          SizedBox(height: 5),
-                                          Container(
-                                            width: MediaQuery.of(context).size.width * 0.6,
-                                            child: Text(widget.task.description, style: TextStyle(color: Colors.grey)),
-                                          ),
-                                          Divider(),
-                                          SizedBox(height: 10),
-                                          widget.task.shared ? Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text("Belongs to group: "),
-                                              Text(widget.group.name)
-                                            ],
-                                          ) : SizedBox(),
-                                          (widget.task.repeated) ? Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text("Repeated on:", style: TextStyle(fontSize: 14)),
-                                              SizedBox(height: 10),
-                                              Text("Mon, Tue, Wed, Thu, Fri, Sat, Sun", style: TextStyle(fontSize: 13))
-                                            ],
-                                          ) :
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text("Single Task on:"),
-                                              SizedBox(width: 3),
-                                              Text("14th of November 2010")
-                                            ],
-                                          ),
-                                          SizedBox(height: 10),
-                                          Padding(
-                                            padding: const EdgeInsets.only(right: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                widget.task.alert_time != null ?
-                                                Text("Alert at:  " + widget.task.alert_time.toString(), style: TextStyle(fontSize: 14))
-                                                    :
-                                                Text("No alert", style: TextStyle(fontSize: 14))
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ]
-                          ),
-                        )
+
+
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ]
+                            ),
+                          )
+                      ),
                     ),
                   ),
+                  // Sticker
+                  (isShowSticker ? buildSticker() : Container()),
+                ],
+              ),
+            ],
+          ),
+        ),
+        actions: !checkedValue ? <Widget>[
+          IconSlideAction(
+            color: Colors.transparent,
+            iconWidget: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.green,
+              ),
+              child: Icon(Icons.check, color: Colors.white),
+            ),
+            onTap: () {
+              setState(() {
+                checkedValue = true;
+                updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
+              });
+            },
+          ),
+        ] : [],
+        secondaryActions: checkedValue ? <Widget>[
+          IconSlideAction(
+            color: Colors.transparent,
+            iconWidget: Container(
+                width: 80,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.red,
                 ),
-                // Sticker
-                (isShowSticker ? buildSticker() : Container()),
-              ],
+                child: Center(
+                  child: Text("Undo", style: TextStyle(color: Colors.white, fontSize: 18)),
+                )
             ),
-          ],
-        ),
-      ),
-      actions: !checkedValue ? <Widget>[
-        IconSlideAction(
-          color: Colors.transparent,
-          iconWidget: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.green,
+            onTap: () {
+              setState(() {
+                checkedValue = false;
+                updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
+              });
+            },
+          ),
+        ] :
+        [
+          IconSlideAction(
+            color: Colors.transparent,
+            iconWidget: Container(
+                width: 80,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.blue,
+                ),
+                child: Center(
+                  child: Text("Edit", style: TextStyle(color: Colors.white, fontSize: 18)),
+                )
             ),
-            child: Icon(Icons.check, color: Colors.white),
-          ),
-          onTap: () {
-            setState(() {
-              checkedValue = true;
-              updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
-            });
-          },
-        ),
-      ] : [],
-      secondaryActions: checkedValue ? <Widget>[
-        IconSlideAction(
-          color: Colors.transparent,
-          iconWidget: Container(
-              width: 80,
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.red,
-              ),
-              child: Center(
-                child: Text("Undo", style: TextStyle(color: Colors.white, fontSize: 18)),
-              )
-          ),
-          onTap: () {
-            setState(() {
-              checkedValue = false;
-              updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
-            });
-          },
-        ),
-      ] :
-      [
-        IconSlideAction(
-          color: Colors.transparent,
-          iconWidget: Container(
-              width: 80,
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.blue,
-              ),
-              child: Center(
-                child: Text("Edit", style: TextStyle(color: Colors.white, fontSize: 18)),
-              )
-          ),
-          onTap: () {
-            setState(() {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
+            onTap: () {
+              setState(() {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
 //              checkedValue = false;
 //              updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
-            });
-          },
-        )
-      ]
+              });
+            },
+          )
+        ]
     );
   }
 
