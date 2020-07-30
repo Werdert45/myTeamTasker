@@ -5,6 +5,7 @@ import 'package:collaborative_repitition/screens/authentication/create_group.dar
 import 'package:collaborative_repitition/screens/authentication/select-group.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/screens/wrapper.dart';
+import 'package:collaborative_repitition/theme_changer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -25,25 +26,33 @@ void main() => runApp(new MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle.light,
-      child: StreamProvider<User>.value(
-        value: AuthService().user,
-        child: new MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Wrapper(),
-          theme: ThemeData(primarySwatch: Colors.teal),
-          routes: <String, WidgetBuilder>{
-            '/landingpage': (BuildContext context) => new MyApp(),
-            '/signup': (BuildContext context) => new SignupPage(),
-            '/login': (BuildContext context) => new LoginPage(),
-            '/creategroup': (BuildContext context) => new CreateGroupPage(),
-            '/selectgroup': (BuildContext context) => new SelectGroupPage(),
-            '/homepage': (BuildContext context) => new HomePage(),
-            '/taskmanager': (context) => new TaskManagerPage(),
-          },
-        )
-      ),
+    return ThemeBuilder(
+      defaultBrightness: Brightness.light,
+      builder: (context, _brightness) {
+        return AnnotatedRegion(
+          value: SystemUiOverlayStyle.light,
+          child: StreamProvider<User>.value(
+              value: AuthService().user,
+              child: new MaterialApp(
+                debugShowCheckedModeBanner: false,
+                home: Wrapper(),
+                theme: ThemeData(
+                    primarySwatch: Colors.teal,
+                    brightness: _brightness
+                ),
+                routes: <String, WidgetBuilder>{
+                  '/landingpage': (BuildContext context) => new MyApp(),
+                  '/signup': (BuildContext context) => new SignupPage(),
+                  '/login': (BuildContext context) => new LoginPage(),
+                  '/creategroup': (BuildContext context) => new CreateGroupPage(),
+                  '/selectgroup': (BuildContext context) => new SelectGroupPage(),
+                  '/homepage': (BuildContext context) => new HomePage(),
+                  '/taskmanager': (context) => new TaskManagerPage(),
+                },
+              )
+          ),
+        );
+      },
     );
   }
 }
