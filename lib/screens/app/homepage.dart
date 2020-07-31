@@ -1,7 +1,6 @@
 import 'package:collaborative_repitition/components/add_task.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/screens/app/partials/bottombaritem.dart';
-import 'package:collaborative_repitition/screens/app/profilepage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
