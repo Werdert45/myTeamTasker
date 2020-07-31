@@ -191,7 +191,6 @@ class _DashboardPageState extends State<DashboardPage> {
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: snapshot.data.tasks.length,
                                 itemBuilder: (context, index) {
-                                  print(snapshot.data.tasks);
                                   if (snapshot.data.tasks[index].title != "") {
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 4.0),

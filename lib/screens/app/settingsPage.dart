@@ -1,5 +1,6 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/screens/app/partials/groupsettings.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changeEmail.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changePassword.dart';
 import 'package:collaborative_repitition/services/auth.dart';
@@ -275,30 +276,20 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Container(
             height: 200,
-            child: ListView(
-              primary: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: ListTile.divideTiles(
-                  context: context,
-                  tiles: [
-                    ListTile(
-                      leading: Text("T"),
-                      title: Text("First ever group"),
-                      trailing: Icon(Icons.arrow_forward_ios, size: 12,),
-                    ),
-                    ListTile(
-                      leading: Text("T"),
-                      title: Text("My Groupie 1"),
-                      trailing: Icon(Icons.arrow_forward_ios, size: 12,),
-                    ),
-                    ListTile(
-                      leading: Text("T"),
-                      title: Text("The Fam"),
-                      trailing: Icon(Icons.arrow_forward_ios, size: 12,),
-                    )
-                  ]
-              ).toList(),
-            ),
+            child: ListView.builder(
+              itemCount: widget.data.groups.length,
+              itemBuilder: (context, index) {
+
+                return ListTile(
+                  leading: Icon(Icons.group),
+                  title: Text(widget.data.groups[index].name),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 12),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => GroupSettings(group: widget.data.groups[index])));
+                  },
+                );
+              },
+            )
           ),
           Container(
               width: MediaQuery.of(context).size.width - 50,
