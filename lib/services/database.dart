@@ -675,4 +675,11 @@ class DatabaseService {
       'groups': user_groups
     });
   }
+
+
+  Future updateName(puid, name) async {
+    await usersCollection.document(puid).updateData({
+      'name': name
+    });
+  }
 }
