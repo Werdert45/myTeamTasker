@@ -3,6 +3,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/partials/groupsettings.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changeEmail.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changePassword.dart';
+import 'package:collaborative_repitition/screens/app/settings_sub/changeProfilePicture.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
@@ -77,15 +78,20 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: Container(
                                   width: 70,
                                   height: 70,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(35),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Align(
-                                          alignment: Alignment.center,
-                                          heightFactor: 0.5,
-                                          widthFactor: 1,
-                                          child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.data.profile_picture.toString()))),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeProfilePicturePage(widget.data)));
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(35),
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Align(
+                                            alignment: Alignment.center,
+                                            heightFactor: 0.5,
+                                            widthFactor: 1,
+                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.data.profile_picture.toString()))),
+                                      ),
                                     ),
                                   ),
                                 )
