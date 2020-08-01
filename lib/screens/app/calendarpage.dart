@@ -107,7 +107,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   alignment: Alignment.topRight,
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 10.0),
-                                    child: Text("Today you have\n4 things to do", style: TextStyle(fontSize: 26, color: mainTextColor)),
+                                    child: _events[_selectedDay].where((i) => i['isDone'] == false).length != 0 ? Text("Today you have\n" + _events[_selectedDay].where((i) => i['isDone'] == false).length.toString() + " thing(s) to do", style: TextStyle(fontSize: 26, color: mainTextColor)) : Text("You are all done\n for today", style: TextStyle(fontSize: 26, color: mainTextColor)),
                                   ),
                                 )
                               ],
