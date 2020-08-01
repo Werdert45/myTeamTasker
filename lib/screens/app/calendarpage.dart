@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/components/task-tile.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
@@ -55,9 +56,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context);
-
-
+    var current_user = Provider.of<User>(context);
 
     Map<String, dynamic> per_day = new Map();
 
@@ -65,7 +64,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: FutureBuilder(
-            future: streams.getCalendar(user.uid),
+            future: streams.getCalendar(current_user.uid),
             builder: (context, snapshot) {
                 var today = DateTime.now();
 
@@ -140,7 +139,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           ),
                         ),
                       ),
-                      _buildEventList()
+                      _buildEventList(current_user)
                     ],
                   ),
                 );
@@ -151,7 +150,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  Widget _buildEventList() {
+  Widget _buildEventList(user) {
     return _selectedEvents == null ?
         Padding(
           padding: const EdgeInsets.only(top: 50.0),
@@ -176,8 +175,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           if (_selectedEvents.isNotEmpty) {
-            print(_selectedEvents[index]);
-
             return Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -185,32 +182,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
-              child: ListTile(
-                leading: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    // Smaller and bigger icons show bigger (shifted to right for mountain
-                      child: Text(_selectedEvents[index]['icon'], style: TextStyle(fontSize: 28))
-                  ),
-                ),
-                title: Text(_selectedEvents[index]['name']),
-                subtitle: _selectedEvents[index]['description'].length < 30 ? Text(_selectedEvents[index]['description']) : Text(_selectedEvents[index]['description'].substring(0,27) + "..."),
-//                subtitle: (_selectedEvents[index]['days'] != null) ? Text("Repeated")  : Text("One Time"),
-                trailing: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      (_selectedEvents[index]['alert_time'] != null) ? Text("Alert at: " + _selectedEvents[index]['alert_time'].toString()) : Text("No Alert"),
-                      (_selectedEvents[index]['days'] != null) ? Text("Repeated")  : Text("One Time")
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  print(_selectedDay);
-                  print(_selectedEvents[index]);
-                },
-              ),
+              child: EmoIcon(_selectedEvents[index]['task'], user.uid, _selectedEvents[index]['groups'], this, _selectedEvents[index]['tasks_history_pers'], _selectedEvents[index]['total_tasks'], isDone: _selectedEvents[index]['isDone'])
             );
           }
           else {
