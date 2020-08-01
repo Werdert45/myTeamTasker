@@ -688,21 +688,6 @@ class DatabaseService {
 
     var days_list = groups_history.values.toList();
     List users_per_day;
-//
-//
-//    // Loop over all of the days
-//    for (int i=0; i < days_list.length; i++) {
-//      users_per_day = days_list[i].keys.toList();
-//
-//
-//      if (users_per_day[j].containsKey(puid)) {
-//        groups_history[days_list[i]]["Removed User"] = users_per_day[j][puid];
-//      }
-////      // Loop over all of the members
-////      for (int j=0; j < users_per_day.length; j++) {
-////
-////      }
-//    }
 
     await groupsCollection.document(group_code).updateData({
       'members': members

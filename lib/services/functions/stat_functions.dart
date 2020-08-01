@@ -120,6 +120,7 @@ pieChartGroup(Map task_history, Map members) {
 
 
   task_history.forEach((key, value) {
+
     value.forEach((key, value) => member_contrib[key] += value.length);
   });
 
