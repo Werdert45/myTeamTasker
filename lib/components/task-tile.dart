@@ -31,8 +31,8 @@ class EmoIconState extends State<EmoIcon> {
   DatabaseService database = DatabaseService();
 
 
-  var repeated = false;
-  var shared = false;
+  bool repeated;
+  bool shared;
   var setAlert;
   var task_name;
 
@@ -96,6 +96,9 @@ class EmoIconState extends State<EmoIcon> {
   }
 
   updateFinishedStatus(taskID, status, puid) async {
+    print(checkedValue);
+    print(shared);
+
     if (checkedValue) {
       if (shared) {
         await database.addToSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
@@ -148,6 +151,10 @@ class EmoIconState extends State<EmoIcon> {
 
   @override
   Widget build(BuildContext context) {
+    repeated = widget.task.repeated;
+    shared = widget.task.shared;
+
+
     return Slidable(
       // Set the slidable to be able to be accepted when not checked, when checked show undo
         actionPane: SlidableDrawerActionPane(),

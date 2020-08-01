@@ -51,7 +51,11 @@ timeSeriesPointsPers(Map task_history, range) {
   ];
 }
 
-
+// Example of task_history_group:
+// {
+// datetime: {
+//    userid: [task],
+// }
 
 timeSeriesPointsGroup(Map task_history, range) {
   List<TimeSeriesSales> seriesLine = [];

@@ -1,7 +1,10 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/group.dart';
+import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/services/database.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GroupSettings extends StatefulWidget {
   final group;
@@ -13,27 +16,40 @@ class GroupSettings extends StatefulWidget {
 }
 
 class _GroupSettingsState extends State<GroupSettings> {
+  final DatabaseService database = DatabaseService();
+
   var selection = 0;
 
+  TextEditingController _groupNameController;
+  TextEditingController _groupDescriptionController;
 
+  var groupName;
+  var groupDescription;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    TextEditingController _groupNameController;
+    TextEditingController _groupDescriptionController;
+
   }
 
 
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _groupNameController = TextEditingController(text: widget.group.name);
-    var groupName = widget.group.name;
+    _groupNameController = TextEditingController(text: widget.group.name);
+    _groupDescriptionController = TextEditingController(text: widget.group.description);
 
-    TextEditingController _groupDescriptionController = TextEditingController(text: widget.group.description);
-    var groupDescription = widget.group.description;
+    groupName = widget.group.name;
+    groupDescription = widget.group.description;
+
 
     var members = widget.group.members.values.toList();
+    var user = Provider.of<User>(context);
+
 
     return Scaffold(
       body: SafeArea(
@@ -46,10 +62,18 @@ class _GroupSettingsState extends State<GroupSettings> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 15, top: 12),
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       // await the saving of the changes first
+                      try {
+                        print(groupDescription);
+                        if (groupDescription != widget.group.description || groupName != widget.group.name) {
+                          await database.updateGroup(groupName, groupDescription, widget.group.code);
+                        }
 
-                      Navigator.pop(context);
+                        Navigator.pop(context);
+                      } catch (e) {
+                        return e;
+                      }
                     },
                     child: Icon(Icons.arrow_back_ios),
                   ),
@@ -78,7 +102,7 @@ class _GroupSettingsState extends State<GroupSettings> {
                           controller: _groupNameController,
                           validator: (val) => val.isEmpty ? 'No description provided' : null,
                           onChanged: (val) {
-                            setState(() => groupName = val);
+                            groupName = val;
                           },
                           textCapitalization: TextCapitalization.none,
                           decoration: InputDecoration(
@@ -113,7 +137,7 @@ class _GroupSettingsState extends State<GroupSettings> {
                           controller: _groupDescriptionController,
                           validator: (val) => val.isEmpty ? 'No description provided' : null,
                           onChanged: (val) {
-                            setState(() => groupDescription = val);
+                            groupDescription = val;
                           },
                           textCapitalization: TextCapitalization.none,
                           decoration: InputDecoration(
@@ -169,7 +193,7 @@ class _GroupSettingsState extends State<GroupSettings> {
                                     ),
                                     title: Text("Ian Ronk"),
 //                                    subtitle: admin ? Text("ADMIN") : SizedBox(),
-                                    trailing: index == 0 ? _simplePopup() : SizedBox()
+//                                    trailing: index == 0 ? _simplePopup() : SizedBox()
                                   ),
                                 );
                             },
@@ -185,8 +209,14 @@ class _GroupSettingsState extends State<GroupSettings> {
                 bottom: 40,
                 left: 20,
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    try {
+                      await database.leaveGroup(user.uid, widget.group.code);
 
+                      Navigator.pop(context);
+                    } catch (e) {
+                      return e;
+                    }
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width - 40,
