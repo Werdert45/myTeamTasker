@@ -250,12 +250,12 @@ class ActiveTaskState extends State<ActiveTask> {
                                         ],
                                       ),
                                       Container(
-                                        height: expanded ? 280 : 0,
+                                        height: expanded ? 330 : 0,
                                         width: MediaQuery.of(context).size.width - 50,
                                         child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Container(
-                                              height: expanded ? 180 : 0,
+                                              height: expanded ? 250 : 0,
                                               width: MediaQuery.of(context).size.width - 50,
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,85 +346,87 @@ class ActiveTaskState extends State<ActiveTask> {
                                                       },
                                                     ),
                                                   ),
+                                                  SizedBox(height: 54),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 10, right: 10),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        RaisedButton(
+                                                          color: Colors.red,
+                                                          onPressed: () async {
+                                                            if (repeated) {
+                                                              if (widget.task.shared) {
+                                                                await database.removeRepeatedTask(widget.task.id);
+                                                                await database.removeRepeatedTaskFromGroup(widget.task.id, widget.group.code);
+                                                                widget.parent.setState(() {
+                                                                  widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                                                });
+                                                              }
+                                                              else {
+                                                                await database.removeRepeatedTask(widget.task.id);
+                                                                await database.removeRepeatedTaskFromUser(widget.task.id, widget.puid);
+                                                                widget.parent.setState(() {
+                                                                  widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                                                });
+                                                              }
+                                                            }
+                                                            else {
+                                                              if (widget.task.shared) {
+                                                                await database.removeSingleTask(widget.task.id);
+                                                                await database.removeSingleTaskFromGroup(widget.task.id, widget.group.code);
+                                                                widget.parent.setState(() {
+                                                                  widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                                                });
+                                                              }
+
+                                                              else {
+                                                                await database.removeSingleTask(widget.task.id);
+                                                                await database.removeSingleTaskFromUser(widget.task.id, widget.puid);
+                                                                widget.parent.setState(() {
+                                                                  widget.parent.tasks.removeWhere((item) => item == widget.task.id);
+                                                                });
+                                                              }
+                                                            }
+                                                          },
+                                                          child: Container(
+                                                            width: MediaQuery.of(context).size.width / 3 - 20,
+                                                            child: Row(
+                                                              children: [
+                                                                Icon(Icons.delete),
+                                                                SizedBox(width: 8),
+                                                                Text("Delete task")
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        RaisedButton(
+                                                          color: Colors.blue,
+                                                          onPressed: () {
+                                                            print("Showing EditTask");
+
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
+                                                          },
+                                                          child: Container(
+                                                            width: MediaQuery.of(context).size.width / 3 - 20,
+                                                            child: Row(
+                                                              children: [
+                                                                Icon(Icons.edit),
+                                                                SizedBox(width: 8),
+                                                                Text("Edit task")
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             )
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 17.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            RaisedButton(
-                                              color: Colors.red,
-                                              onPressed: () async {
-                                                if (repeated) {
-                                                  if (widget.task.shared) {
-                                                    await database.removeRepeatedTask(widget.task.id);
-                                                    await database.removeRepeatedTaskFromGroup(widget.task.id, widget.group.code);
-                                                    widget.parent.setState(() {
-                                                      widget.parent.tasks.removeWhere((item) => item == widget.task.id);
-                                                    });
-                                                  }
-                                                  else {
-                                                    await database.removeRepeatedTask(widget.task.id);
-                                                    await database.removeRepeatedTaskFromUser(widget.task.id, widget.puid);
-                                                    widget.parent.setState(() {
-                                                      widget.parent.tasks.removeWhere((item) => item == widget.task.id);
-                                                    });
-                                                  }
-                                                }
-                                                else {
-                                                  if (widget.task.shared) {
-                                                    await database.removeSingleTask(widget.task.id);
-                                                    await database.removeSingleTaskFromGroup(widget.task.id, widget.group.code);
-                                                    widget.parent.setState(() {
-                                                      widget.parent.tasks.removeWhere((item) => item == widget.task.id);
-                                                    });
-                                                  }
 
-                                                  else {
-                                                    await database.removeSingleTask(widget.task.id);
-                                                    await database.removeSingleTaskFromUser(widget.task.id, widget.puid);
-                                                    widget.parent.setState(() {
-                                                      widget.parent.tasks.removeWhere((item) => item == widget.task.id);
-                                                    });
-                                                  }
-                                                }
-                                              },
-                                              child: Container(
-                                                width: MediaQuery.of(context).size.width / 3 - 20,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.delete),
-                                                    SizedBox(width: 8),
-                                                    Text("Delete task")
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            RaisedButton(
-                                              color: Colors.blue,
-                                              onPressed: () {
-                                                print("Showing EditTask");
-
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
-                                              },
-                                              child: Container(
-                                                width: MediaQuery.of(context).size.width / 3 - 20,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.edit),
-                                                    SizedBox(width: 8),
-                                                    Text("Edit task")
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
 
                                     ],
                                   ),
