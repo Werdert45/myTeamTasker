@@ -628,4 +628,51 @@ class DatabaseService {
     }, merge: true);
 
   }
+
+  Future updateGroup(group_name, group_description, group_code) async {
+    await groupsCollection.document(group_code).updateData({
+      'description': group_description,
+      'name': group_name
+    });
+  }
+
+  Future leaveGroup(puid, group_code) async {
+    var group_data = await groupsCollection.document(group_code).get();
+    var group_model = group.fromMap(group_data.data);
+    var groups_history = group_model.tasks_history;
+    var members = group_model.members;
+    members.remove(puid);
+
+    var days_list = groups_history.values.toList();
+    List users_per_day;
+//
+//
+//    // Loop over all of the days
+//    for (int i=0; i < days_list.length; i++) {
+//      users_per_day = days_list[i].keys.toList();
+//
+//
+//      if (users_per_day[j].containsKey(puid)) {
+//        groups_history[days_list[i]]["Removed User"] = users_per_day[j][puid];
+//      }
+////      // Loop over all of the members
+////      for (int j=0; j < users_per_day.length; j++) {
+////
+////      }
+//    }
+
+    await groupsCollection.document(group_code).updateData({
+      'members': members
+    });
+
+    var user_data = await usersCollection.document(puid).get();
+    var user = user_db.fromMap(user_data.data);
+
+    var user_groups = user.groups;
+    user_groups.remove(group_code);
+
+    await usersCollection.document(puid).updateData({
+      'groups': user_groups
+    });
+  }
 }
