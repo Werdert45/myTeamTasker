@@ -198,7 +198,6 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
                       if (_name != widget.user.name) {
                         await database.updateName(user.uid, _name);
                       }
-
                       Navigator.pop(context);
                     } catch (e) {
                       return e;
@@ -322,7 +321,6 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
                       if (_name != widget.user.name) {
                         await database.updateName(user.uid, _name);
                       }
-
                       // upload the image to firebase as it has been changed
                       uploadImage(user.uid);
 

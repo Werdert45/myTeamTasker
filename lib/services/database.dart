@@ -240,11 +240,31 @@ class Streams {
         var month = date.month;
         var year = date.year;
 
-        if (per_day.containsKey(DateTime(year, month, day))) {
-          // Second task
-          per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'description': tasks[i].description, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': null, 'alert_time': tasks[i].alert_time}];
+        var isDone;
+
+
+        var now = DateTime.now();
+
+        if (DateTime(year, month, day) == DateTime(now.year, now.month, now.day)) {
+          if (per_day.containsKey(DateTime(year, month, day))) {
+            per_day[DateTime(year, month, day)] += [{'task': tasks[i], 'isDone': tasks[i].finished, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
+          } else {
+            per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': tasks[i].finished, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
+          }
         } else {
-          per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'description': tasks[i].description, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': null, 'alert_time': tasks[i].alert_time}];
+          if (tasks[i] is repeated_task) {
+            isDone = false;
+          }
+
+          else {
+            isDone = tasks[i].finished;
+          }
+
+          if (per_day.containsKey(DateTime(year, month, day))) {
+            per_day[DateTime(year, month, day)] += [{'task': tasks[i], 'isDone': isDone, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
+          } else {
+            per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': isDone, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
+          }
         }
       }
 
@@ -260,11 +280,34 @@ class Streams {
             var month = day_of_the_year.month;
             var year = day_of_the_year.year;
 
-            if (per_day.containsKey(DateTime(year, month, day))) {
-              per_day[DateTime(year, month, day)] += [{'name': tasks[i].title, 'description': tasks[i].description, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+            var isDone;
+
+
+            var now = DateTime.now();
+
+            if (DateTime(year, month, day) == DateTime(now.year, now.month, now.day)) {
+              if (per_day.containsKey(DateTime(year, month, day))) {
+                per_day[DateTime(year, month, day)] += [{'task': tasks[i], 'isDone': tasks[i].finished, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
+              } else {
+                per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': tasks[i].finished, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
+              }
             } else {
-              per_day[DateTime(year, month, day)] = [{'name': tasks[i].title, 'description': tasks[i].description, 'icon': tasks[i].icon, 'isDone': tasks[i].finished, 'days': tasks[i].days, 'alert_time': tasks[i].alert_time}];
+              if (tasks[i] is repeated_task) {
+                isDone = false;
+              }
+
+              else {
+                isDone = tasks[i].finished;
+              }
+
+              if (per_day.containsKey(DateTime(year, month, day))) {
+                per_day[DateTime(year, month, day)] += [{'task': tasks[i], 'isDone': isDone, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
+              } else {
+                per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': isDone, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
+              }
             }
+
+
           }
 
           day_of_the_year = day_of_the_year.add(Duration(days: 1));

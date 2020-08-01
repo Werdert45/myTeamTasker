@@ -17,8 +17,9 @@ class EmoIcon extends StatefulWidget {
   final parent;
   final tasks_history_pers;
   final total_tasks;
+  final isDone;
 //
-  EmoIcon(this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks);
+  EmoIcon(this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, {this.isDone});
 
 
   @override
@@ -96,9 +97,6 @@ class EmoIconState extends State<EmoIcon> {
   }
 
   updateFinishedStatus(taskID, status, puid) async {
-    print(checkedValue);
-    print(shared);
-
     if (checkedValue) {
       if (shared) {
         await database.addToSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
@@ -154,7 +152,6 @@ class EmoIconState extends State<EmoIcon> {
     repeated = widget.task.repeated;
     shared = widget.task.shared;
 
-
     return Slidable(
       // Set the slidable to be able to be accepted when not checked, when checked show undo
         actionPane: SlidableDrawerActionPane(),
@@ -179,12 +176,12 @@ class EmoIconState extends State<EmoIcon> {
                           duration: Duration(milliseconds: 500),
                           decoration: BoxDecoration(
                               color: Color(0xFFE8EDED),
-                              border: checkedValue ? Border(
+                              border: widget.isDone == null ? checkedValue ? Border(
                                   bottom: BorderSide(
                                       color: Colors.green,
                                       width: 5.0
                                   )
-                              ) : null
+                              ) : null : null
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -213,12 +210,13 @@ class EmoIconState extends State<EmoIcon> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     SizedBox(height: 10),
-                                                    (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: primaryColor, fontSize: 20, decoration: checkedValue ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
+                                                    (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: primaryColor, fontSize: 20, decoration: (widget.isDone == null) ? (checkedValue ? TextDecoration.lineThrough : null) : (widget.isDone) ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
 //                      SizedBox(height: 3),
-                                                    checkedValue ? (
-                                                        widget.task.shared ? Text("Finished by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: secondaryColor, fontSize: 12)) :
-                                                        Text("Completed", style: TextStyle(color: secondaryColor, fontSize: 12))) :
-                                                    Text("Not finished", style: TextStyle(color: secondaryColor, fontSize: 12))
+                                                    (widget.isDone == null) ? checkedValue ? (
+                                                      widget.task.shared ? Text("Finished by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: secondaryColor, fontSize: 12)) :
+                                                      Text("Completed", style: TextStyle(color: secondaryColor, fontSize: 12))) :
+                                                  Text("Not finished", style: TextStyle(color: secondaryColor, fontSize: 12)) :
+                                                      SizedBox()
                                                   ]
                                               ),
                                             ],
@@ -275,7 +273,7 @@ class EmoIconState extends State<EmoIcon> {
                                                 Text("19:05", style: TextStyle(fontSize: 24))
                                               ],
                                             ),
-                                            checkedValue ? (widget.task.shared ?
+                                            (widget.isDone == null) ? checkedValue ? (widget.task.shared ?
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -284,7 +282,7 @@ class EmoIconState extends State<EmoIcon> {
                                               ],
                                             ) :
                                                 Text("FINISHED", style: TextStyle(fontSize: 14))) :
-                                                Text("NOT FINISHED")
+                                                Text("NOT FINISHED") : SizedBox()
                                           ],
                                         ),
                                         SizedBox(height: 10),
@@ -348,7 +346,7 @@ class EmoIconState extends State<EmoIcon> {
             ],
           ),
         ),
-        actions: !checkedValue ? <Widget>[
+        actions: (widget.isDone == null && !checkedValue) ? <Widget>[
           IconSlideAction(
             color: Colors.transparent,
             iconWidget: Container(
@@ -368,7 +366,7 @@ class EmoIconState extends State<EmoIcon> {
             },
           ),
         ] : [],
-        secondaryActions: checkedValue ? <Widget>[
+        secondaryActions: widget.isDone == null ? checkedValue ? <Widget>[
           IconSlideAction(
             color: Colors.transparent,
             iconWidget: Container(
@@ -412,7 +410,7 @@ class EmoIconState extends State<EmoIcon> {
               });
             },
           )
-        ]
+        ] : null
     );
   }
 
