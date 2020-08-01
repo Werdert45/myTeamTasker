@@ -348,7 +348,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                   ),
                                                   SizedBox(height: 54),
                                                   Padding(
-                                                    padding: const EdgeInsets.only(left: 10, right: 10),
+                                                    padding: const EdgeInsets.only(left: 6, right: 10),
                                                     child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
