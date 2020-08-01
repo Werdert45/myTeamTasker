@@ -1,3 +1,4 @@
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -110,8 +111,6 @@ timeSeriesPointsGroup(Map task_history, range) {
 
 pieChartGroup(Map task_history, Map members) {
 
-  List color_list = [charts.MaterialPalette.blue.shadeDefault, charts.MaterialPalette.red.shadeDefault, charts.MaterialPalette.green.shadeDefault, charts.MaterialPalette.yellow.shadeDefault];
-
   List<LinearSales> data = [];
   // Set all members contrib to zero
   var member_contrib = {};
@@ -130,7 +129,7 @@ pieChartGroup(Map task_history, Map members) {
   var counter = 0;
 
   member_contrib.forEach((key, value) {
-    data.add(LinearSales(counter, value, members[key], color_list[counter]));
+    data.add(LinearSales(counter, value, members[key], colorList[counter]));
     counter += 1;
   });
 
