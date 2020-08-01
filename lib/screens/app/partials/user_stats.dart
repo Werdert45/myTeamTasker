@@ -31,74 +31,7 @@ class _UserStatPageState extends State<UserStatPage> {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width - 30,
-                    child: Row(
-                      children: [
-                        Card(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            height: 70,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15.0, right: 10, top: 0, bottom: 0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.check_circle, size: 28),
-                                  Container(
-                                    width: 50,
-                                    child: Text("153 Tasks", style: TextStyle(fontSize: 16),),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          elevation: 4,
-                        ),
-                        Card(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            height: 70,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15.0, right: 10, top: 0, bottom: 0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.check_circle, size: 28),
-                                  Container(
-                                    width: 50,
-                                    child: Text("153 Tasks", style: TextStyle(fontSize: 16),),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          elevation: 4,
-                        ),
-                        Card(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            height: 70,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15.0, right: 10, top: 0, bottom: 0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.assignment_turned_in, size: 28),
-                                  Container(
-                                    width: 50,
-                                    child: Text("153 of 234", style: TextStyle(fontSize: 16),),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          elevation: 4,
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 25),
+                  SizedBox(height: 65),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Row(
