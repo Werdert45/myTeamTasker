@@ -1,9 +1,17 @@
+import 'dart:io';
+
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/main.dart';
 import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/notifications_lib/builder/RemindersListViewBuilder.dart';
+import 'package:collaborative_repitition/notifications_lib/models/index.dart';
+import 'package:collaborative_repitition/notifications_lib/store/AppState.dart';
+import 'package:collaborative_repitition/notifications_lib/utils/notificationHelper.dart';
 import 'package:collaborative_repitition/screens/app/partials/groupsettings.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changeEmail.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changePassword.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changeProfilePicture.dart';
+import 'package:collaborative_repitition/screens/app/settings_sub/notificationSettings.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
@@ -12,6 +20,7 @@ import 'package:emoji_picker/emoji_picker.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:async';
 
 import 'package:provider/provider.dart';
@@ -31,7 +40,13 @@ class _SettingsPageState extends State<SettingsPage> {
   final userManagement = UserManagement();
 
   bool isDark = false;
+
+  // Notifications
+  bool notify = false;
+
+  // Something
   bool isSwitched = false;
+
 
   bool changePassword = false;
 
@@ -206,18 +221,19 @@ class _SettingsPageState extends State<SettingsPage> {
                   tiles: [
                     ListTile(
                       leading: Icon(Icons.notifications),
-                      title: Text("Notify for each task"),
-                      trailing: Switch(
-                        value: isSwitched,
-                        onChanged: (value) {
-                          setState(() {
-                            isSwitched = value;
-                            print(isSwitched);
-                          });
+                      title: Text("Notifications"),
+                      trailing: IconButton(
+                        icon: Icon(Icons.arrow_forward_ios, size: 12,),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NotificationSettingsPage(),
+                            ),
+                          );
                         },
-                        activeTrackColor: Colors.blue,
-                        activeColor: Colors.blueAccent,
-                      ),
+                      )
                     ),
                     ListTile(
                       leading: Icon(Icons.email),

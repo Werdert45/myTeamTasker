@@ -1,4 +1,6 @@
+import 'package:collaborative_repitition/notifications_lib/actions/actions.dart';
 import 'package:collaborative_repitition/notifications_lib/models/index.dart';
+import 'package:collaborative_repitition/notifications_lib/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:collaborative_repitition/main.dart';
 
@@ -27,6 +29,12 @@ class RemindersList extends StatelessWidget {
                   ),
                   Text(item.name)
                 ],
+              ),
+              trailing: IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: () {
+                  getStore().dispatch(RemoveReminderAction(item.name));
+          },
               ),
               subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

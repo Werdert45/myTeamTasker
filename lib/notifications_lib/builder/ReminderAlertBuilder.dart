@@ -177,19 +177,7 @@ class _ReminderAlertBuilderState extends State<ReminderAlertBuilder> {
                                   decoration: TextDecoration.none,
                                   fontWeight: FontWeight.w500),
                             )),
-                        ReminderCustomItem(
-                          checkBoxValue: customReminder,
-                          iconName: custom,
-                          onChanged: (value) {
-                            setState(() {
-                              customReminder = value;
-                            });
-                            _configureCustomReminder(value);
-                          },
-                          showTimeDialog: () {
-                            _showTimeDialog(setState);
-                          },
-                        ),
+
                         Padding(
                           padding: new EdgeInsets.only(
                               top: margin * 2, bottom: margin),

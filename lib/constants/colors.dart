@@ -6,7 +6,8 @@ var brightness = SchedulerBinding.instance.window.platformBrightness;
 bool darkModeOn = brightness == Brightness.dark;
 
 //var primaryColor = Color(0xFF572f8c);
-var primaryColor = darkModeOn ? Color.fromRGBO(21, 105, 94, 1) : Colors.white;
+//var primaryColor = darkModeOn ? Color.fromRGBO(21, 105, 94, 1) : Colors.white;
+var primaryColor = Color.fromRGBO(21, 105, 94, 1);
 var secondaryColor = Color(0xFFc6bed2);
 
 var boxColor = Color.fromRGBO(21, 105, 94, 1);

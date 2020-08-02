@@ -84,7 +84,6 @@ class _ChangeEmailState extends State<ChangeEmail> {
                         // Add the email to the database as change
                         await database.updateEmail(_email, uid);
 
-
                         setState(() {
                           _completed = true;
                         });
