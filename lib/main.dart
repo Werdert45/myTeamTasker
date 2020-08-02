@@ -1,5 +1,6 @@
-import 'package:collaborative_repitition/screens/app/database_test.dart';
-import 'package:collaborative_repitition/screens/app/settingsPage.dart';
+import 'package:collaborative_repitition/notifications_lib/store/AppState.dart';
+import 'package:collaborative_repitition/notifications_lib/store/store.dart';
+import 'package:collaborative_repitition/notifications_lib/utils/notificationHelper.dart';
 import 'package:collaborative_repitition/screens/app/taskmanagerpage.dart';
 import 'package:collaborative_repitition/screens/authentication/create_group.dart';
 import 'package:collaborative_repitition/screens/authentication/select-group.dart';
@@ -8,8 +9,11 @@ import 'package:collaborative_repitition/screens/wrapper.dart';
 import 'package:collaborative_repitition/theme_changer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:redux/redux.dart';
 import 'models/user.dart';
 import 'services/auth.dart';
 
@@ -18,41 +22,63 @@ import 'screens/app/homepage.dart';
 import 'screens/authentication/loginpage.dart';
 import 'screens/authentication/signuppage.dart';
 
-void main() => runApp(new MyApp());
+final df = new DateFormat('dd-MM-yyyy hh:mm a');
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+NotificationAppLaunchDetails notificationAppLaunchDetails;
+Store<AppState> store;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initStore();
+  store = getStore();
+  notificationAppLaunchDetails =
+  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  await initNotifications(flutterLocalNotificationsPlugin);
+  requestIOSPermissions(flutterLocalNotificationsPlugin);
+
+  runApp(MyApp(store));
+}
 
 
 
 class MyApp extends StatelessWidget {
+  final Store<AppState> store;
+  MyApp(this.store);
+
   @override
   Widget build(BuildContext context) {
-    return ThemeBuilder(
-      defaultBrightness: Brightness.light,
-      builder: (context, _brightness) {
-        return AnnotatedRegion(
-          value: SystemUiOverlayStyle.light,
-          child: StreamProvider<User>.value(
-              value: AuthService().user,
-              child: new MaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: Wrapper(),
-                theme: ThemeData(
-                    primarySwatch: Colors.teal,
-                    brightness: _brightness
-                ),
-                routes: <String, WidgetBuilder>{
-                  '/landingpage': (BuildContext context) => new MyApp(),
-                  '/signup': (BuildContext context) => new SignupPage(),
-                  '/login': (BuildContext context) => new LoginPage(),
-                  '/creategroup': (BuildContext context) => new CreateGroupPage(),
-                  '/selectgroup': (BuildContext context) => new SelectGroupPage(),
-                  '/homepage': (BuildContext context) => new HomePage(),
-                  '/taskmanager': (context) => new TaskManagerPage(),
-                },
-              )
-          ),
-        );
-      },
+    return StoreProvider<AppState>(
+      child: ThemeBuilder(
+        defaultBrightness: Brightness.light,
+        builder: (context, _brightness) {
+          return AnnotatedRegion(
+            value: SystemUiOverlayStyle.light,
+            child: StreamProvider<User>.value(
+                value: AuthService().user,
+                child: new MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  home: Wrapper(),
+                  theme: ThemeData(
+                      primarySwatch: Colors.teal,
+                      brightness: _brightness
+                  ),
+                  routes: <String, WidgetBuilder>{
+                    '/landingpage': (BuildContext context) => new MyApp(store),
+                    '/signup': (BuildContext context) => new SignupPage(),
+                    '/login': (BuildContext context) => new LoginPage(),
+                    '/creategroup': (BuildContext context) => new CreateGroupPage(),
+                    '/selectgroup': (BuildContext context) => new SelectGroupPage(),
+                    '/homepage': (BuildContext context) => new HomePage(),
+                    '/taskmanager': (context) => new TaskManagerPage(),
+                  },
+                )
+            ),
+          );
+        },
+      ),
+      store: store,
     );
   }
 }
