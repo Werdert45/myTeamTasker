@@ -1,6 +1,9 @@
 import 'package:collaborative_repitition/components/add_task.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/notifications_lib/functions/notification_functions.dart';
 import 'package:collaborative_repitition/screens/app/partials/bottombaritem.dart';
+import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +26,8 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   TabController tabController;
 
+  final Streams streams = Streams();
+
 
   var _page = 1;
 
@@ -40,6 +45,7 @@ class _HomePageState extends State<HomePage>
     tabController = new TabController(length: 4, vsync: this);
 
     _page = 0;
+
   }
 
 
@@ -59,32 +65,43 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<User>(context);
+
     return new AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
-        child: Scaffold(
-          bottomNavigationBar: FABBottomAppBar(
-            onTabSelected: _selectPage,
-            color: Colors.black,
-            selectedColor: boxColor,
-//            backgroundColor: Colors.grey,
-            notchedShape: CircularNotchedRectangle(),
-            items: [
-              FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
-              FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
-              FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics"),
-              FABBottomAppBarItem(iconData: Icons.edit, text: "Manager"),
-            ],
-          ),
-          body: pages[_page],
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            backgroundColor: boxColor,
-            heroTag: "add_task",
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
-            },
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        child: FutureBuilder(
+          future: streams.getCompleteUser(user.uid),
+          builder: (context, snapshot) {
+            return FutureBuilder(
+              future: setNotifications(snapshot.data.tasks),
+              builder: (context, snapshot) {
+                return Scaffold(
+                  bottomNavigationBar: FABBottomAppBar(
+                    onTabSelected: _selectPage,
+                    color: Colors.black,
+                    selectedColor: boxColor,
+                    notchedShape: CircularNotchedRectangle(),
+                    items: [
+                      FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
+                      FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
+                      FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics"),
+                      FABBottomAppBarItem(iconData: Icons.edit, text: "Manager"),
+                    ],
+                  ),
+                  body: pages[_page],
+                  floatingActionButton: FloatingActionButton(
+                    child: Icon(Icons.add),
+                    backgroundColor: boxColor,
+                    heroTag: "add_task",
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
+                    },
+                  ),
+                  floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                );
+              }
+            );
+          }
         )
     );
   }

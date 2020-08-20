@@ -48,25 +48,6 @@ class _DashboardPageState extends State<DashboardPage> {
     super.dispose();
   }
 
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
-    final data = [
-      new OrdinalSales('Ian Ronk', 5),
-      new OrdinalSales('Theo Roseveldt', 25),
-      new OrdinalSales('Ronald Reagan', 100),
-      new OrdinalSales('George Bush', 75),
-    ];
-
-    return [
-      new charts.Series<OrdinalSales, String>(
-        id: 'Sales',
-        domainFn: (OrdinalSales sales, _) => sales.year.length < 11 ? sales.year : sales.year.substring(0, 8) + "...",
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: data,
-      )
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);

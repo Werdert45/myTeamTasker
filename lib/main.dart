@@ -1,4 +1,4 @@
-import 'package:collaborative_repitition/notifications_lib/functions/not_functions.dart';
+import 'package:collaborative_repitition/notifications_lib/functions/notification_functions.dart';
 import 'package:collaborative_repitition/notifications_lib/store/AppState.dart';
 import 'package:collaborative_repitition/notifications_lib/store/store.dart';
 import 'package:collaborative_repitition/notifications_lib/utils/notificationHelper.dart';
@@ -35,25 +35,17 @@ Future<void> main() async {
   await initStore();
   store = getStore();
 
-  await cancelAllNotifications();
-
-  var test = await tester();
-
-  var test2 = await getPendingNotificationCount();
-
-  print(test2);
   notificationAppLaunchDetails =
   await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-
-  print("Notification Details");
-  print(notificationAppLaunchDetails);
 
   await initNotifications(flutterLocalNotificationsPlugin);
   requestIOSPermissions(flutterLocalNotificationsPlugin);
 
+
+
+
   runApp(MyApp(store));
 }
-
 
 
 class MyApp extends StatelessWidget {
