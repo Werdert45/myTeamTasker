@@ -15,6 +15,11 @@ Future<String> get _localPath async {
 
 Future<File> get _localFile async {
   final path = await _localPath;
+
+
+  print("THIS IS THE FILE");
+  print(path);
+
   return File('$path/state.json');
 }
 
@@ -45,4 +50,9 @@ Future<void> initStore() async {
 
 Store<AppState> getStore() {
   return store;
+}
+
+Future tester() async {
+  var test = await _localFile;
+  return test.readAsString();
 }
