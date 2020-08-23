@@ -11,15 +11,17 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'button.dart';
 
 class EmoIcon extends StatefulWidget {
+  final Function() notifyParent;
   final task;
   final puid;
   final group;
   final parent;
   final tasks_history_pers;
   final total_tasks;
+  final count;
   final isDone;
 //
-  EmoIcon(this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, {this.isDone});
+  EmoIcon(this.notifyParent, this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, this.count, {this.isDone});
 
 
   @override
@@ -362,6 +364,10 @@ class EmoIconState extends State<EmoIcon> {
               setState(() {
                 checkedValue = true;
                 updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
+
+
+                // Set the count of completed tasks to add one
+                widget.notifyParent();
               });
             },
           ),
@@ -384,6 +390,10 @@ class EmoIconState extends State<EmoIcon> {
               setState(() {
                 checkedValue = false;
                 updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
+
+                // Set the count of completed tasks to remove one
+                widget.notifyParent();
+
               });
             },
           ),

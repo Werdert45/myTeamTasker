@@ -23,9 +23,15 @@ import '../../services/auth.dart';
 class DashboardPage extends StatefulWidget {
   @override
   _DashboardPageState createState() => _DashboardPageState();
+
+
+  static _DashboardPageState of(BuildContext context) {
+    return context.findAncestorStateOfType<_DashboardPageState>();
+  }
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+
   bool checkedValue;
 
   final AuthService _auth = AuthService();
@@ -34,6 +40,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   var tasks = [];
 
+
+
   void initState() {
     super.initState();
     checkedValue = false;
@@ -41,6 +49,9 @@ class _DashboardPageState extends State<DashboardPage> {
     tasks = [];
   }
 
+  refresh() {
+    setState(() {});
+  }
 
   @override
   void dispose() {
@@ -63,6 +74,7 @@ class _DashboardPageState extends State<DashboardPage> {
               tasks = snapshot.data.tasks;
 
               var finished_tasks = progressBar(tasks);
+              var finished_count = finished_tasks[1].length;
 
 
               return Container(
@@ -143,9 +155,9 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: new LinearPercentIndicator(
                           width: MediaQuery.of(context).size.width - 40,
                           lineHeight: 20.0,
-                          percent: (finished_tasks[1].length / (finished_tasks[0].length + finished_tasks[1].length)),
+                          percent: (finished_count / (finished_tasks[0].length + finished_count)),
                           center: Text(
-                            ((finished_tasks[1].length / (finished_tasks[0].length + finished_tasks[1].length))*100).round().toString() + "%",
+                            ((finished_count / (finished_tasks[0].length + finished_count))*100).round().toString() + "%",
                             style: new TextStyle(fontSize: 12.0),
                           ),
 //                        trailing: Icon(Icons.mood, size: 40),
@@ -177,7 +189,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       padding: const EdgeInsets.symmetric(vertical: 4.0),
                                       child: Container(
                                         width: double.infinity,
-                                        child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, tasks.length),
+                                        child: EmoIcon(refresh, tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, finished_count, tasks.length),
                                       ),
                                     );
                                   }
@@ -189,28 +201,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           ],
                         ),
                       ),
-//                    Padding(
-//                      padding: EdgeInsets.only(left: 20),
-//                      child: Text("Tomorrow", style: TextStyle(fontSize: 24, color: Colors.grey)),
-//                    ),
-//                    ListView.builder(
-//                        padding: EdgeInsets.only(top: 10),
-//                        shrinkWrap: true,
-//                        physics: NeverScrollableScrollPhysics(),
-//                        itemCount: snapshot.data.tasks.length,
-//                        itemBuilder: (context, index) {
-//                          print(snapshot.data.tasks);
-//                          if (snapshot.data.tasks[index].title != "") {
-//                            return Container(
-//                              width: double.infinity,
-//                              child: EmoIcon(tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, tasks.length),
-//                            );
-//                          }
-//                          else {
-//                            return SizedBox();
-//                          }
-//                        }
-//                    ),
                     ],
                   )
               );

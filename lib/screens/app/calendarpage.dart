@@ -182,7 +182,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
-              child: EmoIcon(_selectedEvents[index]['task'], user.uid, _selectedEvents[index]['groups'], this, _selectedEvents[index]['tasks_history_pers'], _selectedEvents[index]['total_tasks'], isDone: _selectedEvents[index]['isDone'])
+              child: EmoIcon(() {}, _selectedEvents[index]['task'], user.uid, _selectedEvents[index]['groups'], this, _selectedEvents[index]['tasks_history_pers'], _selectedEvents[index]['total_tasks'], _selectedEvents[index]['isDone'])
             );
           }
           else {
