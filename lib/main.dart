@@ -7,6 +7,7 @@ import 'package:collaborative_repitition/screens/authentication/create_group.dar
 import 'package:collaborative_repitition/screens/authentication/select-group.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/screens/wrapper.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/theme_changer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,22 +42,24 @@ Future<void> main() async {
   await initNotifications(flutterLocalNotificationsPlugin);
   requestIOSPermissions(flutterLocalNotificationsPlugin);
 
+  var theme = await getDarkModeSetting();
 
-
-
-  runApp(MyApp(store));
+  runApp(MyApp(store, theme ?? false));
 }
 
 
 class MyApp extends StatelessWidget {
   final Store<AppState> store;
-  MyApp(this.store);
+  final bool theme;
+  MyApp(this.store, this.theme);
+
+
 
   @override
   Widget build(BuildContext context) {
     return StoreProvider<AppState>(
       child: ThemeBuilder(
-        defaultBrightness: Brightness.light,
+        defaultBrightness: theme ? Brightness.dark : Brightness.light,
         builder: (context, _brightness) {
           return AnnotatedRegion(
             value: SystemUiOverlayStyle.light,
@@ -70,7 +73,7 @@ class MyApp extends StatelessWidget {
                       brightness: _brightness
                   ),
                   routes: <String, WidgetBuilder>{
-                    '/landingpage': (BuildContext context) => new MyApp(store),
+                    '/landingpage': (BuildContext context) => new MyApp(store, theme),
                     '/signup': (BuildContext context) => new SignupPage(),
                     '/login': (BuildContext context) => new LoginPage(),
                     '/creategroup': (BuildContext context) => new CreateGroupPage(),
