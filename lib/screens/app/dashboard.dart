@@ -1,23 +1,18 @@
-//import 'dart:html';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collaborative_repitition/components/syncingComponents.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
-import 'package:collaborative_repitition/models/repeated_task.dart';
-import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
-import 'package:collaborative_repitition/screens/app/partials/horizontalbarchart.dart';
 import 'package:collaborative_repitition/screens/app/settingsPage.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/progressbar.dart';
+
+import 'package:connectivity/connectivity.dart';
+
 import 'package:firebase_image/firebase_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../components/task-tile.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-
-import '../../components/button.dart';
 import '../../services/auth.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -38,6 +33,9 @@ class _DashboardPageState extends State<DashboardPage> {
   final Streams streams = Streams();
   final DatabaseService database = DatabaseService();
 
+  Map _source = {ConnectivityResult.none: false};
+  MyConnectivity _connectivity = MyConnectivity.instance;
+
   var tasks = [];
 
 
@@ -47,6 +45,13 @@ class _DashboardPageState extends State<DashboardPage> {
     checkedValue = false;
 
     tasks = [];
+
+
+    // Connection check
+    _connectivity.initialise();
+    _connectivity.myStream.listen((source) {
+      setState(() => _source = source);
+    });
   }
 
   refresh() {
@@ -134,6 +139,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                               ),
                             ),
+                            checkConnectivity(_source, context)
                           ],
                         ),
                         height: 160,
