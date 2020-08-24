@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:collaborative_repitition/components/syncingComponents.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
@@ -11,6 +12,7 @@ import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:collaborative_repitition/components/task-tile.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
   final Streams streams = Streams();
   final DatabaseService database = DatabaseService();
 
+  Map _source = {ConnectivityResult.none: false};
+  MyConnectivity _connectivity = MyConnectivity.instance;
+
+
   var tasks = [];
 
   void initState() {
@@ -42,6 +48,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
     checkedValue = false;
 
     tasks = [];
+
+    // Connection check
+    _connectivity.initialise();
+    _connectivity.myStream.listen((source) {
+      setState(() => _source = source);
+    });
   }
 
   @override
@@ -71,7 +83,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       Container(
                         child: Stack(
                           children: [
-
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -127,7 +138,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               ],
                             )
                         ),
-                      )
+                      ),
+                      checkConnectivity(_source, context, true),
                     ],
                   )
               );

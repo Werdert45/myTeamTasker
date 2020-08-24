@@ -1,8 +1,10 @@
 import 'package:collaborative_repitition/components/active-task-tile.dart';
+import 'package:collaborative_repitition/components/syncingComponents.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +23,9 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
   final AuthService _auth = AuthService();
   final Streams streams = Streams();
   final DatabaseService database = DatabaseService();
+
+  Map _source = {ConnectivityResult.none: false};
+  MyConnectivity _connectivity = MyConnectivity.instance;
 
   var tasks = [];
 
@@ -41,6 +46,12 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
     categories = Emoji(name: 'Sailboat', emoji: '👑');
 
     tasks = [];
+
+    // Connection check
+    _connectivity.initialise();
+    _connectivity.myStream.listen((source) {
+      setState(() => _source = source);
+    });
   }
 
   Future<bool> onBackPress() {
@@ -148,6 +159,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                               showPersonal ? PersonalPage(snapshot, user) : GroupPage(snapshot, user),
                             ],
                           ),
+                          checkConnectivity(_source, context, true),
                         ]
                     );
                   }

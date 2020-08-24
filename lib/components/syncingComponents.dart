@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 
 // Check whether the banner is necessary
 // connection:
-Widget checkConnectivity(connection, context) {
+Widget checkConnectivity(connection, context, bigger) {
   print(connection);
   switch (connection.keys.toList()[0]) {
     case ConnectivityResult.none:
       // Offline: show
-      return offlineBanner(context);
+      return offlineBanner(context, bigger);
       break;
     case ConnectivityResult.mobile:
       return SizedBox();
@@ -24,19 +24,36 @@ Widget checkConnectivity(connection, context) {
 
 
 // Offline banner to show when the user is offline
-Widget offlineBanner(context) {
-  return Positioned(
-    top: 0,
-    child: Container(
-      width: MediaQuery.of(context).size.width,
-      height: 50,
-      color: Colors.blueAccent,
-      child: Padding(
-        padding: EdgeInsets.only(left: 20, top: 30, right: 20),
-        child: Text("You are offline, changes will be synced once online"),
+Widget offlineBanner(context, bigger) {
+  if (bigger) {
+    return Positioned(
+      top: 0,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 50,
+        color: Colors.blueAccent,
+        child: Padding(
+          padding: EdgeInsets.only(left: 20, top: 30, right: 20),
+          child: Text("You are offline, changes will be synced once online"),
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  else {
+    return Positioned(
+      top: 0,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 40,
+        color: Colors.blueAccent,
+        child: Padding(
+          padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+          child: Text("You are offline, changes will be synced once online"),
+        ),
+      ),
+    );
+  }
 }
 
 

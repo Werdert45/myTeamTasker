@@ -1,9 +1,11 @@
+import 'package:collaborative_repitition/components/syncingComponents.dart';
 import 'package:collaborative_repitition/components/task-tile.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/date-functions.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +38,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   final AuthService _auth = AuthService();
 
+  Map _source = {ConnectivityResult.none: false};
+  MyConnectivity _connectivity = MyConnectivity.instance;
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +51,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
 
     _selectedEvents = _events[_selectedDay] ?? [];
+
+
+    // Connection check
+    _connectivity.initialise();
+    _connectivity.myStream.listen((source) {
+      setState(() => _source = source);
+    });
   }
 
   @override
@@ -79,6 +91,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
+                      checkConnectivity(_source, context, false),
                       SizedBox(height: 20),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),

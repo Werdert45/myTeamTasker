@@ -38,14 +38,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
   var tasks = [];
 
-
-
   void initState() {
     super.initState();
     checkedValue = false;
 
     tasks = [];
-
 
     // Connection check
     _connectivity.initialise();
@@ -139,7 +136,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                               ),
                             ),
-                            checkConnectivity(_source, context)
+                            checkConnectivity(_source, context, true)
                           ],
                         ),
                         height: 160,
