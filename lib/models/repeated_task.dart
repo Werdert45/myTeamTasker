@@ -34,4 +34,22 @@ class repeated_task {
         belongs_to: data['belongs_to'] ?? null
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'icon': icon,
+      'id': id,
+      'title': title,
+      'description': description,
+      'creator': creator,
+      'days': days,
+      'alert_time': alert_time,
+      'assignee': assignee,
+      'shared': shared,
+      'repeated': repeated,
+      'finished': finished,
+      'finished_by': finished_by,
+      'belongs_to': belongs_to
+    };
+  }
 }

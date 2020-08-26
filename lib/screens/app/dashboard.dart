@@ -4,6 +4,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/settingsPage.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/progressbar.dart';
+import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 
 import 'package:connectivity/connectivity.dart';
 
@@ -77,6 +78,10 @@ class _DashboardPageState extends State<DashboardPage> {
 
               var finished_tasks = progressBar(tasks);
               var finished_count = finished_tasks[1].length;
+
+              readTasksFromStorage().then((r) {
+                print(r);
+              });
 
 
               return Container(
