@@ -23,4 +23,17 @@ class group {
       tasks_history: data['tasks_history'] ?? {}
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'code': code,
+      'description': description,
+      'id': id,
+      'members': members,
+      'name': name,
+      'repeated_tasks': repeated_tasks,
+      'single_tasks': single_tasks,
+      'tasks_history': tasks_history
+    };
+  }
 }

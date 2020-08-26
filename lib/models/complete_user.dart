@@ -23,4 +23,16 @@ class complete_user {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'email': email,
+//      'groups': groups,
+      'profile_picture': profile_picture,
+//      'tasks': tasks,
+      'personal_history': personal_history,
+      'group_history': group_history
+    };
+  }
+
 }

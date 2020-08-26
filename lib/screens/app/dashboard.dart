@@ -3,6 +3,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/settingsPage.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
 import 'package:collaborative_repitition/services/functions/progressbar.dart';
 import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 
@@ -66,23 +67,25 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
+
+
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
       child: SingleChildScrollView(
         child: FutureBuilder(
-          future: streams.getCompleteUser(user.uid),
+          future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
           builder: (context, snapshot) {
+//            writeGeneralInfoToStorage(snapshot.data).then((r) async {
+//              print(r);
+//
+//              String contents = await r.readAsString();
+//              print(contents);
+//            });
+          print(snapshot.data);
 
             if (snapshot.connectionState == ConnectionState.done) {
-              tasks = snapshot.data.tasks;
-
               var finished_tasks = progressBar(tasks);
               var finished_count = finished_tasks[1].length;
-
-              readTasksFromStorage().then((r) {
-                print(r);
-              });
-
 
               return Container(
                   child: Column(

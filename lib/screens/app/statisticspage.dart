@@ -10,6 +10,8 @@ import 'package:collaborative_repitition/screens/app/partials/group_stats.dart';
 import 'package:collaborative_repitition/screens/app/partials/user_stats.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
+import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:collaborative_repitition/components/task-tile.dart';
 import 'package:connectivity/connectivity.dart';
@@ -70,7 +72,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       value: SystemUiOverlayStyle.light,
       child: SingleChildScrollView(
         child: FutureBuilder(
-          future: streams.getCompleteUser(user.uid),
+          future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               tasks = snapshot.data.tasks;

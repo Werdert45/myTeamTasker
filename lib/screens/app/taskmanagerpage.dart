@@ -4,6 +4,8 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
+import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +84,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
       child: Scaffold(
           body: SingleChildScrollView(
             child: FutureBuilder(
-                future: streams.getAllTasks(user.uid),
+                future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     tasks = snapshot.data.tasks;
