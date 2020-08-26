@@ -5,7 +5,11 @@ import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:path_provider/path_provider.dart';
 
+
+/// Write the tasks to the storage:
+/// tasks --> storage
 writeTasksToStorage(List tasks) async {
+  // Get storage path and file
   var path = await _localPath;
   var file = File('$path/tasks.json');
   Map jsonReady = {};
@@ -26,20 +30,26 @@ writeTasksToStorage(List tasks) async {
     }
   }
 
+  // Write to json
   String jsonFile = jsonEncode(jsonReady);
 
+  // Write string to the file
   return file.writeAsString(jsonFile);
 }
 
+
+/// Read the file from the storage
+/// storage ---> tasks
 readTasksFromStorage() async {
   var path = await _localPath;
   var file = File('$path/tasks.json');
 
   List tasks = [];
 
+  // Get string of data
   String contents = await file.readAsString();
 
-  // Map of data inside of JSON
+  // Map of data inside of JSON from string
   Map data = jsonDecode(contents);
 
   // Loop through all tasks and check if repeated, if so set as repeated task,
@@ -61,7 +71,7 @@ readTasksFromStorage() async {
   return tasks;
 }
 
-
+/// Function to get the path to the application directory
 Future<String> get _localPath async {
   final directory = await getApplicationDocumentsDirectory();
   return directory.path;
