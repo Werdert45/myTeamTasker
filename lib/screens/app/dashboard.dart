@@ -75,19 +75,13 @@ class _DashboardPageState extends State<DashboardPage> {
         child: FutureBuilder(
           future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
           builder: (context, snapshot) {
-//            writeGeneralInfoToStorage(snapshot.data).then((r) async {
-//              print(r);
-//
-//              String contents = await r.readAsString();
-//              print(contents);
-//            });
-          print(snapshot.data);
-
             if (snapshot.connectionState == ConnectionState.done) {
+              var tasks = snapshot.data.tasks;
+
               var finished_tasks = progressBar(tasks);
               var finished_count = finished_tasks[1].length;
 
-              return Container(
+            return Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
