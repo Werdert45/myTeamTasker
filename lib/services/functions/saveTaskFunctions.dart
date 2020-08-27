@@ -111,6 +111,109 @@ readGeneralInfoFromStorage() async {
   return complete_user.fromMap(fullUser);
 }
 
+
+readCalendarFromStorage() async {
+
+  final Map<DateTime, dynamic> per_day = new Map();
+
+  var fullUser = await readGeneralInfoFromStorage();
+
+  // Get tasks from database:
+  var tasks = await readTasksFromStorage();
+
+  var day_of_the_year = DateTime.now();
+  var day = day_of_the_year.day;
+  var month = day_of_the_year.month;
+  var year = day_of_the_year.year;
+
+  // Per task in the total task list
+  for (int i = 0; i < tasks.length; i++) {
+    // If task is a single task
+    if (tasks[i] is single_task) {
+      var date = DateTime.fromMillisecondsSinceEpoch(tasks[i].date);
+      var day = date.day;
+      var month = date.month;
+      var year = date.year;
+
+      var isDone;
+
+
+      var now = DateTime.now();
+
+      if (DateTime(year, month, day) == DateTime(now.year, now.month, now.day)) {
+        if (per_day.containsKey(DateTime(year, month, day))) {
+          per_day[DateTime(year, month, day)] += [{'task': tasks[i], 'isDone': tasks[i].finished, 'groups': fullUser.groups[0], 'tasks_history_pers': fullUser.personal_history, 'total_tasks': tasks}];
+        } else {
+          per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': tasks[i].finished, 'groups': fullUser.groups[0], 'tasks_history_pers': fullUser.personal_history, 'total_tasks': tasks}];
+        }
+      } else {
+        if (tasks[i] is repeated_task) {
+          isDone = false;
+        }
+
+        else {
+          isDone = tasks[i].finished;
+        }
+
+        if (per_day.containsKey(DateTime(year, month, day))) {
+          per_day[DateTime(year, month, day)] += [{'task': tasks[i], 'isDone': isDone, 'groups': fullUser.groups[0], 'tasks_history_pers': fullUser.personal_history, 'total_tasks': tasks}];
+        } else {
+          per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': isDone, 'groups': fullUser.groups[0], 'tasks_history_pers': fullUser.personal_history, 'total_tasks': tasks}];
+        }
+      }
+    }
+
+    else {
+      // Set day of today
+      var day_of_the_year = DateTime.now();
+
+      // Loop over a whole year
+      for (int j = 0; j < 364; j++) {
+
+        if (tasks[i].days[day_of_the_year.weekday - 1]) {
+          var day = day_of_the_year.day;
+          var month = day_of_the_year.month;
+          var year = day_of_the_year.year;
+
+          var isDone;
+
+
+          var now = DateTime.now();
+
+          if (DateTime(year, month, day) == DateTime(now.year, now.month, now.day)) {
+            if (per_day.containsKey(DateTime(year, month, day))) {
+              per_day[DateTime(year, month, day)] += [{'task': tasks[i], 'isDone': tasks[i].finished, 'groups': fullUser.groups[0], 'tasks_history_pers': fullUser.personal_history, 'total_tasks': tasks}];
+            } else {
+              per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': tasks[i].finished, 'groups': fullUser.groups[0], 'tasks_history_pers': fullUser.personal_history, 'total_tasks': tasks}];
+            }
+          } else {
+            if (tasks[i] is repeated_task) {
+              isDone = false;
+            }
+
+            else {
+              isDone = tasks[i].finished;
+            }
+
+            if (per_day.containsKey(DateTime(year, month, day))) {
+              per_day[DateTime(year, month, day)] += [{'task': tasks[i], 'isDone': isDone, 'groups': fullUser.groups[0], 'tasks_history_pers': fullUser.personal_history, 'total_tasks': tasks}];
+            } else {
+              per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': isDone, 'groups': fullUser.groups[0], 'tasks_history_pers': fullUser.personal_history, 'total_tasks': tasks}];
+            }
+          }
+
+
+        }
+
+        day_of_the_year = day_of_the_year.add(Duration(days: 1));
+      }
+    }
+  }
+
+  // Return a map with the days of the next year
+  return per_day;
+}
+
 /// Write the tasks to the storage:
 /// tasks --> storage
 writeTasksToStorage(List tasks) async {

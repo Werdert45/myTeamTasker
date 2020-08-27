@@ -234,7 +234,7 @@ class Streams {
     // Per task in the total task list
     for (int i = 0; i < tasks.length; i++) {
       // If task is a single task
-      if (!tasks[i].repeated) {
+      if (tasks[i] is single_task) {
         var date = DateTime.fromMillisecondsSinceEpoch(tasks[i].date);
         var day = date.day;
         var month = date.month;

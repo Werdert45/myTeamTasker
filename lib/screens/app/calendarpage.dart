@@ -4,7 +4,9 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
 import 'package:collaborative_repitition/services/functions/date-functions.dart';
+import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +78,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: FutureBuilder(
-            future: streams.getCalendar(current_user.uid),
+            future: connected(_source) ? streams.getCalendar(current_user.uid) : readCalendarFromStorage(),
             builder: (context, snapshot) {
                 var today = DateTime.now();
 
