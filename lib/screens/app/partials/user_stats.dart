@@ -1,4 +1,5 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/screens/app/partials/timeseriesgraph.dart';
 import 'package:collaborative_repitition/services/functions/stat_functions.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _UserStatPageState extends State<UserStatPage> {
   Widget build(BuildContext context) {
     return Container(
       height: 500,
-      color: Colors.white,
+//      color: backgroundColor,
       child: Column(
         children: [
           Container(

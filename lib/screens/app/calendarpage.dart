@@ -101,7 +101,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           height: 120,
                           width: MediaQuery.of(context).size.width - 30,
                           decoration: BoxDecoration(
-                            color: boxColor,
+                            color: foregroundColor,
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Padding(

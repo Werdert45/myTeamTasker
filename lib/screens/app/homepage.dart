@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage>
                     bottomNavigationBar: FABBottomAppBar(
                       onTabSelected: _selectPage,
                       color: Colors.black,
-                      selectedColor: boxColor,
+                      selectedColor: foregroundColor,
                       notchedShape: CircularNotchedRectangle(),
                       items: [
                         FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage>
                     body: pages[_page],
                     floatingActionButton: FloatingActionButton(
                       child: Icon(Icons.add),
-                      backgroundColor: boxColor,
+                      backgroundColor: primaryColor,
                       heroTag: "add_task",
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));

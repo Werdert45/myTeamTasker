@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/main.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +91,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
               height: MediaQuery.of(context).size.height / 4,
               color: primaryColor,
               child: Center(
-                  child: Text("WELCOME\n" + widget.user_name, style: TextStyle(fontSize: 34, color: secondaryColor,
+                  child: Text("WELCOME\n" + widget.user_name, style: TextStyle(fontSize: 34, color: mainTextColor,
                       fontWeight: FontWeight.w400), textAlign: TextAlign.center)
               )
           ),
@@ -177,7 +178,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
             padding: EdgeInsets.only(left: 30, bottom: 15),
             child: RaisedButton(
                 onPressed: getImage,
-                textColor: secondaryColor,
+                textColor: mainTextColor,
                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
@@ -233,7 +234,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
               height: MediaQuery.of(context).size.height / 4,
               color: primaryColor,
               child: Center(
-                  child: Text("CHOOSE PICTURE", style: TextStyle(fontSize: 34, color: secondaryColor,
+                  child: Text("CHOOSE PICTURE", style: TextStyle(fontSize: 34, color: mainTextColor,
                       fontWeight: FontWeight.w400), textAlign: TextAlign.center)
               )
           ),
@@ -311,7 +312,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                 onPressed: () {
                   uploadImage(user.uid);
                   },
-                textColor: secondaryColor,
+                textColor: mainTextColor,
                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),

@@ -65,7 +65,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                     height: MediaQuery.of(context).size.height / 4.5,
                     color: primaryColor,
                     child: Center(
-                        child: Text("\n\nSELECT OR\nJOIN A GROUP", style: TextStyle(fontSize: 30, color: secondaryColor,
+                        child: Text("\n\nSELECT OR\nJOIN A GROUP", style: TextStyle(fontSize: 30, color: mainTextColor,
                             fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                     )
                 ),
@@ -114,11 +114,11 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                           database.addToGroup(user.uid, _group_code, "Ian Ronk");
                           Navigator.popAndPushNamed(context, '/homepage');
                         },
-                        textColor: primaryColor,
+                        textColor: mainTextColor,
                         padding: EdgeInsets.symmetric(horizontal: 310/2, vertical: 30/2),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(310/2),
-                          side: BorderSide(color: primaryColor, width: 2),
+                          side: BorderSide(color: secondaryColor, width: 2),
                         ),
                         color: secondaryColor,
                         child: Container(

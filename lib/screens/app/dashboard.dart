@@ -144,7 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         height: 160,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                            color: primaryColor,
+                            color: foregroundColor,
                             border: Border(
                             ),
                             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))

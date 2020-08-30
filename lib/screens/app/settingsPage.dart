@@ -45,9 +45,6 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isDark = false;
   bool sendNotifications = false;
 
-
-
-
   // Set the standard settings
 //
 //  // Notifications
@@ -73,7 +70,6 @@ class _SettingsPageState extends State<SettingsPage> {
           isDark = snapshot.data[0];
           sendNotifications = snapshot.data[2];
 
-
           return Scaffold(
             body: SafeArea(
               child: SingleChildScrollView(
@@ -85,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           width: MediaQuery.of(context).size.width - 40,
                           height: 170,
                           decoration: BoxDecoration(
-                              color: boxColor,
+                              color: foregroundColor,
                               borderRadius: BorderRadius.circular(30)
                           ),
                           child: Stack(
@@ -191,8 +187,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   isDark = value;
                                 });
                               },
-                              activeTrackColor: Colors.blue,
-                              activeColor: Colors.blueAccent,
+                              activeTrackColor: primaryColorFocus,
+                              activeColor: primaryColor,
                             ),
                           ),
                           ListTile(
@@ -250,8 +246,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 sendNotifications = value;
                               });
                             },
-                            activeTrackColor: Colors.blue,
-                            activeColor: Colors.blueAccent,
+                            activeTrackColor: primaryColorFocus,
+                            activeColor: primaryColor,
                           ),
                         ),
                         ListTile(

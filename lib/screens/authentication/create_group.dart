@@ -51,7 +51,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                       height: MediaQuery.of(context).size.height / 4.5,
                       color: primaryColor,
                       child: Center(
-                          child: Text("\n\nCREATE GROUP", style: TextStyle(fontSize: 30, color: secondaryColor,
+                          child: Text("\n\nCREATE GROUP", style: TextStyle(fontSize: 30, color: mainTextColor,
                               fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                       )
                   ),
@@ -72,7 +72,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                         createGroup(user.uid, _group_name, _group_description);
 //                        Navigator.popAndPushNamed(context, '/homepage');
                       },
-                      child: Text("CREATE", style: TextStyle(fontSize: 16, color: secondaryColor)),
+                      child: Text("CREATE", style: TextStyle(fontSize: 16, color: mainTextColor)),
                     )
                 ),
                 Form(
@@ -148,9 +148,6 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          Text("TASKS", style: TextStyle(fontSize: 14, color: secondaryColor)),
-                          SizedBox(height: 5),
-                          Container(height: MediaQuery.of(context).size.height / 4.5, width: double.infinity, color: Colors.red),
                         ],
                       ),
                     ),

@@ -120,7 +120,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
 //                            labelText: "Task Title",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
                               focusColor: primaryColor,
-                              fillColor: Color(0xFFE0E0E0),
+                              fillColor: textFieldFillColor,
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),

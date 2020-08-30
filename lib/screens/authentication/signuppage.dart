@@ -43,6 +43,21 @@ class _SignupPageState extends State<SignupPage> {
         body: Container(
           child: Stack(
             children: [
+              Positioned(
+                left: -60,
+                top: MediaQuery.of(context).size.height / 4.5 - 60,
+                child: Opacity(
+                  opacity: 0.8,
+                  child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                          color: secondaryColor,
+                          borderRadius: BorderRadius.circular(60.0)),
+                      child: SizedBox()
+                  ),
+                ),
+              ),
               Align(
                 alignment: Alignment.topCenter,
                 child: Container(
@@ -50,7 +65,7 @@ class _SignupPageState extends State<SignupPage> {
                     height: MediaQuery.of(context).size.height / 4.5,
                     color: primaryColor,
                     child: Center(
-                        child: Text("\n\nSIGN UP", style: TextStyle(fontSize: 34, color: secondaryColor,
+                        child: Text("\n\nSIGN UP", style: TextStyle(fontSize: 34, color: mainTextColor,
                             fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                     )
                 ),
@@ -172,7 +187,7 @@ class _SignupPageState extends State<SignupPage> {
                           child: SizedBox(),
                         ),
                       ),
-                      primaryRoundButton(primaryColor, secondaryColor, "SIGN UP", _signUpAction, 310, 30),
+                      primaryRoundButton(primaryColor, mainTextColor, "SIGN UP", _signUpAction, 310, 30),
                       SizedBox(height: 15),
                       GestureDetector(
                           onTap: () {
@@ -185,21 +200,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
               ),
-              Positioned(
-                left: -60,
-                top: MediaQuery.of(context).size.height / 4.5 - 60,
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                          color: secondaryColor,
-                          borderRadius: BorderRadius.circular(60.0)),
-                      child: SizedBox()
-                  ),
-                ),
-              ),
+
               Positioned(
                 right: -60,
                 top: -60,

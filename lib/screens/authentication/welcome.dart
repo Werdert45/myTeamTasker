@@ -61,8 +61,8 @@ class _WelcomePageState extends State<WelcomePage> {
                   children: [
                     SizedBox(height: 40),
                     Text("WELCOME TO\nTaskCollab",
-                        style: TextStyle(fontSize: 20, color: primaryColor,
-                            fontWeight: FontWeight.w400),
+                        style: TextStyle(fontSize: 28, color: primaryColor,
+                            fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center)
                   ],
                 )
@@ -72,9 +72,9 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      primaryRoundButton(primaryColor, secondaryColor, " LOG IN ", () { Navigator.pushNamed(context, '/login'); }, 260.0, 30.0),
+                      primaryRoundButton(primaryColor, mainTextColor, " LOG IN ", () { Navigator.pushNamed(context, '/login'); }, 260.0, 30.0),
                       SizedBox(height: 30),
-                      primaryRoundButton(secondaryColor, primaryColor, "SIGN UP", () { Navigator.pushNamed(context, '/signup'); }, 260.0, 30.0),
+                      primaryRoundButton(secondaryColor, mainTextColor, "SIGN UP", () { Navigator.pushNamed(context, '/signup'); }, 260.0, 30.0),
                       SizedBox(height: 100)
                     ],
                   )
