@@ -151,26 +151,26 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, bottom: 10),
-                        child: Text("Progess", style: TextStyle(fontSize: 24, color: Colors.grey)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: new LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 40,
-                          lineHeight: 20.0,
-                          percent: (finished_count / (finished_tasks[0].length + finished_count)),
-                          center: Text(
-                            ((finished_count / (finished_tasks[0].length + finished_count))*100).round().toString() + "%",
-                            style: new TextStyle(fontSize: 12.0),
-                          ),
-//                        trailing: Icon(Icons.mood, size: 40),
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          backgroundColor: Colors.grey,
-                          progressColor: Colors.blue,
-                        ),
-                      ),
+//                      Padding(
+//                        padding: EdgeInsets.only(left: 20, bottom: 10),
+//                        child: Text("Progess", style: TextStyle(fontSize: 24, color: Colors.grey)),
+//                      ),
+//                      Padding(
+//                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+//                        child: new LinearPercentIndicator(
+//                          width: MediaQuery.of(context).size.width - 40,
+//                          lineHeight: 20.0,
+//                          percent: (finished_count / (finished_tasks[0].length + finished_count)),
+//                          center: Text(
+//                            ((finished_count / (finished_tasks[0].length + finished_count))*100).round().toString() + "%",
+//                            style: new TextStyle(fontSize: 12.0),
+//                          ),
+////                        trailing: Icon(Icons.mood, size: 40),
+//                          linearStrokeCap: LinearStrokeCap.roundAll,
+//                          backgroundColor: Colors.grey,
+//                          progressColor: Colors.blue,
+//                        ),
+//                      ),
                       SizedBox(height: 20),
                       Container(
                         width: double.infinity,
