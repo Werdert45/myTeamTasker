@@ -365,9 +365,9 @@ class EmoIconState extends State<EmoIcon> {
                 checkedValue = true;
                 updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
 
-
-                // Set the count of completed tasks to add one
-                widget.notifyParent();
+//
+//                // Set the count of completed tasks to add one
+//                widget.notifyParent();
               });
             },
           ),
@@ -391,8 +391,8 @@ class EmoIconState extends State<EmoIcon> {
                 checkedValue = false;
                 updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
 
-                // Set the count of completed tasks to remove one
-                widget.notifyParent();
+//                // Set the count of completed tasks to remove one
+//                widget.notifyParent();
 
               });
             },
