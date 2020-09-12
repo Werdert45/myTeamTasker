@@ -118,7 +118,17 @@ class _SignupPageState extends State<SignupPage> {
                       Padding(
                           padding: EdgeInsets.only(left: 20, right: 20),
                           child: TextFormField(
-                            validator: (val) => val.isEmpty ? 'Enter your email' : null,
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Enter your email';
+                              }
+
+                              if (!val.contains('@') && !val.contains('.')) {
+                                return 'Invalid email';
+                              }
+
+                              return null;
+                            },
                             onChanged: (val) {
                               setState(() => _email = val);
                             },
@@ -148,7 +158,17 @@ class _SignupPageState extends State<SignupPage> {
                       Padding(
                           padding: EdgeInsets.only(left: 20, right: 20),
                           child: TextFormField(
-                            validator: (val) => val.isEmpty ? 'Enter your name' : null,
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Enter a password, with 6+ characters';
+                              }
+
+                              if (val.length < 6) {
+                                return 'A password must have 6+ characters';
+                              }
+
+                              return null;
+                            },
                             onChanged: (val) {
                               setState(() => _password = val);
                             },

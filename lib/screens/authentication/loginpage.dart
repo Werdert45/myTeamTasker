@@ -29,7 +29,18 @@ class _LoginPageState extends State<LoginPage> {
     _signInAction() async {
       if (_formKey.currentState.validate()) {
         dynamic result = await _auth.signInWithEmail(_email, _password);
-        Navigator.pop(context);
+
+        if (result is FirebaseUser) {
+          Navigator.pop(context);
+        }
+
+        else {
+          setState(() {
+            _error = result;
+          });
+
+          print(_error);
+        }
 
         if (result == null) {
           setState(() => _error = 'No user found with this email');
@@ -88,7 +99,17 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
                           child: TextFormField(
-                            validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Enter your email';
+                              }
+
+                              if (!val.contains('@') && !val.contains('.')) {
+                                return 'Invalid email';
+                              }
+
+                              return null;
+                            },
                             onChanged: (val) {
                               setState(() => _email = val);
                             },
@@ -118,7 +139,17 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                           padding: EdgeInsets.only(left: 20, right: 20),
                           child: TextFormField(
-                            validator: (val) => val.isEmpty ? 'A password must have 6+ characters' : null,
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Enter a password, with 6+ characters';
+                              }
+
+                              if (val.length < 6) {
+                                return 'A password must have 6+ characters';
+                              }
+
+                              return null;
+                            },
                             onChanged: (val) {
                               setState(() => _password = val);
                             },
@@ -145,6 +176,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           )
                       ),
+                      SizedBox(height: 5),
+                      _error != null ? Container(width: MediaQuery.of(context).size.width * 0.9, child: Text(_error)): SizedBox(),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 25),
                         child: Container(
