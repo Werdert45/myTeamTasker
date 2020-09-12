@@ -4,6 +4,7 @@ import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class ChangeEmail extends StatefulWidget {
@@ -43,6 +44,10 @@ class _ChangeEmailState extends State<ChangeEmail> {
   @override
   Widget build(BuildContext context) {
     var uid = Provider.of<User>(context).uid;
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
 
     return Scaffold(
       body: SafeArea(
@@ -93,7 +98,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                       }
 
                     },
-                    child: Icon(Icons.edit, size: 30, color: confirmColor),
+                    child: Icon(Icons.edit, size: 30, color: color['confirmColor']),
                   ),
                 ),
               ),
@@ -119,8 +124,8 @@ class _ChangeEmailState extends State<ChangeEmail> {
                               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
-                              fillColor: textFieldFillColor,
+                              focusColor: color['primaryColor'],
+                              fillColor: color['textFieldFillColor'],
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -161,7 +166,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
+                              focusColor: color['primaryColor'],
                               fillColor: Color(0xFFE0E0E0),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
@@ -184,7 +189,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                           width: MediaQuery.of(context).size.width - 40,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: confirmColor,
+                            color: color['confirmColor'],
                             borderRadius: BorderRadius.all(Radius.circular(8))
                           ),
                           child: Center(

@@ -9,6 +9,7 @@ import 'package:collaborative_repitition/services/functions/saveTaskFunctions.da
 import 'package:connectivity/connectivity.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -78,6 +79,11 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
@@ -108,7 +114,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                                 height: 120,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                    color: primaryColor,
+                                    color: color['primaryColor'],
                                     border: Border(
                                     ),
                                     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
@@ -158,7 +164,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
                                     )
                                 ),
                               ),
-                              showPersonal ? PersonalPage(snapshot, user) : GroupPage(snapshot, user),
+                              showPersonal ? PersonalPage(snapshot, user, color) : GroupPage(snapshot, user, color),
                             ],
                           ),
                           checkConnectivity(_source, context, true),
@@ -181,13 +187,13 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
     );
   }
 
-  Widget GroupPage(snapshot, user) {
+  Widget GroupPage(snapshot, user, color) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Group Tasks", style: TextStyle(fontSize: 24, color: primaryColor)),
+          child: Text("Group Tasks", style: TextStyle(fontSize: 24, color: color['primaryColor'])),
         ),
         ListView.builder(
           padding: EdgeInsets.all(0),
@@ -210,13 +216,13 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
     );
   }
 
-  Widget PersonalPage(snapshot, user) {
+  Widget PersonalPage(snapshot, user, color) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 15.0, top: 20),
-          child: Text("Personal Tasks", style: TextStyle(fontSize: 24, color: primaryColor)),
+          child: Text("Personal Tasks", style: TextStyle(fontSize: 24, color: color['primaryColor'])),
         ),
         ListView.builder(
           padding: EdgeInsets.all(0),

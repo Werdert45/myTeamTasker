@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _SignupPageState extends State<SignupPage> {
   String _name = '';
   String _email = '';
   String _password = '';
-  String _error = '';
+  String _error;
 
 
   @override
@@ -29,14 +30,22 @@ class _SignupPageState extends State<SignupPage> {
     _signUpAction() async {
       if (_formKey.currentState.validate()) {
         dynamic result = await _auth.registerWithEmail(_email, _password, _name);
-        if (result == null) {
-          setState(() => _error = 'please supply a valid email');
-        }
-        else {
+
+        if (result is FirebaseUser) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SelectprofilepicPage(_name)));
+        }
+
+        else {
+          setState(() => _error = result);
         }
       }
     }
+
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
 
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -52,7 +61,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: secondaryColor,
+                          color: color['secondaryColor'],
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -63,9 +72,9 @@ class _SignupPageState extends State<SignupPage> {
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 4.5,
-                    color: primaryColor,
+                    color: color['primaryColor'],
                     child: Center(
-                        child: Text("\n\nSIGN UP", style: TextStyle(fontSize: 34, color: mainTextColor,
+                        child: Text("\n\nSIGN UP", style: TextStyle(fontSize: 34, color: color['mainTextColor'],
                             fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                     )
                 ),
@@ -96,19 +105,19 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: InputDecoration(
                               prefixText: "df",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: primaryColor,
-                                fillColor: primaryColor,
+                                focusColor: color['primaryColor'],
+                                fillColor: color['primaryColor'],
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['primaryColor'], width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['primaryColor'], width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['primaryColor'], width: 2)
                                 ),
                                 hintText: 'Enter your Name'
                             ),
@@ -136,19 +145,19 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: InputDecoration(
                                 prefixText: "df",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: primaryColor,
-                                fillColor: primaryColor,
+                                focusColor: color['primaryColor'],
+                                fillColor: color['primaryColor'],
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['primaryColor'], width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['primaryColor'], width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(color: primaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['primaryColor'], width: 2)
                                 ),
                                 hintText: 'Enter Email'
                             ),
@@ -177,44 +186,46 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: InputDecoration(
                               prefixText: "df",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
-                              fillColor: primaryColor,
+                              focusColor: color['primaryColor'],
+                              fillColor: color['primaryColor'],
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: primaryColor, width: 2)
+                                  borderSide: BorderSide(color: color['primaryColor'], width: 2)
                               ),
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: primaryColor, width: 2)
+                                  borderSide: BorderSide(color: color['primaryColor'], width: 2)
                               ),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: primaryColor, width: 2)
+                                  borderSide: BorderSide(color: color['primaryColor'], width: 2)
                               ),
                               hintText: '*********',
                             ),
                           )
                       ),
+                      SizedBox(height: 5),
+                      _error != null ? Container(width: MediaQuery.of(context).size.width * 0.9, child: Text(_error)): SizedBox(),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 25),
                         child: Container(
                           height: 6,
                           width: 30,
                           decoration: BoxDecoration(
-                              color: secondaryColor,
+                              color: color['secondaryColor'],
                               borderRadius: BorderRadius.circular(3.0)
                           ),
                           child: SizedBox(),
                         ),
                       ),
-                      primaryRoundButton(primaryColor, mainTextColor, "SIGN UP", _signUpAction, 310, 30),
+                      primaryRoundButton(color['primaryColor'], color['mainTextColor'], "SIGN UP", _signUpAction, 310, 30),
                       SizedBox(height: 15),
                       GestureDetector(
                           onTap: () {
 //                            Navigator.pop(context);
                             Navigator.popAndPushNamed(context, '/login');
                           },
-                          child: Text("Already have an account? Log in here", style: TextStyle(color: primaryColor, fontSize: 10))
+                          child: Text("Already have an account? Log in here", style: TextStyle(color: color['primaryColor'], fontSize: 10))
                       )
                     ],
                   ),
@@ -230,7 +241,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: secondaryColor,
+                          color: color['secondaryColor'],
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -243,7 +254,7 @@ class _SignupPageState extends State<SignupPage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: secondaryColor,
+                        color: color['secondaryColor'],
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),

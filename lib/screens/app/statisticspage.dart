@@ -20,6 +20,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
@@ -97,7 +102,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         height: MediaQuery.of(context).size.height / 6,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                            color: primaryColor,
+                            color: color['primaryColor'],
                             border: Border(
                             ),
                             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))

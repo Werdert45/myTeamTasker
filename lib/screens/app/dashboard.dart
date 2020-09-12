@@ -11,6 +11,7 @@ import 'package:connectivity/connectivity.dart';
 
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../components/task-tile.dart';
@@ -66,6 +67,10 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
 
 
 
@@ -144,7 +149,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         height: 160,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                            color: foregroundColor,
+                            color: color['foregroundColor'],
                             border: Border(
                             ),
                             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))

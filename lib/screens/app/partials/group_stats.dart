@@ -5,6 +5,7 @@ import 'package:collaborative_repitition/services/functions/stat_functions.dart'
 import 'package:flutter/material.dart';
 import 'package:collaborative_repitition/screens/app/partials/timeseriesgraph.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/scheduler.dart';
 
 
 class GroupStatPage extends StatefulWidget {
@@ -22,6 +23,11 @@ class _GroupStatPageState extends State<GroupStatPage> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
     return Container(
         child: DefaultTabController(
           initialIndex: 0,
@@ -58,7 +64,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicator: new BubbleTabIndicator(
                       indicatorHeight: 35.0,
-                      indicatorColor: tabColor,
+                      indicatorColor: color['tabColor'],
                       tabBarIndicatorSize: TabBarIndicatorSize.tab,
                     ),
                   ),
@@ -92,7 +98,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                                       borderRadius: BorderRadius.circular(6),
                                       selectedColor: Colors.greenAccent,
                                       fillColor: Colors.grey,
-                                      splashColor: tabColor,
+                                      splashColor: color['tabColor'],
                                       isSelected: timeFrame,
                                       onPressed: (int index) {
                                         setState(() {

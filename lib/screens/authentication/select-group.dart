@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class SelectGroupPage extends StatefulWidget {
@@ -37,6 +38,10 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
 
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -52,7 +57,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: secondaryColor,
+                          color: color['secondaryColor'],
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -63,9 +68,9 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 4.5,
-                    color: primaryColor,
+                    color: color['primaryColor'],
                     child: Center(
-                        child: Text("\n\nSELECT OR\nJOIN A GROUP", style: TextStyle(fontSize: 30, color: mainTextColor,
+                        child: Text("\n\nSELECT OR\nJOIN A GROUP", style: TextStyle(fontSize: 30, color: color['mainTextColor'],
                             fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                     )
                 ),
@@ -75,7 +80,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: 30),
-                    Text("JOIN A GROUP", style: TextStyle(color: primaryColor)),
+                    Text("JOIN A GROUP", style: TextStyle(color: color['primaryColor'])),
                     SizedBox(height: 30),
 
                     // The error for iOS is in here
@@ -90,19 +95,19 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                           decoration: InputDecoration(
                               prefixText: "df",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: secondaryColor,
-                              fillColor: secondaryColor,
+                              focusColor: color['secondaryColor'],
+                              fillColor: color['secondaryColor'],
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: secondaryColor, width: 2)
+                                  borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                               ),
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: secondaryColor, width: 2)
+                                  borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                               ),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide(color: secondaryColor, width: 2)
+                                  borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                               ),
                               hintText: 'ENTER CODE'
                           ),
@@ -114,13 +119,13 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                           database.addToGroup(user.uid, _group_code, "Ian Ronk");
                           Navigator.popAndPushNamed(context, '/homepage');
                         },
-                        textColor: mainTextColor,
+                        textColor: color['mainTextColor'],
                         padding: EdgeInsets.symmetric(horizontal: 310/2, vertical: 30/2),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(310/2),
-                          side: BorderSide(color: secondaryColor, width: 2),
+                          side: BorderSide(color: color['secondaryColor'], width: 2),
                         ),
-                        color: secondaryColor,
+                        color: color['secondaryColor'],
                         child: Container(
                             child: Text("JOIN", style: TextStyle(fontSize: 20))
                         )
@@ -150,7 +155,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                       onTap: () {
                         Navigator.popAndPushNamed(context, '/creategroup');
                       },
-                      child: Text("CREATE A GROUP", style: TextStyle(fontSize: 24, color: primaryColor)),
+                      child: Text("CREATE A GROUP", style: TextStyle(fontSize: 24, color: color['primaryColor'])),
                     )
                   ],
                 ),
@@ -164,7 +169,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: secondaryColor,
+                          color: color['secondaryColor'],
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),
@@ -177,7 +182,7 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: secondaryColor,
+                        color: color['secondaryColor'],
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),

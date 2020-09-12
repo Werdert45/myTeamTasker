@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class CreateGroupPage extends StatefulWidget {
@@ -26,6 +27,10 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
 
 
     createGroup(uid, group_name, group_description) async {
@@ -49,9 +54,9 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 4.5,
-                      color: primaryColor,
+                      color: color['primaryColor'],
                       child: Center(
-                          child: Text("\n\nCREATE GROUP", style: TextStyle(fontSize: 30, color: mainTextColor,
+                          child: Text("\n\nCREATE GROUP", style: TextStyle(fontSize: 30, color: color['mainTextColor'],
                               fontWeight: FontWeight.w400), textAlign: TextAlign.center)
                       )
                   ),
@@ -72,7 +77,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                         createGroup(user.uid, _group_name, _group_description);
 //                        Navigator.popAndPushNamed(context, '/homepage');
                       },
-                      child: Text("CREATE", style: TextStyle(fontSize: 16, color: mainTextColor)),
+                      child: Text("CREATE", style: TextStyle(fontSize: 16, color: color['mainTextColor'])),
                     )
                 ),
                 Form(
@@ -85,7 +90,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 30),
-                          Text("Group name", style: TextStyle(fontSize: 14, color: secondaryColor)),
+                          Text("Group name", style: TextStyle(fontSize: 14, color: color['secondaryColor'])),
                           SizedBox(height: 5),
                           Padding(
                               padding: EdgeInsets.only(left: 0),
@@ -98,26 +103,26 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                                     prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                    focusColor: secondaryColor,
-                                    fillColor: secondaryColor,
+                                    focusColor: color['secondaryColor'],
+                                    fillColor: color['secondaryColor'],
                                     enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                                     ),
                                     border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                                     ),
                                     hintText: 'Enter group name'
                                 ),
                               )
                           ),
                           SizedBox(height: 30),
-                          Text("Description", style: TextStyle(fontSize: 14, color: secondaryColor)),
+                          Text("Description", style: TextStyle(fontSize: 14, color: color['secondaryColor'])),
                           SizedBox(height: 5),
                           TextFormField(
                             onChanged: (val) {
@@ -130,19 +135,19 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: secondaryColor,
-                                fillColor: secondaryColor,
+                                focusColor: color['secondaryColor'],
+                                fillColor: color['secondaryColor'],
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: secondaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: secondaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: secondaryColor, width: 2)
+                                    borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                                 ),
                                 hintText: 'Put down a small description of the group here'
                             ),
@@ -160,7 +165,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                          color: secondaryColor,
+                          color: color['secondaryColor'],
                           borderRadius: BorderRadius.circular(60.0)),
                       child: SizedBox()
                   ),

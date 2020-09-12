@@ -7,6 +7,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:firebase_image/firebase_image.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 import 'package:collaborative_repitition/services/usermanagement.dart';
@@ -72,13 +73,19 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
     var user = Provider.of<User>(context);
     _name = widget.user.name;
 
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
+
 
     return new Scaffold(
         resizeToAvoidBottomInset: false,
-        body: newProfilePic == null ? getChooseButton(context, user) : getUploadButton(user));
+        body: newProfilePic == null ? getChooseButton(context, user, color) : getUploadButton(user, color));
   }
 
-  Widget getChooseButton(context, user) {
+  Widget getChooseButton(context, user, color) {
     return SafeArea(
       child: new Stack(
         children: <Widget>[
@@ -105,7 +112,7 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
                           height: 220.0,
                           decoration: BoxDecoration(
                               color: Colors.white,
-                              border: Border.all(color: primaryColor),
+                              border: Border.all(color: color['primaryColor']),
                               borderRadius: BorderRadius.all(Radius.circular(125.0)),
                               boxShadow: [
                                 BoxShadow(blurRadius: 4.0, color: Colors.black)
@@ -130,7 +137,7 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(40),
-                                color: primaryColor
+                                color: color['primaryColor']
                               ),
                               child: IconButton(
                                 icon: Icon(Icons.edit, color: Colors.white),
@@ -168,7 +175,7 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
                         contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                         prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                        focusColor: primaryColor,
+                        focusColor: color['primaryColor'],
                         fillColor: Color(0xFFE0E0E0),
                         filled: true,
                         enabledBorder: OutlineInputBorder(
@@ -212,7 +219,7 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
     );
   }
 
-  Widget getUploadButton(user) {
+  Widget getUploadButton(user, color) {
     return SafeArea(
       child: new Stack(
         children: <Widget>[
@@ -252,7 +259,7 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(40),
-                                  color: primaryColor
+                                  color: color['primaryColor']
                               ),
                               child: IconButton(
                                 icon: Icon(Icons.edit, color: Colors.white),
@@ -290,7 +297,7 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
                         contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                         prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                        focusColor: primaryColor,
+                        focusColor: color['primaryColor'],
                         fillColor: Color(0xFFE0E0E0),
                         filled: true,
                         enabledBorder: OutlineInputBorder(

@@ -20,6 +20,7 @@ import 'package:collaborative_repitition/theme_changer.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:async';
@@ -61,6 +62,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.dark,
@@ -81,7 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           width: MediaQuery.of(context).size.width - 40,
                           height: 170,
                           decoration: BoxDecoration(
-                              color: foregroundColor,
+                              color: color['foregroundColor'],
                               borderRadius: BorderRadius.circular(30)
                           ),
                           child: Stack(
@@ -187,8 +192,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   isDark = value;
                                 });
                               },
-                              activeTrackColor: primaryColorFocus,
-                              activeColor: primaryColor,
+                              activeTrackColor: color['primaryColorFocus'],
+                              activeColor: color['primaryColor'],
                             ),
                           ),
                           ListTile(
@@ -246,8 +251,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 sendNotifications = value;
                               });
                             },
-                            activeTrackColor: primaryColorFocus,
-                            activeColor: primaryColor,
+                            activeTrackColor: color['primaryColorFocus'],
+                            activeColor: color['primaryColor'],
                           ),
                         ),
                         ListTile(

@@ -4,6 +4,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class GroupSettings extends StatefulWidget {
@@ -49,7 +50,10 @@ class _GroupSettingsState extends State<GroupSettings> {
 
     var members = widget.group.members.values.toList();
     var user = Provider.of<User>(context);
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
 
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
 
     return Scaffold(
       body: SafeArea(
@@ -109,7 +113,7 @@ class _GroupSettingsState extends State<GroupSettings> {
                               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
+                              focusColor: color['primaryColor'],
                               fillColor: Color(0xFFE0E0E0),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
@@ -143,7 +147,7 @@ class _GroupSettingsState extends State<GroupSettings> {
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
+                              focusColor: color['primaryColor'],
                               fillColor: Color(0xFFE0E0E0),
                               filled: true,
                               enabledBorder: OutlineInputBorder(

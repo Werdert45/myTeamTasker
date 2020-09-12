@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,11 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
     return new AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
         child: FutureBuilder(
@@ -84,7 +90,7 @@ class _HomePageState extends State<HomePage>
                     bottomNavigationBar: FABBottomAppBar(
                       onTabSelected: _selectPage,
                       color: Colors.black,
-                      selectedColor: foregroundColor,
+                      selectedColor: color['foregroundColor'],
                       notchedShape: CircularNotchedRectangle(),
                       items: [
                         FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
@@ -96,7 +102,7 @@ class _HomePageState extends State<HomePage>
                     body: pages[_page],
                     floatingActionButton: FloatingActionButton(
                       child: Icon(Icons.add),
-                      backgroundColor: primaryColor,
+                      backgroundColor: color['primaryColor'],
                       heroTag: "add_task",
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));

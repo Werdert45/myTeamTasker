@@ -10,6 +10,7 @@ import 'package:collaborative_repitition/services/functions/saveTaskFunctions.da
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 
@@ -74,6 +75,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     Map<String, dynamic> per_day = new Map();
 
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -101,7 +107,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           height: 120,
                           width: MediaQuery.of(context).size.width - 30,
                           decoration: BoxDecoration(
-                            color: foregroundColor,
+                            color: color['foregroundColor'],
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Padding(
@@ -113,8 +119,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(months[today.month].toUpperCase(), style: TextStyle(fontSize: 28, color: mainTextColor)),
-                                      Text(today.day < 10 ? "0" + today.day.toString() : today.day.toString(), style: TextStyle(fontSize: 48, color: mainTextColor))
+                                      Text(months[today.month].toUpperCase(), style: TextStyle(fontSize: 28, color: color['mainTextColor'])),
+                                      Text(today.day < 10 ? "0" + today.day.toString() : today.day.toString(), style: TextStyle(fontSize: 48, color: color['mainTextColor']))
                                     ],
                                   ),
                                 ),
@@ -124,9 +130,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     padding: const EdgeInsets.only(top: 10.0),
                                     child: _events[_selectedDay] != null ? (_events[_selectedDay].where((i) => i['isDone'] == false).length != 0
                                         ?
-                                    Text("Today you have\n" + _events[_selectedDay].where((i) => i['isDone'] == false).length.toString() + " thing(s) to do", style: TextStyle(fontSize: 26, color: mainTextColor))
+                                    Text("Today you have\n" + _events[_selectedDay].where((i) => i['isDone'] == false).length.toString() + " thing(s) to do", style: TextStyle(fontSize: 26, color: color['mainTextColor']))
                                         :
-                                    Text("You are all done\n for today", style: TextStyle(fontSize: 26, color: mainTextColor))) : Text("You can't change the past"),
+                                    Text("You are all done\n for today", style: TextStyle(fontSize: 26, color: color['mainTextColor']))) : Text("You can't change the past"),
                                   ),
                                 )
                               ],
@@ -148,7 +154,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             onDateSelected: (date) => _handleNewDate(date),
                             isExpandable: false,
                             eventDoneColor: Colors.green,
-                            selectedColor: boxColor,
+                            selectedColor: color['boxColor'],
                             todayColor: Colors.blue,
                             eventColor: Colors.grey,
                             dayOfWeekStyle: TextStyle(

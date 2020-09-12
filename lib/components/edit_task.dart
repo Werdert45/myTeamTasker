@@ -4,6 +4,7 @@ import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/time.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 
@@ -111,6 +112,10 @@ class _EditTaskState extends State<EditTask> {
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.dark,
@@ -165,7 +170,7 @@ class _EditTaskState extends State<EditTask> {
 //                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
 //                            labelText: "Task Title",
                                     prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                    focusColor: primaryColor,
+                                    focusColor: color['primaryColor'],
                                     fillColor: Color(0xFFE0E0E0),
                                     filled: true,
                                     enabledBorder: OutlineInputBorder(
@@ -211,7 +216,7 @@ class _EditTaskState extends State<EditTask> {
                               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
+                              focusColor: color['primaryColor'],
                               fillColor: Color(0xFFE0E0E0),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
@@ -309,7 +314,7 @@ class _EditTaskState extends State<EditTask> {
                                 child: TabBarView(
                                   children: [
                                     singleTask(),
-                                    repeatedTask()
+                                    repeatedTask(color)
                                   ],
                                 ),
                               )
@@ -445,7 +450,7 @@ class _EditTaskState extends State<EditTask> {
     );
   }
 
-  Widget repeatedTask() {
+  Widget repeatedTask(color) {
     return Container(
       height: 230,
       width: MediaQuery.of(context).size.width,
@@ -480,7 +485,7 @@ class _EditTaskState extends State<EditTask> {
                           height: MediaQuery.of(context).size.width / 9,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: days_show[index] ? selectedColor : unselectedColor,
+                            color: days_show[index] ? color['selectedColor'] : color['unselectedColor'],
                           ),
                           child: Center(child: Text(days[index].substring(0,1))),
                         ),

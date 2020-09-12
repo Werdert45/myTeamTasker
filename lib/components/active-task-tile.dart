@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:emoji_picker/emoji_picker.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'button.dart';
 
@@ -167,6 +168,11 @@ class ActiveTaskState extends State<ActiveTask> {
     var init_days = widget.task.days;
 
 
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
 
     return Slidable(
       // Set the slidable to be able to be accepted when not checked, when checked show undo
@@ -181,7 +187,7 @@ class ActiveTaskState extends State<ActiveTask> {
                   },
                   // Add a slider, to remove task
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(10.0),
                     child: ClipPath(
                       clipper: ShapeBorderClipper(
                         shape: RoundedRectangleBorder(
@@ -191,7 +197,7 @@ class ActiveTaskState extends State<ActiveTask> {
                       child: AnimatedContainer(
                           width: MediaQuery.of(context).size.width - 30,
                           height: expanded ? 400.0 : 60.0,
-                          color: Color(0xFFE8EDED),
+                          color: color['taskColor'],
                           duration: Duration(milliseconds: 500),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20.0, right: 5),
@@ -217,8 +223,8 @@ class ActiveTaskState extends State<ActiveTask> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 SizedBox(height: 10),
-                                                (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: primaryColor, fontSize: 20))) : Text("Loading ...")),
-                                                Text("8 AM to 12 AM", style: TextStyle(color: secondaryColor, fontSize: 12))
+                                                (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: color['primaryColor'], fontSize: 20))) : Text("Loading ...")),
+                                                Text("8 AM to 12 AM", style: TextStyle(color: color['secondaryColor'], fontSize: 12))
                                               ]
                                           ),
                                           FlatButton(
@@ -338,7 +344,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                             height: MediaQuery.of(context).size.width / 10,
                                                             decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(5),
-                                                              color: days_show[index] ? selectedColor : unselectedColor,
+                                                              color: days_show[index] ? color['selectedColor'] : color['unselectedColor'],
                                                             ),
                                                             child: Center(child: Text(days[index].substring(0,1))),
                                                           ),

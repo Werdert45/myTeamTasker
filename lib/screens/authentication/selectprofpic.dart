@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/main.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/usermanagement.dart';
@@ -75,13 +76,17 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
 
     return new Scaffold(
         resizeToAvoidBottomInset: false,
-        body: newProfilePic == null ? getChooseButton(context) : getUploadButton(user));
+        body: newProfilePic == null ? getChooseButton(context, color) : getUploadButton(user, color));
   }
 
-  Widget getChooseButton(context) {
+  Widget getChooseButton(context, color) {
     return new Stack(
       children: <Widget>[
         Align(
@@ -89,9 +94,9 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
           child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 4,
-              color: primaryColor,
+              color: color['primaryColor'],
               child: Center(
-                  child: Text("WELCOME\n" + widget.user_name, style: TextStyle(fontSize: 34, color: mainTextColor,
+                  child: Text("WELCOME\n" + widget.user_name, style: TextStyle(fontSize: 34, color: color['mainTextColor'],
                       fontWeight: FontWeight.w400), textAlign: TextAlign.center)
               )
           ),
@@ -112,19 +117,19 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                         height: 220.0,
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(color: primaryColor),
+                            border: Border.all(color: color['primaryColor']),
                             borderRadius: BorderRadius.all(Radius.circular(125.0)),
                             boxShadow: [
                               BoxShadow(blurRadius: 7.0, color: Colors.black)
                             ]),
-                        child: Icon(Icons.person, size: 130, color: secondaryColor),
+                        child: Icon(Icons.person, size: 130, color: color['secondaryColor']),
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
                           padding: EdgeInsets.only(right: 0, bottom: 0),
                           child: IconButton(
-                            icon: Icon(Icons.add_circle, color: primaryColor),
+                            icon: Icon(Icons.add_circle, color: color['primaryColor']),
                             onPressed: getImage,
                             iconSize: 50,
                             color: Colors.black,
@@ -139,7 +144,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                   'Choose an avatar',
                   style: TextStyle(
                       fontSize: 18.0,
-                      color: primaryColor,
+                      color: color['primaryColor'],
                       fontFamily: 'Montserrat'),
                 ),
                 SizedBox(height: 55.0),
@@ -152,19 +157,19 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                   decoration: InputDecoration(
                     prefixText: "df",
                     prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                    focusColor: secondaryColor,
-                    fillColor: secondaryColor,
+                    focusColor: color['secondaryColor'],
+                    fillColor: color['secondaryColor'],
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                     ),
                     hintText: 'Enter Email',
                   ),
@@ -178,12 +183,12 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
             padding: EdgeInsets.only(left: 30, bottom: 15),
             child: RaisedButton(
                 onPressed: getImage,
-                textColor: mainTextColor,
+                textColor: color['mainTextColor'],
                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
-                color: primaryColor,
+                color: color['primaryColor'],
                 child: Container(
                     child: Text("SELECT IMAGE", style: TextStyle(fontSize: 12))
                 )
@@ -198,7 +203,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
               onTap: () {},
               child: Text(
                 "SKIP",
-                style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+                style: TextStyle(color: color['primaryColor'], fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -215,7 +220,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
     );
   }
 
-  Widget getUploadButton(user) {
+  Widget getUploadButton(user, color) {
     return new Stack(
       children: <Widget>[
         Align(
@@ -232,9 +237,9 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
           child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 4,
-              color: primaryColor,
+              color: color['primaryColor'],
               child: Center(
-                  child: Text("CHOOSE PICTURE", style: TextStyle(fontSize: 34, color: mainTextColor,
+                  child: Text("CHOOSE PICTURE", style: TextStyle(fontSize: 34, color: color['mainTextColor'],
                       fontWeight: FontWeight.w400), textAlign: TextAlign.center)
               )
           ),
@@ -266,7 +271,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                         child: Padding(
                           padding: EdgeInsets.only(right: 0, bottom: 0),
                           child: IconButton(
-                            icon: Icon(Icons.add_circle, color: primaryColor),
+                            icon: Icon(Icons.add_circle, color: color['primaryColor']),
                             onPressed: getImage,
                             iconSize: 50,
                             color: Colors.black,
@@ -284,19 +289,19 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                   decoration: InputDecoration(
                     prefixText: "df",
                     prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                    focusColor: secondaryColor,
-                    fillColor: secondaryColor,
+                    focusColor: color['secondaryColor'],
+                    fillColor: color['secondaryColor'],
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(color: secondaryColor, width: 2)
+                        borderSide: BorderSide(color: color['secondaryColor'], width: 2)
                     ),
                     hintText: 'Enter Email',
                   ),
@@ -312,12 +317,12 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
                 onPressed: () {
                   uploadImage(user.uid);
                   },
-                textColor: mainTextColor,
+                textColor: color['mainTextColor'],
                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
-                color: primaryColor,
+                color: color['primaryColor'],
                 child: Container(
                     child: Text("CONTINUE", style: TextStyle(fontSize: 12))
                 )
@@ -332,7 +337,7 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
               onTap: getImage,
               child: Text(
                 "CHOOSE OTHER",
-                style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+                style: TextStyle(color: color['primaryColor'], fontWeight: FontWeight.w500),
               ),
             ),
           ),

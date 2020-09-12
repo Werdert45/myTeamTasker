@@ -2,6 +2,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class ChangePassword extends StatefulWidget {
   final email;
@@ -44,6 +45,11 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -88,7 +94,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       }
                       // Save the password, if the conditions apply
                     },
-                    child: Icon(Icons.edit, size: 30, color: confirmColor),
+                    child: Icon(Icons.edit, size: 30, color: color['confirmColor']),
                   ),
                 ),
               ),
@@ -123,7 +129,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
+                              focusColor: color['primaryColor'],
                               fillColor: Color(0xFFE0E0E0),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
@@ -164,7 +170,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
+                              focusColor: color['primaryColor'],
                               fillColor: Color(0xFFE0E0E0),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
@@ -205,7 +211,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                               prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                              focusColor: primaryColor,
+                              focusColor: color['primaryColor'],
                               fillColor: Color(0xFFE0E0E0),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
@@ -228,7 +234,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           width: MediaQuery.of(context).size.width - 40,
                           height: 50,
                           decoration: BoxDecoration(
-                              color: confirmColor,
+                              color: color['confirmColor'],
                               borderRadius: BorderRadius.all(Radius.circular(8))
                           ),
                           child: Center(

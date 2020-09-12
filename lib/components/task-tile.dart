@@ -7,6 +7,7 @@ import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:emoji_picker/emoji_picker.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'button.dart';
 
@@ -154,6 +155,12 @@ class EmoIconState extends State<EmoIcon> {
     repeated = widget.task.repeated;
     shared = widget.task.shared;
 
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
+
     return Slidable(
       // Set the slidable to be able to be accepted when not checked, when checked show undo
         actionPane: SlidableDrawerActionPane(),
@@ -177,7 +184,7 @@ class EmoIconState extends State<EmoIcon> {
                           height: expanded ? 280.0 : 60.0,
                           duration: Duration(milliseconds: 500),
                           decoration: BoxDecoration(
-                              color: Color(0xFFE8EDED),
+                              color: color['taskColor'],
                               border: widget.isDone == null ? checkedValue ? Border(
                                   bottom: BorderSide(
                                       color: Colors.green,
@@ -212,12 +219,12 @@ class EmoIconState extends State<EmoIcon> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     SizedBox(height: 10),
-                                                    (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: primaryColor, fontSize: 20, decoration: (widget.isDone == null) ? (checkedValue ? TextDecoration.lineThrough : null) : (widget.isDone) ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
+                                                    (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: color['primaryColor'], fontSize: 20, decoration: (widget.isDone == null) ? (checkedValue ? TextDecoration.lineThrough : null) : (widget.isDone) ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
 //                      SizedBox(height: 3),
                                                     (widget.isDone == null) ? checkedValue ? (
-                                                      widget.task.shared ? Text("Finished by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: secondaryColor, fontSize: 12)) :
-                                                      Text("Completed", style: TextStyle(color: secondaryColor, fontSize: 12))) :
-                                                  Text("Not finished", style: TextStyle(color: secondaryColor, fontSize: 12)) :
+                                                      widget.task.shared ? Text("Finished by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: color['secondaryColor'], fontSize: 12)) :
+                                                      Text("Completed", style: TextStyle(color: color['secondaryColor'], fontSize: 12))) :
+                                                  Text("Not finished", style: TextStyle(color: color['secondaryColor'], fontSize: 12)) :
                                                       SizedBox()
                                                   ]
                                               ),
@@ -320,7 +327,7 @@ class EmoIconState extends State<EmoIcon> {
                                                   height: MediaQuery.of(context).size.width / 10,
                                                   decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(5),
-                                                    color: days_show[index] ? selectedColor : unselectedColor,
+                                                    color: days_show[index] ? color['selectedColor'] : color['unselectedColor'],
                                                   ),
                                                   child: Center(child: Text(days[index].substring(0,1))),
                                                 ),

@@ -1,5 +1,6 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import '../../components/button.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -10,6 +11,12 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+
+    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+
+
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -25,7 +32,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: secondaryColor,
+                        color: color['secondaryColor'],
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),
@@ -37,7 +44,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: secondaryColor,
+                        color: color['secondaryColor'],
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),
@@ -49,7 +56,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                        color: secondaryColor,
+                        color: color['secondaryColor'],
                         borderRadius: BorderRadius.circular(60.0)),
                     child: SizedBox()
                 ),
@@ -61,7 +68,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   children: [
                     SizedBox(height: 40),
                     Text("WELCOME TO\nTaskCollab",
-                        style: TextStyle(fontSize: 28, color: primaryColor,
+                        style: TextStyle(fontSize: 28, color: color['primaryColor'],
                             fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center)
                   ],
@@ -72,9 +79,9 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      primaryRoundButton(primaryColor, mainTextColor, " LOG IN ", () { Navigator.pushNamed(context, '/login'); }, 260.0, 30.0),
+                      primaryRoundButton(color['primaryColor'], color['mainTextColor'], " LOG IN ", () { Navigator.pushNamed(context, '/login'); }, 260.0, 30.0),
                       SizedBox(height: 30),
-                      primaryRoundButton(secondaryColor, mainTextColor, "SIGN UP", () { Navigator.pushNamed(context, '/signup'); }, 260.0, 30.0),
+                      primaryRoundButton(color['secondaryColor'], color['mainTextColor'], "SIGN UP", () { Navigator.pushNamed(context, '/signup'); }, 260.0, 30.0),
                       SizedBox(height: 100)
                     ],
                   )

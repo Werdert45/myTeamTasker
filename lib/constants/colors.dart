@@ -38,24 +38,65 @@ bool darkModeOn = brightness == Brightness.dark;
 //var textFieldFillColor = Color(0xFFE0E0E0);
 //var tabColor = Colors.teal;
 
-var primaryColorFocus = Colors.blue;
-var primaryColor = Color(0xFF05668D);
-var primaryColorHalf = Color(0xCC05668D);
-var secondaryColor = Color(0xFF028090);
-var foregroundColor = Color(0xFF028090);
-var backgroundColor = Color(0xFFD8D8D8);
 
-var boxColor = Color.fromRGBO(21, 105, 94, 1);
-var mainTextColor = Colors.white;
-var selectedColor = Colors.green;
-var unselectedColor = Colors.red;
-// Color of confirm/change buttons
-var confirmColor = primaryColor;
-var textFieldFillColor = Color(0xFFE0E0E0);
-var tabColor = Colors.teal;
+var darkmodeColor = {
+  'primaryColorFocus': Colors.blue,
+  'primaryColor': Color(0xFF05668D),
+  'primaryColorHalf': Color(0xCC05668D),
+  'secondaryColor': Color(0xFF028090),
+  'foregroundColor': Color(0xFF028090),
+  'backgroundColor': Color(0xFFD8D8D8),
 
+  'boxColor': Color.fromRGBO(21, 105, 94, 1),
+  'mainTextColor': Colors.white,
+  'selectedColor': Colors.green,
+  'unselectedColor': Colors.red,
 
+  'confirmColor': Color(0xFF05668D),
+  'textFieldFillColor': Color(0xFFE0E0E0),
+  'tabColor': Colors.teal,
 
+  'taskColor': Color(0xFFE8EDED)
+};
+
+var lightmodeColor = {
+  'primaryColorFocus': Colors.blue,
+  'primaryColor': Color(0xFF05668D),
+  'primaryColorHalf': Color(0xCC05668D),
+  'secondaryColor': Color(0xFF028090),
+  'foregroundColor': Color(0xFF028090),
+  'backgroundColor': Color(0xFFD8D8D8),
+
+  'boxColor': Color.fromRGBO(21, 105, 94, 1),
+  'mainTextColor': Colors.white,
+  'selectedColor': Colors.green,
+  'unselectedColor': Colors.red,
+
+  'confirmColor': Color(0xFF05668D),
+  'textFieldFillColor': Color(0xFFE0E0E0),
+  'tabColor': Colors.teal,
+
+  'taskColor': Color(0xFFE8EDED)
+};
+
+//var primaryColorFocus = Colors.blue;
+//var primaryColor = Color(0xFF05668D);
+//var primaryColorHalf = Color(0xCC05668D);
+//var secondaryColor = Color(0xFF028090);
+//var foregroundColor = Color(0xFF028090);
+//var backgroundColor = Color(0xFFD8D8D8);
+//
+//var boxColor = Color.fromRGBO(21, 105, 94, 1);
+//var mainTextColor = Colors.white;
+//var selectedColor = Colors.green;
+//var unselectedColor = Colors.red;
+//// Color of confirm/change buttons
+//var confirmColor = primaryColor;
+//var textFieldFillColor = Color(0xFFE0E0E0);
+//var tabColor = Colors.teal;
+//
+//var taskColor = Color(0xFFE8EDED);
+//
 
 
 // List of colors for the per member statistics
