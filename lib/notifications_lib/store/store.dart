@@ -17,9 +17,6 @@ Future<File> get _localFile async {
   final path = await _localPath;
 
 
-  print("THIS IS THE FILE");
-  print(path);
-
   return File('$path/state.json');
 }
 

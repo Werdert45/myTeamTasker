@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../../components/button.dart';
@@ -9,14 +10,28 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  bool brightness = false;
+
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+  }
+
+  @override
+
   Widget build(BuildContext context) {
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
-
+    
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,

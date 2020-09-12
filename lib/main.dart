@@ -61,28 +61,25 @@ class MyApp extends StatelessWidget {
       child: ThemeBuilder(
         defaultBrightness: theme ? Brightness.dark : Brightness.light,
         builder: (context, _brightness) {
-          return AnnotatedRegion(
-            value: SystemUiOverlayStyle.light,
-            child: StreamProvider<User>.value(
-                value: AuthService().user,
-                child: new MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  home: Wrapper(),
-                  theme: ThemeData(
-                      primarySwatch: Colors.teal,
-                      brightness: _brightness
-                  ),
-                  routes: <String, WidgetBuilder>{
-                    '/landingpage': (BuildContext context) => new MyApp(store, theme),
-                    '/signup': (BuildContext context) => new SignupPage(),
-                    '/login': (BuildContext context) => new LoginPage(),
-                    '/creategroup': (BuildContext context) => new CreateGroupPage(),
-                    '/selectgroup': (BuildContext context) => new SelectGroupPage(),
-                    '/homepage': (BuildContext context) => new HomePage(),
-                    '/taskmanager': (context) => new TaskManagerPage(),
-                  },
-                )
-            ),
+          return StreamProvider<User>.value(
+              value: AuthService().user,
+              child: new MaterialApp(
+                debugShowCheckedModeBanner: false,
+                home: Wrapper(),
+                theme: ThemeData(
+                    primarySwatch: Colors.teal,
+                    brightness: _brightness
+                ),
+                routes: <String, WidgetBuilder>{
+                  '/landingpage': (BuildContext context) => new MyApp(store, theme),
+                  '/signup': (BuildContext context) => new SignupPage(),
+                  '/login': (BuildContext context) => new LoginPage(),
+                  '/creategroup': (BuildContext context) => new CreateGroupPage(),
+                  '/selectgroup': (BuildContext context) => new SelectGroupPage(),
+                  '/homepage': (BuildContext context) => new HomePage(),
+                  '/taskmanager': (context) => new TaskManagerPage(),
+                },
+              )
           );
         },
       ),

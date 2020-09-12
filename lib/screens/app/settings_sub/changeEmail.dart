@@ -1,6 +1,7 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,20 +36,29 @@ class _ChangeEmailState extends State<ChangeEmail> {
 
   bool _completed = false;
 
+  bool brightness = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var uid = Provider.of<User>(context).uid;
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
 
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
+    
     return Scaffold(
       body: SafeArea(
         child: Container(

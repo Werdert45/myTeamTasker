@@ -1,4 +1,5 @@
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,20 +37,28 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   bool _completed = false;
 
+  bool brightness = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+    
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
+    
     return Scaffold(
       body: SafeArea(
         child: Container(

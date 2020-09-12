@@ -1,6 +1,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/screens/app/partials/donutchart.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/stat_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:collaborative_repitition/screens/app/partials/timeseriesgraph.dart';
@@ -21,13 +22,29 @@ class GroupStatPage extends StatefulWidget {
 class _GroupStatPageState extends State<GroupStatPage> {
   List<bool> timeFrame = [true,false];
 
+  bool brightness = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
 
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+    
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
+    
     return Container(
         child: DefaultTabController(
           initialIndex: 0,

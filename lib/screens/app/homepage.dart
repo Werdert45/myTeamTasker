@@ -4,6 +4,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/notifications_lib/functions/notification_functions.dart';
 import 'package:collaborative_repitition/screens/app/partials/bottombaritem.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -47,6 +48,10 @@ class _HomePageState extends State<HomePage>
 
     _page = 0;
 
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+
   }
 
 
@@ -56,65 +61,69 @@ class _HomePageState extends State<HomePage>
     });
   }
 
+  bool brightness = false;
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
 
     tabController.dispose();
+
+
   }
 
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+    
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
-    return new AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
-        child: FutureBuilder(
-          future: streams.getCompleteUser(user.uid),
+    
+    return FutureBuilder(
+      future: streams.getCompleteUser(user.uid),
+      builder: (context, snapshot) {
+        return FutureBuilder(
+          future: setNotifications(snapshot.data.tasks),
           builder: (context, snapshot) {
-            return FutureBuilder(
-              future: setNotifications(snapshot.data.tasks),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.active) {
-                  return CircularProgressIndicator();
-                }
-                else {
-                  return Scaffold(
+            if (snapshot.connectionState == ConnectionState.active) {
+              return CircularProgressIndicator();
+            }
+            else {
+              return Scaffold(
 
-                    bottomNavigationBar: FABBottomAppBar(
-                      onTabSelected: _selectPage,
-                      color: Colors.black,
-                      selectedColor: color['foregroundColor'],
-                      notchedShape: CircularNotchedRectangle(),
-                      items: [
-                        FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
-                        FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
-                        FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics"),
-                        FABBottomAppBarItem(iconData: Icons.edit, text: "Manager"),
-                      ],
-                    ),
-                    body: pages[_page],
-                    floatingActionButton: FloatingActionButton(
-                      child: Icon(Icons.add),
-                      backgroundColor: color['primaryColor'],
-                      heroTag: "add_task",
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask()));
-                      },
-                    ),
-                    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-                  );
-                }
-              }
-            );
+                bottomNavigationBar: FABBottomAppBar(
+                  onTabSelected: _selectPage,
+                  color: Colors.black,
+                  selectedColor: color['foregroundColor'],
+                  notchedShape: CircularNotchedRectangle(),
+                  items: [
+                    FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
+                    FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
+                    FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics"),
+                    FABBottomAppBarItem(iconData: Icons.edit, text: "Manager"),
+                  ],
+                ),
+                body: pages[_page],
+                floatingActionButton: FloatingActionButton(
+                  child: Icon(Icons.add),
+                  backgroundColor: color['primaryColor'],
+                  heroTag: "add_task",
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  AddTask()));
+                  },
+                ),
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              );
+            }
           }
-        )
+        );
+      }
     );
   }
 }

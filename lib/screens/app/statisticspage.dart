@@ -11,6 +11,7 @@ import 'package:collaborative_repitition/screens/app/partials/user_stats.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:collaborative_repitition/components/task-tile.dart';
@@ -45,6 +46,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
 
   var tasks = [];
+  bool brightness = false;
 
   void initState() {
     super.initState();
@@ -57,6 +59,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
     });
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   @override
@@ -68,11 +74,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
+    
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
       child: SingleChildScrollView(

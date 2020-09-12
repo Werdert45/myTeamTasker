@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/main.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
@@ -39,10 +40,15 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
 
   String _name = '';
 
+  bool brightness = false;
 
   void initState() {
     super.initState();
     _controller = new TextEditingController(text: widget.user_name);
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   Future getImage() async {
@@ -75,11 +81,13 @@ class _SelectprofilepicPageState extends State<SelectprofilepicPage> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
+    
 
     return new Scaffold(
         resizeToAvoidBottomInset: false,

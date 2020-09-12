@@ -1,6 +1,7 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -39,12 +40,18 @@ class _AddTaskState extends State<AddTask> {
 
   final DatabaseService database = DatabaseService();
 
+  bool brightness = false;
+
   void initState() {
     super.initState();
     isShowSticker = false;
     categories = Emoji(name: 'Sailboat', emoji: '👑');
     _dateTime = DateTime.now();
     _time = null;
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   Future<Null> selectDate(BuildContext context) async {
@@ -84,8 +91,7 @@ class _AddTaskState extends State<AddTask> {
 
   // Improve addTaskDB to also save to either group or personal + title not working
   addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description) async {
-    print(shared);
-    print(group_code);
+
 
     if (repeated) {
       await database.addRepeatedTask(taskID, puid, group_code, shared);
@@ -100,16 +106,13 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
 
+    var color = brightness ? darkmodeColor : darkmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+    
 
-
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle.dark,
-      child: Hero(
-          child: Scaffold(
+    return Hero(
+        child: Scaffold(
 //          appBar: AppBar(
 //            centerTitle: true,
 //            title: Text("Add Task"),
@@ -142,271 +145,269 @@ class _AddTaskState extends State<AddTask> {
 //              )
 //            ],
 //          ),
-            body: SafeArea(
-              child: Form(
-                child: Container(
-                  height: MediaQuery.of(context).size.height - 20,
-                  width: MediaQuery.of(context).size.width,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 10,
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_back_ios, size: 24),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
+          body: SafeArea(
+            child: Form(
+              child: Container(
+                height: MediaQuery.of(context).size.height - 20,
+                width: MediaQuery.of(context).size.width,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 10,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back_ios, size: 24),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 20),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
 //                          Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                            SizedBox(height: 5),
-                            Row(
+                          SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                              Text("ICON", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                            ],
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("TITLE", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                                Text("ICON", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                              ],
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width - 100,
-                                    child: TextFormField(
-                                      controller: _titleController,
-                                      validator: (val) => val.isEmpty ? 'Enter an email' : null,
-                                      onChanged: (val) {
-                                        setState(() => _title = val);
-                                        print(_title);
-                                      },
-                                      textCapitalization: TextCapitalization.none,
-                                      decoration: InputDecoration(
+                                Container(
+                                  width: MediaQuery.of(context).size.width - 100,
+                                  child: TextFormField(
+                                    controller: _titleController,
+                                    validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                                    onChanged: (val) {
+                                      setState(() => _title = val);
+                                      print(_title);
+                                    },
+                                    textCapitalization: TextCapitalization.none,
+                                    decoration: InputDecoration(
 //                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
 //                            labelText: "Task Title",
-                                        prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                        focusColor: color['primaryColor'],
-                                        fillColor: Color(0xFFE0E0E0),
-                                        filled: true,
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                            borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                            borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                            borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
-                                        ),
-                                        hintText: 'Title',
+                                      prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
+                                      focusColor: color['backgroundColor'],
+                                      fillColor: color['backgroundColor'],
+                                      filled: true,
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
                                       ),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                      ),
+                                      border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                      ),
+                                      hintText: 'Title',
                                     ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          child: buildInput("t", 40.0)
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            Text("DESCRIPTION", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                            SizedBox(height: 5),
-                            TextFormField(
-                              controller: _descriptionController,
-                              minLines: 4,
-                              maxLines: 4,
-                              validator: (val) => val.isEmpty ? 'No description provided' : null,
-                              onChanged: (val) {
-                                setState(() => _description = val);
-                              },
-                              textCapitalization: TextCapitalization.none,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-//                            labelText: "Task Title",
-                                  prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                  focusColor: color['primaryColor'],
-                                  fillColor: Color(0xFFE0E0E0),
-                                  filled: true,
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
-                                  ),
-                                  hintText: 'Write down a small description'
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                                ),
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("TYPE", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                    Container(
+                                        child: buildInput("t", 40.0)
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Text("DESCRIPTION", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          SizedBox(height: 5),
+                          TextFormField(
+                            controller: _descriptionController,
+                            minLines: 4,
+                            maxLines: 4,
+                            validator: (val) => val.isEmpty ? 'No description provided' : null,
+                            onChanged: (val) {
+                              setState(() => _description = val);
+                            },
+                            textCapitalization: TextCapitalization.none,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+//                            labelText: "Task Title",
+                                prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
+                                focusColor: color['backgroundColor'],
+                                fillColor: color['backgroundColor'],
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                ),
+                                hintText: 'Write down a small description'
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text("TYPE", style: TextStyle(fontSize: 16, color: Colors.grey)),
 //                                SizedBox(height: 5),
-                                    Row(
-                                      children: [
-                                        Text("Personal"),
-                                        Switch(
-                                          activeColor: Colors.grey,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              shared = !shared;
+                                  Row(
+                                    children: [
+                                      Text("Personal"),
+                                      Switch(
+                                        activeColor: Colors.grey,
+                                        onChanged: (bool value) {
+                                          setState(() {
+                                            shared = !shared;
 //                                          if (repeated) {
 //                                            days_show = [false, false, false, false, false, false, false];
 //                                          }
 //                                          else {
 //                                            days_show = null;
 //                                          }
-                                            });
+                                          });
 
-                                          },
-                                          value: shared,
-                                        ),
-                                        Text("Group")
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("ALERT", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                                    SizedBox(height: 10),
-                                    GestureDetector(
-                                      onTap: () {
-                                        selectTime(context);
-                                      },
-                                      child: Text(_time != null ? _time.hour.toString() + ":" + _time.minute.toString() : "Select", style: TextStyle(fontSize: 18)),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            DefaultTabController(
-                              length: 2,
-                              child: Column(
-                                children: [
-                                  TabBar(
-                                    onTap: (index) {
-                                      if (index == 0) {
-                                        setState(() {
-                                          repeated = false;
-                                        });
-                                      }
-                                      else {
-                                        setState(() {
-                                          repeated = true;
-                                        });
-                                      }
-                                    },
-                                    labelColor: Colors.black,
-                                    tabs: [
-                                      Tab(text: "SINGLE TASK"),
-                                      Tab(text: "REPEATED TASK")
+                                        },
+                                        value: shared,
+                                      ),
+                                      Text("Group")
                                     ],
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 180,
-                                    child: TabBarView(
-                                      children: [
-                                        singleTask(),
-                                        repeatedTask(color)
-                                      ],
-                                    ),
                                   )
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        left: 15,
-                        child: FutureBuilder(
-                            future: streams.getCompleteUser(user.uid),
-                            builder: (context, snapshot) {
-                              print(snapshot.data);
-
-                              return RaisedButton(
-                                color: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-//                                      side: BorderSide(color: Colors.green)
-                                ),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width - 60,
-                                  height: 50,
-                                  child: Center(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.add, color: Colors.white),
-                                          SizedBox(width: 5),
-                                          Text("ADD TASK", style: TextStyle(color: Colors.white, fontSize: 18))
-                                        ],
-                                      )
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("ALERT", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                  SizedBox(height: 10),
+                                  GestureDetector(
+                                    onTap: () {
+                                      selectTime(context);
+                                    },
+                                    child: Text(_time != null ? _time.hour.toString() + ":" + _time.minute.toString() : "Select", style: TextStyle(fontSize: 18)),
                                   ),
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          DefaultTabController(
+                            length: 2,
+                            child: Column(
+                              children: [
+                                TabBar(
+                                  onTap: (index) {
+                                    if (index == 0) {
+                                      setState(() {
+                                        repeated = false;
+                                      });
+                                    }
+                                    else {
+                                      setState(() {
+                                        repeated = true;
+                                      });
+                                    }
+                                  },
+                                  labelColor: color['mainTextColor'],
+                                  tabs: [
+                                    Tab(text: "SINGLE TASK"),
+                                    Tab(text: "REPEATED TASK")
+                                  ],
                                 ),
-                                onPressed: () async {
-                                  var puid = user.uid;
-                                  var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-                                  var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-                                  var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
-                                  var title = _title;
-                                  var description = _description;
-                                  var date = _dateTime.millisecondsSinceEpoch;
-
-                                  var group_code = snapshot.data.groups[0].code;
-                                  var group_name = snapshot.data.groups[0].name;
-
-                                  addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
-
-                                  // Not the correct navigator
-                                  Navigator.pop(context);
-                                  setState(() {});
-                                },
-                              );
-                            }
-                        ),
+                                Container(
+                                  width: double.infinity,
+                                  height: 180,
+                                  child: TabBarView(
+                                    children: [
+                                      singleTask(),
+                                      repeatedTask(color)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Positioned(
-                        bottom: 0,
-                        child: (isShowSticker ? buildSticker() : Container()),
-                      )
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      left: 15,
+                      child: FutureBuilder(
+                          future: streams.getCompleteUser(user.uid),
+                          builder: (context, snapshot) {
+
+                            return RaisedButton(
+                              color: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+//                                      side: BorderSide(color: Colors.green)
+                              ),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 60,
+                                height: 50,
+                                child: Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.add, color: Colors.white),
+                                        SizedBox(width: 5),
+                                        Text("ADD TASK", style: TextStyle(color: Colors.white, fontSize: 18))
+                                      ],
+                                    )
+                                ),
+                              ),
+                              onPressed: () async {
+                                var puid = user.uid;
+                                var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                                var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                                var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+                                var title = _title;
+                                var description = _description;
+                                var date = _dateTime.millisecondsSinceEpoch;
+
+                                var group_code = snapshot.data.groups[0].code;
+                                var group_name = snapshot.data.groups[0].name;
+
+                                addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
+
+                                // Not the correct navigator
+                                Navigator.pop(context);
+                                setState(() {});
+                              },
+                            );
+                          }
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: (isShowSticker ? buildSticker() : Container()),
+                    )
+                  ],
                 ),
               ),
             ),
           ),
-          tag: "add_task"
-      ),
+        ),
+        tag: "add_task"
     );
   }
 
@@ -557,7 +558,6 @@ class _AddTaskState extends State<AddTask> {
           child: GestureDetector(
               onTap: () {
                 setState(() {
-                  print(isShowSticker);
                   isShowSticker = !isShowSticker;
                 });
               },

@@ -3,6 +3,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,17 +23,30 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   String _group_description = '';
   String error = '';
 
+  bool brightness = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
 
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-
+    
     createGroup(uid, group_name, group_description) async {
       try {
         var check = await DatabaseService(uid: uid).createGroup(uid, group_name, group_description);

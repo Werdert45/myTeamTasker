@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
@@ -39,10 +40,15 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
 
   String _name;
 
+  bool brightness = false;
 
   void initState() {
     super.initState();
     _controller = new TextEditingController(text: widget.user.name);
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   Future getImage() async {
@@ -73,12 +79,13 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
     var user = Provider.of<User>(context);
     _name = widget.user.name;
 
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
-
+    
 
     return new Scaffold(
         resizeToAvoidBottomInset: false,

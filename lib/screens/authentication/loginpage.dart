@@ -1,6 +1,7 @@
 import 'package:collaborative_repitition/components/button.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/services/auth.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +22,16 @@ class _LoginPageState extends State<LoginPage> {
   String _password = '';
   String _error = '';
 
+  bool brightness = false;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+  }
 
 
   @override
@@ -49,11 +59,13 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
 
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
+    
 
     return new Scaffold(
         resizeToAvoidBottomPadding: false,

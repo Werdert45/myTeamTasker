@@ -46,6 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isDark = false;
   bool sendNotifications = false;
 
+  bool brightness = false;
   // Set the standard settings
 //
 //  // Notifications
@@ -58,15 +59,28 @@ class _SettingsPageState extends State<SettingsPage> {
   bool changePassword = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+  }
+
+  @override
 
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+    
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
+    
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.dark,
       child: FutureBuilder(

@@ -1,5 +1,7 @@
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class UserSettings extends StatefulWidget {
   final name;
@@ -17,12 +19,17 @@ class _UserSettingsState extends State<UserSettings> {
   var name;
   var email;
   var password;
+  bool brightness = false;
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   @override
@@ -35,6 +42,14 @@ class _UserSettingsState extends State<UserSettings> {
   Widget build(BuildContext context) {
     var controller = new TextEditingController(text: widget.name);
     var controller_email = new TextEditingController(text: widget.email);
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+
+    var color = brightness ? darkmodeColor : lightmodeColor;
+
+    
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -55,8 +70,8 @@ class _UserSettingsState extends State<UserSettings> {
 //                labelText: "Name",
                 labelStyle: TextStyle(color: Colors.grey),
                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                focusColor: primaryColor,
-                fillColor: primaryColor,
+                focusColor: color['primaryColor'],
+                fillColor: color['primaryColor'],
 
               ),
             ),

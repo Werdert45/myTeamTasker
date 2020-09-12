@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
 import 'package:collaborative_repitition/services/functions/date-functions.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,6 +38,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   List _selectedEvents;
   DateTime _selectedDay;
 
+  bool brightness = false;
+
   final Map<DateTime, List> _events = {};
 
   final AuthService _auth = AuthService();
@@ -61,6 +64,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
     });
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   @override
@@ -75,10 +82,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     Map<String, dynamic> per_day = new Map();
 
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+    
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+    
 
     return Scaffold(
       body: SafeArea(

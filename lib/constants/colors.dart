@@ -40,12 +40,13 @@ bool darkModeOn = brightness == Brightness.dark;
 
 
 var darkmodeColor = {
+  'name': 'Dark',
   'primaryColorFocus': Colors.blue,
   'primaryColor': Color(0xFF05668D),
   'primaryColorHalf': Color(0xCC05668D),
   'secondaryColor': Color(0xFF028090),
   'foregroundColor': Color(0xFF028090),
-  'backgroundColor': Color(0xFFD8D8D8),
+  'backgroundColor': Color(0xFF303030),
 
   'boxColor': Color.fromRGBO(21, 105, 94, 1),
   'mainTextColor': Colors.white,
@@ -56,10 +57,11 @@ var darkmodeColor = {
   'textFieldFillColor': Color(0xFFE0E0E0),
   'tabColor': Colors.teal,
 
-  'taskColor': Color(0xFFE8EDED)
+  'taskColor': Color(0xFF232B2B)
 };
 
 var lightmodeColor = {
+  'name': 'Light',
   'primaryColorFocus': Colors.blue,
   'primaryColor': Color(0xFF05668D),
   'primaryColorHalf': Color(0xCC05668D),

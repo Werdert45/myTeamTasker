@@ -3,6 +3,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +25,8 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
 
   var _group_code;
 
+  bool brightness = false;
+
 
   @override
   void initState() {
@@ -33,16 +36,23 @@ class _SelectGroupPageState extends State<SelectGroupPage> {
     _group_code = "";
 
     _controller = new TextEditingController();
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
 
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
+    
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Container(

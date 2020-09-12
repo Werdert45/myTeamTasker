@@ -5,6 +5,7 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:emoji_picker/emoji_picker.dart';
@@ -40,6 +41,7 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
   var single_personal = false;
   var repeated_personal = false;
 
+  bool brightness = false;
 
   void initState() {
     super.initState();
@@ -54,6 +56,10 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
     _connectivity.initialise();
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
+    });
+
+    getDarkModeSetting().then((val) {
+      brightness = val;
     });
   }
 
@@ -79,11 +85,13 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
+    
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,

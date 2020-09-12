@@ -2,6 +2,7 @@ import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/group.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -27,6 +28,8 @@ class _GroupSettingsState extends State<GroupSettings> {
   var groupName;
   var groupDescription;
 
+  bool brightness = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -35,6 +38,9 @@ class _GroupSettingsState extends State<GroupSettings> {
     TextEditingController _groupNameController;
     TextEditingController _groupDescriptionController;
 
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
   }
 
 
@@ -50,11 +56,14 @@ class _GroupSettingsState extends State<GroupSettings> {
 
     var members = widget.group.members.values.toList();
     var user = Provider.of<User>(context);
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    getDarkModeSetting().then((val) {
+      brightness = val;
+    });
+    
 
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var color = brightness == Brightness.light ? lightmodeColor : darkmodeColor;
-
+    
     return Scaffold(
       body: SafeArea(
         child: Container(
