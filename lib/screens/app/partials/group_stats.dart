@@ -103,36 +103,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text("Finished Task History", style: TextStyle(fontSize: 18)),
-                                  SizedBox(height: 15),
-                                  Container(
-                                    height: 25,
-                                    child: ToggleButtons(
-                                      children: [
-                                        Text("Week"),
-                                        Text("Month")
-                                      ],
-                                      borderWidth: 0,
-                                      borderRadius: BorderRadius.circular(6),
-                                      selectedColor: Colors.greenAccent,
-                                      fillColor: Colors.grey,
-                                      splashColor: color['tabColor'],
-                                      isSelected: timeFrame,
-                                      onPressed: (int index) {
-                                        setState(() {
-                                          if (index == 0) {
-                                            timeFrame[1] = false;
-                                          }
-
-                                          else {
-                                            timeFrame[0] = false;
-                                          }
-
-                                          timeFrame[index] = !timeFrame[index];
-                                        });
-                                      },
-                                    ),
-                                  ),
-
+                                  SizedBox()
                                 ],
                               ),
                             ),

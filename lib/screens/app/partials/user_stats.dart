@@ -39,35 +39,7 @@ class _UserStatPageState extends State<UserStatPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text("Finished Task History", style: TextStyle(fontSize: 18)),
-                        Container(
-                          height: 25,
-                          child: ToggleButtons(
-                            children: [
-                              Text("Week"),
-                              Text("Month")
-                            ],
-                            borderWidth: 0,
-                            borderRadius: BorderRadius.circular(6),
-                            selectedColor: Colors.greenAccent,
-                            fillColor: Colors.grey,
-                            splashColor: Colors.blue,
-                            isSelected: timeFrame,
-                            onPressed: (int index) {
-                              setState(() {
-                                if (index == 0) {
-                                  timeFrame[1] = false;
-                                }
-
-                                else {
-                                  timeFrame[0] = false;
-                                }
-
-                                timeFrame[index] = !timeFrame[index];
-                              });
-                            },
-                          ),
-                        ),
-
+                        SizedBox()
                       ],
                     ),
                   ),

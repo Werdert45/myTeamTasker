@@ -7,7 +7,7 @@ import 'package:collaborative_repitition/services/functions/connectionFunctions.
 import 'package:collaborative_repitition/services/functions/progressbar.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
-
+import 'dart:io' as io;
 import 'package:connectivity/connectivity.dart';
 
 import 'package:firebase_image/firebase_image.dart';
@@ -119,10 +119,18 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: Padding(
                                 padding: EdgeInsets.only(top: 40, right: 15),
                                 child: Container(
-                                  width: 80,
-                                  height: 80,
+                                  width: 80.0,
+                                  height: 80.0,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(color: color['primaryColor']),
+                                      borderRadius: BorderRadius.all(Radius.circular(125.0)),
+                                      boxShadow: [
+                                        BoxShadow(blurRadius: 4.0, color: Colors.black)
+                                      ]),
+//                          child: Icon(Icons.person, size: 130, color: secondaryColor),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(180),
                                     child: FittedBox(
                                       fit: BoxFit.scaleDown,
                                       child: Align(
