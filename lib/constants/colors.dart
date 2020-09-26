@@ -69,8 +69,9 @@ var lightmodeColor = {
   'foregroundColor': Color(0xFF028090),
   'backgroundColor': Color(0xFFD8D8D8),
 
+
   'boxColor': Color.fromRGBO(21, 105, 94, 1),
-  'mainTextColor': Colors.white,
+  'mainTextColor': Colors.black,
   'selectedColor': Colors.green,
   'unselectedColor': Colors.red,
 

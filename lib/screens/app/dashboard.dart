@@ -214,7 +214,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                                     child: Container(
                                       width: double.infinity,
-                                      child: EmoIcon(refresh, tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, finished_count, tasks.length),
+                                      child: EmoIcon(refresh, tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, finished_count, tasks.length, color),
                                     ),
                                   );
                                 }

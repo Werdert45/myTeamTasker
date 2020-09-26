@@ -122,7 +122,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Padding(
-                            padding: EdgeInsets.only(left: 50, top: 18, bottom: 6, right: 35),
+                            padding: EdgeInsets.only(left: 35, top: 18, bottom: 6, right: 35),
                             child: Stack(
                               children: [
                                 Align(
@@ -175,7 +175,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           ),
                         ),
                       ),
-                      _buildEventList(current_user)
+                      _buildEventList(current_user, color)
                     ],
                   ),
                 );
@@ -186,7 +186,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  Widget _buildEventList(user) {
+  Widget _buildEventList(user, Map color) {
+    print(color);
+
     return _selectedEvents == null ?
         Padding(
           padding: const EdgeInsets.only(top: 50.0),
@@ -218,7 +220,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
-              child: EmoIcon(() {}, _selectedEvents[index]['task'], user.uid, _selectedEvents[index]['groups'], this, _selectedEvents[index]['tasks_history_pers'], _selectedEvents[index]['total_tasks'], _selectedEvents[index]['isDone'])
+              child: EmoIcon(
+                      () {},
+                  _selectedEvents[index]['task'],
+                  user.uid,
+                  _selectedEvents[index]['groups'],
+                  this,
+                  _selectedEvents[index]['tasks_history_pers'],
+                  _selectedEvents[index]['total_tasks'],
+                  _selectedEvents[index]['isDone'], color,
+              )
             );
           }
           else {

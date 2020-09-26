@@ -21,9 +21,10 @@ class EmoIcon extends StatefulWidget {
   final tasks_history_pers;
   final total_tasks;
   final count;
+  final Map color;
   final isDone;
 //
-  EmoIcon(this.notifyParent, this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, this.count, {this.isDone});
+  EmoIcon(this.notifyParent, this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, this.count, this.color, {this.isDone});
 
 
   @override
@@ -161,13 +162,12 @@ class EmoIconState extends State<EmoIcon> {
     repeated = widget.task.repeated;
     shared = widget.task.shared;
 
+    print("COLOUR");
+    print(widget.color);
+
     return FutureBuilder(
       future: getDarkModeSetting(),
       builder: (context, snapshot) {
-
-        var color = snapshot.data ? darkmodeColor : lightmodeColor;
-
-
         return Slidable(
           // Set the slidable to be able to be accepted when not checked, when checked show undo
             actionPane: SlidableDrawerActionPane(),
@@ -191,7 +191,7 @@ class EmoIconState extends State<EmoIcon> {
                               height: expanded ? 280.0 : 60.0,
                               duration: Duration(milliseconds: 500),
                               decoration: BoxDecoration(
-                                  color: color['taskColor'],
+                                  color: widget.color['taskColor'],
                                   border: widget.isDone == null ? checkedValue ? Border(
                                       bottom: BorderSide(
                                           color: Colors.green,
@@ -226,12 +226,12 @@ class EmoIconState extends State<EmoIcon> {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         SizedBox(height: 10),
-                                                        (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: color['primaryColor'], fontSize: 20, decoration: (widget.isDone == null) ? (checkedValue ? TextDecoration.lineThrough : null) : (widget.isDone) ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
+                                                        (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: widget.color['primaryColor'], fontSize: 20, decoration: (widget.isDone == null) ? (checkedValue ? TextDecoration.lineThrough : null) : (widget.isDone) ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
 //                      SizedBox(height: 3),
                                                         (widget.isDone == null) ? checkedValue ? (
-                                                          widget.task.shared ? Text("Finished by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: color['secondaryColor'], fontSize: 12)) :
-                                                          Text("Completed", style: TextStyle(color: color['secondaryColor'], fontSize: 12))) :
-                                                      Text("Not finished", style: TextStyle(color: color['secondaryColor'], fontSize: 12)) :
+                                                          widget.task.shared ? Text("Finished by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: widget.color['secondaryColor'], fontSize: 12)) :
+                                                          Text("Completed", style: TextStyle(color: widget.color['secondaryColor'], fontSize: 12))) :
+                                                      Text("Not finished", style: TextStyle(color: widget.color['secondaryColor'], fontSize: 12)) :
                                                           SizedBox()
                                                       ]
                                                   ),
@@ -330,11 +330,11 @@ class EmoIconState extends State<EmoIcon> {
                                                   return Padding(
                                                     padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 120),
                                                     child: Container(
-                                                      width: MediaQuery.of(context).size.width / 10,
-                                                      height: MediaQuery.of(context).size.width / 10,
+                                                      width: MediaQuery.of(context).size.width / 10.5,
+                                                      height: MediaQuery.of(context).size.width / 10.5,
                                                       decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.circular(5),
-                                                        color: days_show[index] ? color['selectedColor'] : color['unselectedColor'],
+                                                        color: days_show[index] ? widget.color['selectedColor'] : widget.color['unselectedColor'],
                                                       ),
                                                       child: Center(child: Text(days[index].substring(0,1))),
                                                     ),

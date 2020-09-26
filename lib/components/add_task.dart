@@ -106,10 +106,7 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
 
     var user = Provider.of<User>(context);
-
-    var color = brightness ? darkmodeColor : darkmodeColor;
-
-    
+    var color = brightness ? darkmodeColor : lightmodeColor;
 
     return Hero(
         child: Scaffold(
@@ -195,8 +192,8 @@ class _AddTaskState extends State<AddTask> {
 //                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
 //                            labelText: "Task Title",
                                       prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                      focusColor: color['backgroundColor'],
-                                      fillColor: color['backgroundColor'],
+                                      focusColor: color['textFieldFillColor'],
+                                      fillColor: color['textFieldFillColor'],
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(10),
@@ -241,8 +238,8 @@ class _AddTaskState extends State<AddTask> {
                                 contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
 //                            labelText: "Task Title",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: color['backgroundColor'],
-                                fillColor: color['backgroundColor'],
+                                focusColor: color['textFieldFillColor'],
+                                fillColor: color['textFieldFillColor'],
                                 filled: true,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),

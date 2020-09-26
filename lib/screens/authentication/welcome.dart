@@ -41,14 +41,14 @@ class _WelcomePageState extends State<WelcomePage> {
           child: Stack(
             children: [
               Positioned(
-                left: -60,
-                top: -60,
+                left: -50,
+                top: -50,
                 child: Container(
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
                         color: color['secondaryColor'],
-                        borderRadius: BorderRadius.circular(60.0)),
+                        borderRadius: BorderRadius.circular(80.0)),
                     child: SizedBox()
                 ),
               ),
@@ -96,7 +96,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     children: [
                       primaryRoundButton(color['primaryColor'], color['mainTextColor'], " LOG IN ", () { Navigator.pushNamed(context, '/login'); }, 260.0, 30.0),
                       SizedBox(height: 30),
-                      primaryRoundButton(color['secondaryColor'], color['mainTextColor'], "SIGN UP", () { Navigator.pushNamed(context, '/signup'); }, 260.0, 30.0),
+                      primaryRoundButton(color['primaryColor'], color['mainTextColor'], "SIGN UP", () { Navigator.pushNamed(context, '/signup'); }, 260.0, 30.0),
                       SizedBox(height: 100)
                     ],
                   )

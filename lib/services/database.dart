@@ -163,12 +163,13 @@ class Streams {
   }
 
   getCalendar(uid) async {
-
     final Map<DateTime, dynamic> per_day = new Map();
 
     // Get the user data and set model
     var userdata = await usersCollection.document(uid).get();
     var user = user_db.fromMap(userdata.data);
+
+
 
     // Check for the personal tasks
     var tasks = [];
@@ -313,6 +314,8 @@ class Streams {
           day_of_the_year = day_of_the_year.add(Duration(days: 1));
         }
       }
+//      print(tasks.length);
+      print(tasks[i].title);
     }
 
     // Return a map with the days of the next year 

@@ -24,7 +24,7 @@ Future<void> cancelAllNotifications() async {
 
 
 /// Add a notification (day, time, title, body)
-Future<void> addNotification(int id, int day, Time time, String title, String body) async {
+Future<void> addNotificationRepeated(int id, int day, Time time, String title, String body) async {
 
   var days = [Day.Monday, Day.Tuesday, Day.Wednesday, Day.Thursday, Day.Friday, Day.Saturday, Day.Sunday];
 
@@ -38,6 +38,7 @@ Future<void> addNotification(int id, int day, Time time, String title, String bo
   var iosChannelSpecifics = IOSNotificationDetails();
   var platformChannelSpecifics =
   NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+
   await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
     id,
     title,
@@ -47,6 +48,38 @@ Future<void> addNotification(int id, int day, Time time, String title, String bo
     platformChannelSpecifics,
     payload: 'Time to finish the task',
   );
+}
+
+/// Add a notification of a single task (if it is nearby the date
+Future<void> addNotificationSingle(int id, DateTime date, Time time, String title, String body) async {
+
+  var days = [Day.Monday, Day.Tuesday, Day.Wednesday, Day.Thursday, Day.Friday, Day.Saturday, Day.Sunday];
+
+  var androidChannelSpecifics = AndroidNotificationDetails(
+    'CHANNEL_ID ' + id.toString(),
+    'CHANNEL_NAME ' + id.toString(),
+    "CHANNEL_DESCRIPTION " + id.toString(),
+    importance: Importance.Max,
+    priority: Priority.High,
+  );
+  var iosChannelSpecifics = IOSNotificationDetails();
+  var platformChannelSpecifics =
+  NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+
+  // Check the difference whether it has to be added:
+  var difference = DateTime.now().difference(date).inDays;
+
+
+  if (difference < 7)
+  {
+    await flutterLocalNotificationsPlugin.schedule(
+      id,
+      title,
+      body,
+      date,
+      platformChannelSpecifics
+    );
+  }
 }
 
 
@@ -86,7 +119,7 @@ Future<void> setNotifications(List tasks) async {
 
           // TODO Also add the icon as an attachment so the user has an idea of what the task is
           // 3. Add the notification
-          addNotification(counter, day % 6, alert_time, task.title, "It is time to continue working on your tasks");
+          addNotificationRepeated(counter, day % 6, alert_time, task.title, "It is time to continue working on your tasks");
           counter += 1;
         }
       }
@@ -103,10 +136,10 @@ Future<void> setNotifications(List tasks) async {
         alert_time = Time(int.parse(temp_time[0]), int.parse(temp_time[1]), 0);
       }
 
-      var alert_day = DateTime.fromMillisecondsSinceEpoch(task.date).weekday;
+      var alert_date = DateTime.fromMillisecondsSinceEpoch(task.date);
 
       // 3. Add the notification
-      addNotification(counter, alert_day, alert_time, task.title, "It is time to continue working on your tasks");
+      addNotificationSingle(counter, alert_date, alert_time, task.title, "It is time to continue working on your tasks");
       counter += 1;
     }
   }
