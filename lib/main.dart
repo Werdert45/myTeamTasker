@@ -44,6 +44,7 @@ Future<void> main() async {
 
   var theme = await getDarkModeSetting();
 
+
   runApp(MyApp(store, theme ?? false));
 }
 
@@ -62,33 +63,38 @@ class MyApp extends StatelessWidget {
         defaultBrightness: theme ? Brightness.dark : Brightness.light,
         builder: (context, _brightness) {
           return FutureBuilder(
-            future: getDarkModeSetting(),
+            future: getPendingNotifications(),
             builder: (context, snapshot) {
+              return FutureBuilder(
+                future: getDarkModeSetting(),
+                builder: (context, snapshot) {
 
-              return AnnotatedRegion(
-                value: snapshot.data ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
-                child: StreamProvider<User>.value(
-                    value: AuthService().user,
-                    child: new MaterialApp(
-                      debugShowCheckedModeBanner: false,
-                      home: Wrapper(),
-                      theme: ThemeData(
-                          primarySwatch: Colors.teal,
-                          brightness: _brightness
-                      ),
-                      routes: <String, WidgetBuilder>{
-                        '/landingpage': (BuildContext context) => new MyApp(store, theme),
-                        '/signup': (BuildContext context) => new SignupPage(),
-                        '/login': (BuildContext context) => new LoginPage(),
-                        '/creategroup': (BuildContext context) => new CreateGroupPage(),
-                        '/selectgroup': (BuildContext context) => new SelectGroupPage(),
-                        '/homepage': (BuildContext context) => new HomePage(),
-                        '/taskmanager': (context) => new TaskManagerPage(),
-                      },
-                    )
-                ),
+                  return AnnotatedRegion(
+                    value: snapshot.data ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+                    child: StreamProvider<User>.value(
+                        value: AuthService().user,
+                        child: new MaterialApp(
+                          debugShowCheckedModeBanner: false,
+                          home: Wrapper(),
+                          theme: ThemeData(
+                              primarySwatch: Colors.teal,
+                              brightness: _brightness
+                          ),
+                          routes: <String, WidgetBuilder>{
+                            '/landingpage': (BuildContext context) => new MyApp(store, theme),
+                            '/signup': (BuildContext context) => new SignupPage(),
+                            '/login': (BuildContext context) => new LoginPage(),
+                            '/creategroup': (BuildContext context) => new CreateGroupPage(),
+                            '/selectgroup': (BuildContext context) => new SelectGroupPage(),
+                            '/homepage': (BuildContext context) => new HomePage(),
+                            '/taskmanager': (context) => new TaskManagerPage(),
+                          },
+                        )
+                    ),
+                  );
+                },
               );
-            },
+            }
           );
         },
       ),
