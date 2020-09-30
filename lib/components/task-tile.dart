@@ -283,7 +283,7 @@ class EmoIconState extends State<EmoIcon> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text("ALERT AT", style: TextStyle(fontSize: 14)),
-                                                    Text("19:05", style: TextStyle(fontSize: 24))
+                                                    Text(widget.task.alert_time, style: TextStyle(fontSize: 24))
                                                   ],
                                                 ),
                                                 (widget.isDone == null) ? checkedValue ? (widget.task.shared ?

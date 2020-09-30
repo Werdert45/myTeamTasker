@@ -76,7 +76,7 @@ var lightmodeColor = {
   'unselectedColor': Colors.red,
 
   'confirmColor': Color(0xFF05668D),
-  'textFieldFillColor': Color(0xFFE0E0E0),
+  'textFieldFillColor': Color(0xFF2D2D2D),
   'tabColor': Colors.teal,
 
   'taskColor': Color(0xFFE8EDED)

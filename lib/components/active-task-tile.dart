@@ -228,7 +228,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                   children: [
                                                     SizedBox(height: 10),
                                                     (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: color['primaryColor'], fontSize: 20))) : Text("Loading ...")),
-                                                    Text("8 AM to 12 AM", style: TextStyle(color: color['secondaryColor'], fontSize: 12))
+                                                    Text(widget.task.alert_time, style: TextStyle(color: color['secondaryColor'], fontSize: 12))
                                                   ]
                                               ),
                                               FlatButton(
@@ -300,7 +300,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
                                                               Text("ALERT AT", style: TextStyle(fontSize: 14)),
-                                                              Text("19:05", style: TextStyle(fontSize: 24))
+                                                              Text(widget.task.alert_time, style: TextStyle(fontSize: 24))
                                                             ],
                                                           ),
                                                           checkedValue ? (widget.task.shared ?
@@ -324,7 +324,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                             height: 1,
                                                             color: Colors.grey,
                                                           ),
-                                                          Text("REPEATED ON"),
+                                                          widget.task == repeated_task ? Text("REPEATED ON") : Text("SINGLE TASK"),
                                                           Container(
                                                             width: MediaQuery.of(context).size.width / 2 - 100,
                                                             height: 1,
@@ -333,7 +333,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                         ],
                                                       ),
                                                       SizedBox(height: 10),
-                                                      Container(
+                                                      widget.task == repeated_task ? Container(
                                                         width: MediaQuery.of(context).size.width - 40,
                                                         height: 40,
                                                         child: ListView.builder(
@@ -355,7 +355,8 @@ class ActiveTaskState extends State<ActiveTask> {
                                                             );
                                                           },
                                                         ),
-                                                      ),
+                                                      ) :
+                                                      Container(),
                                                       SizedBox(height: 54),
                                                       Padding(
                                                         padding: const EdgeInsets.only(left: 6, right: 10),

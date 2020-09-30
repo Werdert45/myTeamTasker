@@ -24,7 +24,7 @@ Future<void> cancelAllNotifications() async {
 
 
 /// Add a notification (day, time, title, body)
-Future<void> addNotificationRepeated(int id, int day, Time time, String title, String body) async {
+Future<void> addNotificationRepeated(int id, int day, Time time, String title, String body, Time alert_time) async {
 
   var days = [Day.Monday, Day.Tuesday, Day.Wednesday, Day.Thursday, Day.Friday, Day.Saturday, Day.Sunday];
 
@@ -44,7 +44,7 @@ Future<void> addNotificationRepeated(int id, int day, Time time, String title, S
     title,
     body, //null
     days[day],
-    time,
+    alert_time,
     platformChannelSpecifics,
     payload: 'Time to finish the task',
   );
@@ -69,9 +69,11 @@ Future<void> addNotificationSingle(int id, DateTime date, Time time, String titl
   // Check the difference whether it has to be added:
   var difference = DateTime.now().difference(date).inDays;
 
-
   if (difference < 7)
   {
+    var duration = Duration(hours: time.hour, minutes: time.minute);
+    date = date.add(duration);
+
     await flutterLocalNotificationsPlugin.schedule(
       id,
       title,
@@ -119,7 +121,7 @@ Future<void> setNotifications(List tasks) async {
 
           // TODO Also add the icon as an attachment so the user has an idea of what the task is
           // 3. Add the notification
-          addNotificationRepeated(counter, day % 6, alert_time, task.title, "It is time to continue working on your tasks");
+          addNotificationRepeated(counter, day % 6, alert_time, task.title, "It is time to continue working on your tasks", alert_time);
           counter += 1;
         }
       }
