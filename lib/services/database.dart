@@ -42,7 +42,7 @@ class Streams {
     for (var i = 0; i < user.personal_single_tasks.length; i++) {
       var task = await singleTasksCollection.document(user.personal_single_tasks[i]).get();
 
-      if (task.data != null) {
+      if (task.data != null && single_task.fromMap(task.data).title != null) {
         var spec_group = single_task.fromMap(task.data);
         single_full.add(spec_group);
       }

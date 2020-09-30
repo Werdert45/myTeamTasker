@@ -155,14 +155,12 @@ class _AddTaskState extends State<AddTask> {
                                       setState(() => _title = val);
                                       print(_title);
                                     },
+                                    style: TextStyle(
+                                      color: Colors.white
+                                    ),
                                     textCapitalization: TextCapitalization.none,
                                     decoration: InputDecoration(
-//                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-//                            labelText: "Task Title",
-                                      prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                      focusColor: color['textFieldFillColor'],
-                                      fillColor: color['textFieldFillColor'],
-                                      filled: true,
+
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(10),
                                           borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
@@ -201,13 +199,12 @@ class _AddTaskState extends State<AddTask> {
                             onChanged: (val) {
                               setState(() => _description = val);
                             },
+                            style: TextStyle(
+                              color: Colors.white
+                            ),
                             textCapitalization: TextCapitalization.none,
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-//                            labelText: "Task Title",
-                                prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                focusColor: color['textFieldFillColor'],
-                                fillColor: color['textFieldFillColor'],
                                 filled: true,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -219,7 +216,8 @@ class _AddTaskState extends State<AddTask> {
                                 ),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                    borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2),
+
                                 ),
                                 hintText: 'Write down a small description'
                             ),

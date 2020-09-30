@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
@@ -104,12 +107,18 @@ class _EditTaskState extends State<EditTask> {
 
 
   // Improve addTaskDB to also save to either group or personal + title not working
-  addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description) async {
+  addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description, old_task_id) async {
     if (repeated) {
+      await database.removeRepeatedTaskFromGroup(old_task_id, group_code);
+      await database.removeRepeatedTask(old_task_id);
+      
       await database.addRepeatedTask(taskID, puid, group_code, shared);
       await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
     }
     else {
+      await database.removeSingleTaskFromGroup(old_task_id, group_code);
+      await database.removeSingleTask(old_task_id);
+
       await database.addSingleTask(taskID, puid, group_code, shared);
       await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name, description);
     }
@@ -174,13 +183,10 @@ class _EditTaskState extends State<EditTask> {
                                   print(_title);
                                 },
                                 textCapitalization: TextCapitalization.none,
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),
                                 decoration: InputDecoration(
-//                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-//                            labelText: "Task Title",
-                                  prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                                  focusColor: color['primaryColor'],
-                                  fillColor: Color(0xFFE0E0E0),
-                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
@@ -220,13 +226,11 @@ class _EditTaskState extends State<EditTask> {
                           setState(() => _description = val);
                         },
                         textCapitalization: TextCapitalization.none,
+                        style: TextStyle(
+                            color: Colors.white
+                        ),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-//                            labelText: "Task Title",
-                            prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
-                            focusColor: color['primaryColor'],
-                            fillColor: Color(0xFFE0E0E0),
-                            filled: true,
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
@@ -366,6 +370,8 @@ class _EditTaskState extends State<EditTask> {
 
                               // TODO Dont think that this changes it, but rather adds one
 
+
+
                               var puid = user.uid;
                               var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
                               var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
@@ -373,12 +379,26 @@ class _EditTaskState extends State<EditTask> {
                               var title = _title;
                               var description = _description;
                               var date = _dateTime.millisecondsSinceEpoch;
-                              var group_code = snapshot.data.groups[0].code;
 
-                              var group_name = snapshot.data.groups[0].name;
+                              if (widget.task_data == repeated_task)
+                              {
+                                var group_code = snapshot.data.groups[0].code;
+                                var group_name = snapshot.data.groups[0].name;
+
+                                addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description, widget.task_data.id);
+                              }
+
+                              else {
+                                var group_code = "placeholder";
+                                var group_name = "placeholder";
+
+                                addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description, widget.task_data.id);
+                              }
 
 
-                              addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
+
+
+
 
                               // Not the correct navigator
                               Navigator.pop(context);

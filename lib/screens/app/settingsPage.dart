@@ -24,6 +24,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:async';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:provider/provider.dart';
 
@@ -353,6 +354,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ListTile(
               leading: Icon(Icons.library_books),
               title: Text("Licensing"),
+              onTap: _launchURL,
             )
             ],
           ),
@@ -362,5 +364,14 @@ class _SettingsPageState extends State<SettingsPage> {
         );
       }
     );
+  }
+}
+
+_launchURL() async {
+  const url = 'https://ianronk.nl/privacy_policy/taskcollab';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
