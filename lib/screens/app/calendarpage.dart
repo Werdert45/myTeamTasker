@@ -187,8 +187,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   Widget _buildEventList(user, Map color) {
-    print(color);
-
     return _selectedEvents == null ?
         Padding(
           padding: const EdgeInsets.only(top: 50.0),

@@ -110,38 +110,6 @@ class _AddTaskState extends State<AddTask> {
 
     return Hero(
         child: Scaffold(
-//          appBar: AppBar(
-//            centerTitle: true,
-//            title: Text("Add Task"),
-//            actions: [
-//              FutureBuilder(
-//                future: streams.getCompleteUser(user.uid),
-//                builder: (context, snapshot) {
-//                  print(snapshot.data);
-//
-//                  return IconButton(
-//                    icon: Icon(Icons.check, size: 30),
-//                    onPressed: () async {
-//                      var puid = user.uid;
-//                      var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-//                      var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-//                      var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
-//                      var title = _title;
-//                      var date = _dateTime.millisecondsSinceEpoch;
-//                      var group_code = snapshot.data.groups[0].code;
-//                      var group_name = snapshot.data.groups[0].name;
-//
-//                      addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name);
-//
-//                      // Not the correct navigator
-//                      Navigator.pop(context);
-//                      setState(() {});
-//                    },
-//                  );
-//                }
-//              )
-//            ],
-//          ),
           body: SafeArea(
             child: Form(
               child: Container(

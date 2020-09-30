@@ -42,8 +42,10 @@ class Streams {
     for (var i = 0; i < user.personal_single_tasks.length; i++) {
       var task = await singleTasksCollection.document(user.personal_single_tasks[i]).get();
 
-      var spec_group = single_task.fromMap(task.data);
-      single_full.add(spec_group);
+      if (task.data != null) {
+        var spec_group = single_task.fromMap(task.data);
+        single_full.add(spec_group);
+      }
     }
 
     for (var i = 0; i < user.personal_repeated_tasks.length; i++) {
@@ -186,8 +188,10 @@ class Streams {
     for (var i = 0; i < user.personal_single_tasks.length; i++) {
       var task = await singleTasksCollection.document(user.personal_single_tasks[i]).get();
 
-      var spec_group = single_task.fromMap(task.data);
-      single_full.add(spec_group);
+      if (task.data != null) {
+        var spec_group = single_task.fromMap(task.data);
+        single_full.add(spec_group);
+      }
     }
 
     for (var i = 0; i < user.personal_repeated_tasks.length; i++) {

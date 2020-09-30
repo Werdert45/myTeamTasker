@@ -81,95 +81,92 @@ class _StatisticsPageState extends State<StatisticsPage> {
     var color = brightness ? darkmodeColor : lightmodeColor;
 
     
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle.light,
-      child: SingleChildScrollView(
-        child: FutureBuilder(
-          future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              tasks = snapshot.data.tasks;
+    return SingleChildScrollView(
+      child: FutureBuilder(
+        future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            tasks = snapshot.data.tasks;
 
-              _controller = new TextEditingController(text: snapshot.data.name);
+            _controller = new TextEditingController(text: snapshot.data.name);
 
-              return Container(
-                  child: Stack(
-                    children: [
-                      Container(
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 30, bottom: 10, top: 30),
-                                child: Text("Statistics", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
-                              ),
+            return Container(
+                child: Stack(
+                  children: [
+                    Container(
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 30, bottom: 10, top: 30),
+                              child: Text("Statistics", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
                             ),
-                          ],
-                        ),
-                        height: MediaQuery.of(context).size.height / 6,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: color['primaryColor'],
-                            border: Border(
-                            ),
-                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
-                        ),
+                          ),
+                        ],
                       ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(height: MediaQuery.of(context).size.height / 8),
-                                DefaultTabController(
-                                  length: 2,
-                                  initialIndex: 0,
-                                  child: Column(
-                                    children: [
-                                      TabBar(
+                      height: MediaQuery.of(context).size.height / 6,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: color['primaryColor'],
+                          border: Border(
+                          ),
+                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(height: MediaQuery.of(context).size.height / 8),
+                              DefaultTabController(
+                                length: 2,
+                                initialIndex: 0,
+                                child: Column(
+                                  children: [
+                                    TabBar(
 
-                                        tabs: [
-                                          Tab(icon: Icon(Icons.account_circle, color: Colors.black)),
-                                          Tab(icon: Icon(Icons.group, color: Colors.black))
+                                      tabs: [
+                                        Tab(icon: Icon(Icons.account_circle, color: Colors.black)),
+                                        Tab(icon: Icon(Icons.group, color: Colors.black))
+                                      ],
+                                    ),
+                                    Container(
+                                      height: MediaQuery.of(context).size.height * 0.7,
+//                                      color: Colors.red,
+                                      child: TabBarView(
+                                        children: [
+                                          UserStatPage(snapshot.data.personal_history),
+                                          GroupStatPage(snapshot.data.group_history, snapshot.data.groups)
                                         ],
                                       ),
-                                      Container(
-                                        height: MediaQuery.of(context).size.height * 0.7,
-//                                      color: Colors.red,
-                                        child: TabBarView(
-                                          children: [
-                                            UserStatPage(snapshot.data.personal_history),
-                                            GroupStatPage(snapshot.data.group_history, snapshot.data.groups)
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
+                              ),
 
-                              ],
-                            )
-                        ),
+                            ],
+                          )
                       ),
-                      checkConnectivity(_source, context, true),
-                    ],
-                  )
-              );
-            }
-            else {
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          },
-        ),
+                    ),
+                    checkConnectivity(_source, context, true),
+                  ],
+                )
+            );
+          }
+          else {
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        },
       ),
     );
   }

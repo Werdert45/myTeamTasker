@@ -162,9 +162,6 @@ class EmoIconState extends State<EmoIcon> {
     repeated = widget.task.repeated;
     shared = widget.task.shared;
 
-    print("COLOUR");
-    print(widget.color);
-
     return FutureBuilder(
       future: getDarkModeSetting(),
       builder: (context, snapshot) {
