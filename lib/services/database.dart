@@ -96,6 +96,17 @@ class Streams {
     return userWithTasks;
   }
 
+
+
+
+
+
+
+
+
+
+
+
   getAllTasks(uid) async {
     var userdata = await usersCollection.document(uid).get();
 
@@ -350,6 +361,51 @@ class DatabaseService {
   final CollectionReference groupsCollection = Firestore.instance.collection('groups');
   final CollectionReference repeatedTasksCollection = Firestore.instance.collection('repeated_tasks');
   final CollectionReference singleTasksCollection = Firestore.instance.collection('single_tasks');
+
+  Future addGroupToUser(String code, puid, name) async {
+    code = code.toUpperCase();
+
+    var valid = await groupsCollection.document(code).get();
+
+    if (valid.data == null) {
+      return "error";
+    }
+
+    else if (valid.data is Map){
+      // Add the group to the user and the user to the group
+      try {
+        var user = await usersCollection.document(puid).get();
+        var group_snap = await groupsCollection.document(code).get();
+
+
+        var group_data = group.fromMap(group_snap.data);
+
+
+        Map members_data = group_data.members;
+        members_data[puid] = name;
+
+
+        await groupsCollection.document(code).updateData({
+          'members': members_data,
+        });
+
+        await usersCollection.document(puid).setData({
+          'groups': {code: group_data.name}
+        }, merge: true);
+
+        return group_data;
+      } catch (e) {
+        print(e);
+        return "error";
+      }
+    }
+
+    else {
+      return "error";
+    }
+
+  }
+
 
   Future addRepeatedTask(taskID, puid, group_id, shared) async {
     if (shared) {

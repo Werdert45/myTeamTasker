@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/main.dart';
+import 'package:collaborative_repitition/models/group.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/notifications_lib/builder/RemindersListViewBuilder.dart';
 import 'package:collaborative_repitition/notifications_lib/models/index.dart';
@@ -41,12 +42,17 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final AuthService _auth = AuthService();
   final userManagement = UserManagement();
+  final DatabaseService database = DatabaseService();
 
 
+  TextEditingController _groupCodeController;
+  var _groupCode = "";
+  List groupsList = [];
 
   bool isDark = false;
   bool sendNotifications = false;
 
+  bool wrongGroupCode = false;
   bool brightness = false;
   // Set the standard settings
 //
@@ -81,6 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
+    groupsList = widget.data.groups;
     
     return FutureBuilder(
       future: initSettings(),
@@ -332,22 +339,81 @@ class _SettingsPageState extends State<SettingsPage> {
                         ],
                       ),
                       Container(
-                          height: 60.0 * widget.data.groups.length + 30.0,
+                          height: 60.0 * groupsList.length + 0.0,
                           child: ListView.builder(
-                            itemCount: widget.data.groups.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: groupsList.length,
                             itemBuilder: (context, index) {
-
                               return ListTile(
                                 leading: Icon(Icons.group),
-                                title: Text(widget.data.groups[index].name),
+                                title: Text(groupsList[index].name),
                                 trailing: Icon(Icons.arrow_forward_ios, size: 12),
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => GroupSettings(group: widget.data.groups[index])));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => GroupSettings(group: groupsList[index])));
                                 },
                               );
                             },
                           )
                       ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 80,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _groupCodeController,
+                                validator: (val) => val.isEmpty ? 'No description provided' : null,
+                                onChanged: (val) {
+                                  _groupCode = val;
+                                },
+                                textCapitalization: TextCapitalization.none,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+//                            labelText: "Task Title",
+                                  prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
+                                  focusColor: color['primaryColor'],
+                                  fillColor: Color(0xFFE0E0E0),
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
+                                  ),
+                                    hintText: 'Insert Group Code'
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            RaisedButton(child: Text("Test"), onPressed: () async {
+                              var result = await database.addGroupToUser(_groupCode, user.uid, widget.data.name);
+                              print(result != "error");
+
+                              if (result != "error")
+                              {
+                                setState(() {
+                                  groupsList = groupsList + [result];
+                                });
+
+                              }
+                              else {
+                                setState(() {
+                                  wrongGroupCode = true;
+                                });
+                              }
+                            })
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
                       Container(
                           width: MediaQuery.of(context).size.width - 50,
                           height: 1,
