@@ -85,15 +85,17 @@ class _SettingsPageState extends State<SettingsPage> {
     return FutureBuilder(
       future: initSettings(),
       builder: (context, snapshot) {
-        isDark = snapshot.data[0];
-        sendNotifications = snapshot.data[2];
+        if (snapshot.connectionState == ConnectionState.done) {
 
-        return Scaffold(
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                child: Column(
+          isDark = snapshot.data[0];
+          sendNotifications = snapshot.data[2];
+
+          return Scaffold(
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                  child: Column(
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width - 40,
@@ -133,8 +135,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                           fit: BoxFit.scaleDown,
                                           child: Align(
                                               alignment: Alignment.center,
-                                              heightFactor: 0.5,
-                                              widthFactor: 1,
+                                              heightFactor: 1,
+                                              widthFactor: 0.5,
                                               child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.data.profile_picture.toString()))),
                                         ),
                                       ),
@@ -185,183 +187,194 @@ class _SettingsPageState extends State<SettingsPage> {
                           children: ListTile.divideTiles(
                               context: context,
                               tiles: [
-                          ListTile(
-                          leading: Icon(Icons.brightness_3),
-                          title: Text("Dark Mode"),
-                          trailing: Switch(
-                            value: isDark,
-                            onChanged: (value) {
-                              if (value) {
-                                ThemeBuilder.of(context).changeTheme(Brightness.dark);
-                              }
+                                ListTile(
+                                  leading: Icon(Icons.brightness_3),
+                                  title: Text("Dark Mode"),
+                                  trailing: Switch(
+                                    value: isDark,
+                                    onChanged: (value) {
+                                      if (value) {
+                                        ThemeBuilder.of(context).changeTheme(Brightness.dark);
+                                      }
 
-                              else {
-                                ThemeBuilder.of(context).changeTheme(Brightness.light);
-                              }
+                                      else {
+                                        ThemeBuilder.of(context).changeTheme(Brightness.light);
+                                      }
 
-                              darkModeToSF(value);
+                                      darkModeToSF(value);
 
-                              setState(() {
-                                isDark = value;
-                              });
-                            },
-                            activeTrackColor: color['primaryColorFocus'],
-                            activeColor: color['primaryColor'],
-                          ),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.language),
-                          title: Text("Language"),
-                          trailing: Text("English"),
-                        ),
-                        ListTile(
-                            onTap: () async {
-                              await _auth.signOut();
-                              Navigator.pushReplacementNamed(context, '/landingpage');
-                            },
-                            leading: Icon(Icons.exit_to_app),
-                        title: Text("Logout"),
-                        trailing: Icon(Icons.arrow_forward_ios, size: 12,),
-                      )
-                    ]
-                ).toList(),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 2 - 70,
-                  height: 1,
-                  color: Colors.grey,
-                ),
-                Text("Personal"),
-                Container(
-                  width: MediaQuery.of(context).size.width / 2 - 70,
-                  height: 1,
-                  color: Colors.grey,
-                )
-              ],
-            ),
-            Container(
-              height: changePassword ? 400 : 200,
-              width: MediaQuery.of(context).size.width,
-              child: ListView(
-                primary: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: ListTile.divideTiles(
-                    context: context,
-                    tiles: [
-                      ListTile(
-                        leading: Icon(Icons.notifications),
-                        title: Text("Notifications"),
-                        trailing: Switch(
-                          value: sendNotifications,
-                          onChanged: (value) {
-                            notificationsToSF(value);
-
-                            setState(() {
-                              sendNotifications = value;
-                            });
-                          },
-                          activeTrackColor: color['primaryColorFocus'],
-                          activeColor: color['primaryColor'],
+                                      setState(() {
+                                        isDark = value;
+                                      });
+                                    },
+                                    activeTrackColor: color['primaryColorFocus'],
+                                    activeColor: color['primaryColor'],
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Icon(Icons.language),
+                                  title: Text("Language"),
+                                  trailing: Text("English"),
+                                ),
+                                ListTile(
+                                  onTap: () async {
+                                    await _auth.signOut();
+                                    Navigator.pushReplacementNamed(context, '/landingpage');
+                                  },
+                                  leading: Icon(Icons.exit_to_app),
+                                  title: Text("Logout"),
+                                  trailing: Icon(Icons.arrow_forward_ios, size: 12,),
+                                )
+                              ]
+                          ).toList(),
                         ),
                       ),
-                      ListTile(
-                        leading: Icon(Icons.email),
-                        title: Text("Change email"),
-                        trailing: Container(
-                          width: 155,
-                          height: 30,
-                          child: Row(
-                            children: [
-                              Text(widget.data.email.toLowerCase()),
-                              SizedBox(width: 4,),
-                              Icon(Icons.arrow_forward_ios, size: 12,)
-                            ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2 - 70,
+                            height: 1,
+                            color: Colors.grey,
                           ),
-                        ),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeEmail(email: widget.data.email)));
-                        },
+                          Text("Personal"),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2 - 70,
+                            height: 1,
+                            color: Colors.grey,
+                          )
+                        ],
                       ),
-                      ListTile(
-                        leading: Icon(Icons.lock),
-                        title: Text("Change password"),
-                        trailing: Container(
-                          width: 94,
-                          height: 30,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: Text("************"),
-                              ),
-                              SizedBox(width: 4,),
-                              Icon(Icons.arrow_forward_ios, size: 12,)
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword(email: widget.data.email)));
-                        },
-                      ),
+                      Container(
+                        height: changePassword ? 400 : 200,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView(
+                          primary: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: ListTile.divideTiles(
+                              context: context,
+                              tiles: [
+                                ListTile(
+                                  leading: Icon(Icons.notifications),
+                                  title: Text("Notifications"),
+                                  trailing: Switch(
+                                    value: sendNotifications,
+                                    onChanged: (value) {
+                                      notificationsToSF(value);
+
+                                      setState(() {
+                                        sendNotifications = value;
+                                      });
+                                    },
+                                    activeTrackColor: color['primaryColorFocus'],
+                                    activeColor: color['primaryColor'],
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Icon(Icons.email),
+                                  title: Text("Change email"),
+                                  trailing: Container(
+                                    width: 155,
+                                    height: 30,
+                                    child: Row(
+                                      children: [
+                                        Text(widget.data.email.toLowerCase()),
+                                        SizedBox(width: 4,),
+                                        Icon(Icons.arrow_forward_ios, size: 12,)
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeEmail(email: widget.data.email)));
+                                  },
+                                ),
+                                ListTile(
+                                  leading: Icon(Icons.lock),
+                                  title: Text("Change password"),
+                                  trailing: Container(
+                                    width: 94,
+                                    height: 30,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 4.0),
+                                          child: Text("***********"),
+                                        ),
+                                        SizedBox(width: 4,),
+                                        Icon(Icons.arrow_forward_ios, size: 12,)
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword(email: widget.data.email)));
+                                  },
+                                ),
 //                  changePassword ? Container(height: 200, width: double.infinity, color: Colors.red) : SizedBox()
-                    ]
-                ).toList(),
+                              ]
+                          ).toList(),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2 - 100,
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                          Text("Manage Groups"),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2 - 100,
+                            height: 1,
+                            color: Colors.grey,
+                          )
+                        ],
+                      ),
+                      Container(
+                          height: 60.0 * widget.data.groups.length + 30.0,
+                          child: ListView.builder(
+                            itemCount: widget.data.groups.length,
+                            itemBuilder: (context, index) {
+
+                              return ListTile(
+                                leading: Icon(Icons.group),
+                                title: Text(widget.data.groups[index].name),
+                                trailing: Icon(Icons.arrow_forward_ios, size: 12),
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => GroupSettings(group: widget.data.groups[index])));
+                                },
+                              );
+                            },
+                          )
+                      ),
+                      Container(
+                          width: MediaQuery.of(context).size.width - 50,
+                          height: 1,
+                          color: Colors.grey
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.library_books),
+                        title: Text("Licensing"),
+                        onTap: _launchURL,
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 2 - 100,
-                  height: 1,
-                  color: Colors.grey,
-                ),
-                Text("Manage Groups"),
-                Container(
-                  width: MediaQuery.of(context).size.width / 2 - 100,
-                  height: 1,
-                  color: Colors.grey,
-                )
-              ],
-            ),
-            Container(
-              height: 60.0 * widget.data.groups.length + 30.0,
-              child: ListView.builder(
-                itemCount: widget.data.groups.length,
-                itemBuilder: (context, index) {
+          );
+        }
 
-                  return ListTile(
-                    leading: Icon(Icons.group),
-                    title: Text(widget.data.groups[index].name),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 12),
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => GroupSettings(group: widget.data.groups[index])));
-                    },
-                  );
-                },
-              )
+        else {
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-            Container(
-                width: MediaQuery.of(context).size.width - 50,
-                height: 1,
-                color: Colors.grey
-            ),
-            ListTile(
-              leading: Icon(Icons.library_books),
-              title: Text("Licensing"),
-              onTap: _launchURL,
-            )
-            ],
-          ),
-        ),
-        ),
-        ),
-        );
+          );
+        }
       }
     );
   }

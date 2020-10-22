@@ -7,16 +7,12 @@ import 'package:collaborative_repitition/services/functions/connectionFunctions.
 import 'package:collaborative_repitition/services/functions/progressbar.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
-import 'dart:io' as io;
 import 'package:connectivity/connectivity.dart';
 
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../components/task-tile.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import '../../services/auth.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -55,7 +51,6 @@ class _DashboardPageState extends State<DashboardPage> {
       setState(() => _source = source);
     });
 
-
     getDarkModeSetting().then((val) {
       brightness = val;
     });
@@ -78,7 +73,6 @@ class _DashboardPageState extends State<DashboardPage> {
     getDarkModeSetting().then((val) {
       brightness = val;
     });
-    
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
@@ -89,7 +83,6 @@ class _DashboardPageState extends State<DashboardPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var tasks = snapshot.data.tasks;
-
             var finished_tasks = progressBar(tasks);
             var finished_count = finished_tasks[1].length;
 
@@ -131,14 +124,11 @@ class _DashboardPageState extends State<DashboardPage> {
 //                          child: Icon(Icons.person, size: 130, color: secondaryColor),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(180),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Align(
-                                          alignment: Alignment.center,
-                                          heightFactor: 0.5,
-                                          widthFactor: 1,
-                                          child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + snapshot.data.profile_picture.toString()))),
-                                    ),
+                                    child: Align(
+                                        alignment: Alignment.center,
+                                        heightFactor: 1,
+                                        widthFactor: 0.5,
+                                        child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + snapshot.data.profile_picture.toString()))),
                                   ),
                                 )
                             ),
@@ -214,7 +204,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                                     child: Container(
                                       width: double.infinity,
-                                      child: EmoIcon(refresh, tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, finished_count, tasks.length, color),
+                                      child: EmoIcon(snapshot.data, refresh, tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, finished_count, tasks.length, color),
                                     ),
                                   );
                                 }

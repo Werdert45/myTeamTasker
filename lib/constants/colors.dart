@@ -5,40 +5,6 @@ import 'package:flutter/scheduler.dart';
 var brightness = SchedulerBinding.instance.window.platformBrightness;
 bool darkModeOn = brightness == Brightness.dark;
 
-
-/// First color palette
-//var primaryColor = Color(0xFF572f8c);
-//var primaryColor = darkModeOn ? Color.fromRGBO(21, 105, 94, 1) : Colors.white;
-//var primaryColor = Color.fromRGBO(21, 105, 94, 1);
-//var secondaryColor = Color(0xFFc6bed2);
-//
-//var boxColor = Color.fromRGBO(21, 105, 94, 1);
-//var mainTextColor = Colors.white;
-//var selectedColor = Colors.green;
-//var unselectedColor = Colors.red;
-//var confirmColor = Colors.green;
-//var tabColor = Colors.teal;
-
-
-
-/// Second color palette
-//var primaryColorFocus = Colors.blue;
-//var primaryColor = Color(0xFF26315A);
-//var primaryColorHalf = Color(0xCC26315A);
-//var secondaryColor = Color(0xFF6165E1);
-//var foregroundColor = Color(0xFFEF9C80);
-//var backgroundColor = Color(0xFFD8D8D8);
-//
-//var boxColor = Color.fromRGBO(21, 105, 94, 1);
-//var mainTextColor = Colors.white;
-//var selectedColor = Colors.green;
-//var unselectedColor = Colors.red;
-//// Color of confirm/change buttons
-//var confirmColor = primaryColor;
-//var textFieldFillColor = Color(0xFFE0E0E0);
-//var tabColor = Colors.teal;
-
-
 var darkmodeColor = {
   'name': 'Dark',
   'primaryColorFocus': Colors.blue,

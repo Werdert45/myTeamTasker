@@ -68,7 +68,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                         ),
                       ),
                       Container(
-                        width: 111,
+                        width: 118,
                         child: Row(
                           children: [
                             Icon(Icons.pie_chart, color: Colors.black),

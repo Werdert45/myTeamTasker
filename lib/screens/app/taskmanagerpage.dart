@@ -98,82 +98,121 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   tasks = snapshot.data.tasks;
-                  return Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 30, top: 20),
-                                      child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              height: 120,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: color['primaryColor'],
-                                  border: Border(
-                                  ),
-                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
-                              ),
-                            ),
 
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      new OutlineButton(
-                                          child: Row(
-                                            children: <Widget>[
-//                                              IconButton(icon: Icon(Icons.account_circle)),
-                                              Text("Personal Tasks"),
-//                                              SizedBox(width: 8)
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              showPersonal = true;
-                                            });
-                                          },
-                                          color: showPersonal ? Colors.blue : Colors.white,
-                                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+
+                  if (connected(_source)) {
+                    return Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 30, top: 20),
+                                        child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
                                       ),
-                                      SizedBox(width: 40),
-                                      new OutlineButton(
-                                          child: Row(
-                                            children: <Widget>[
-//                                              IconButton(icon: Icon(Icons.group)),
-                                              Text("Group Tasks"),
-//                                                SizedBox(width: 8)
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              showPersonal = false;
-                                            });
-                                          },
-                                          color: !showPersonal ? Colors.blue : Colors.white,
-                                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
-                                      ),
-                                    ],
-                                  )
+                                    ),
+                                  ],
+                                ),
+                                height: 120,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: color['primaryColor'],
+                                    border: Border(
+                                    ),
+                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                                ),
                               ),
-                            ),
-                            showPersonal ? PersonalPage(snapshot, user, color) : GroupPage(snapshot, user, color),
-                          ],
-                        ),
-                        checkConnectivity(_source, context, true),
-                      ]
-                  );
+
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Container(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        new OutlineButton(
+                                            child: Row(
+                                              children: <Widget>[
+//                                              IconButton(icon: Icon(Icons.account_circle)),
+                                                Text("Personal Tasks"),
+//                                              SizedBox(width: 8)
+                                              ],
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                showPersonal = true;
+                                              });
+                                            },
+                                            color: showPersonal ? Colors.blue : Colors.white,
+                                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                                        ),
+                                        SizedBox(width: 40),
+                                        new OutlineButton(
+                                            child: Row(
+                                              children: <Widget>[
+//                                              IconButton(icon: Icon(Icons.group)),
+                                                Text("Group Tasks"),
+//                                                SizedBox(width: 8)
+                                              ],
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                showPersonal = false;
+                                              });
+                                            },
+                                            color: !showPersonal ? Colors.blue : Colors.white,
+                                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                                        ),
+                                      ],
+                                    )
+                                ),
+                              ),
+                              showPersonal ? PersonalPage(snapshot.data, user, color) : GroupPage(snapshot.data, user, color),
+                            ],
+                          ),
+                          checkConnectivity(_source, context, true),
+                        ]
+                    );
+                  }
+
+                  else {
+                    return Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 30, top: 20),
+                                        child: Text("Task Manager", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                height: 120,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: color['primaryColor'],
+                                    border: Border(
+                                    ),
+                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                                ),
+                              ),
+                              Text("Offline, manage your tasks later, when online again.")
+                            ],
+                          ),
+                          checkConnectivity(_source, context, true),
+                        ]
+                    );
+                  }
                 }
                 else {
                   return Container(
@@ -202,12 +241,12 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
           padding: EdgeInsets.all(0),
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: snapshot.data.tasks.length,
+            itemCount: snapshot.tasks.length,
             itemBuilder: (context, index) {
               if (tasks[index].shared) {
                 return Container(
                   width: double.infinity,
-                  child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
+                  child: ActiveTask(tasks[index], user.uid, snapshot.groups[0], this, snapshot),
                 );
               }
               else {
@@ -231,12 +270,12 @@ class _TaskManagerPageState extends State<TaskManagerPage> {
           padding: EdgeInsets.all(0),
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: snapshot.data.tasks.length,
+            itemCount: snapshot.tasks.length,
             itemBuilder: (context, index) {
               if (!tasks[index].shared) {
                 return Container(
                   width: double.infinity,
-                  child: ActiveTask(tasks[index], user.uid, snapshot.data.groups[0], this),
+                  child: ActiveTask(tasks[index], user.uid, snapshot.groups[0], this, snapshot),
                 );
               }
               else {

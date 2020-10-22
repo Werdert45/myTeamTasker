@@ -4,7 +4,6 @@ import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 
@@ -12,6 +11,10 @@ import 'package:provider/provider.dart';
 
 
 class AddTask extends StatefulWidget {
+  final user_data;
+
+  AddTask(this.user_data);
+
 
   @override
   _AddTaskState createState() => _AddTaskState();
@@ -21,6 +24,7 @@ class _AddTaskState extends State<AddTask> {
   @override
   final Streams streams = Streams();
 
+  bool without_errors = true;
   bool isShowSticker;
   var categories;
   TimeOfDay _time = null;
@@ -37,6 +41,9 @@ class _AddTaskState extends State<AddTask> {
 
   String _title = "";
   String _description = "";
+  var _group_value;
+
+
 
   final DatabaseService database = DatabaseService();
 
@@ -91,8 +98,6 @@ class _AddTaskState extends State<AddTask> {
 
   // Improve addTaskDB to also save to either group or personal + title not working
   addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description) async {
-
-
     if (repeated) {
       await database.addRepeatedTask(taskID, puid, group_code, shared);
       await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
@@ -107,6 +112,25 @@ class _AddTaskState extends State<AddTask> {
 
     var user = Provider.of<User>(context);
     var color = brightness ? darkmodeColor : lightmodeColor;
+
+//    _group_value = {
+////      "name": widget.user_data.groups[0].name,
+////      "value": 0
+////    };
+
+    List _groups = [];
+
+    int group_length = widget.user_data.groups.length;
+    for (int i=0; i<group_length; i++) {
+      _groups.add(
+          [
+            widget.user_data.groups[i].name,
+            i
+      ]
+      );
+    }
+
+    _group_value = _groups[0][1];
 
     return Hero(
         child: Scaffold(
@@ -142,7 +166,7 @@ class _AddTaskState extends State<AddTask> {
                             ],
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width,
+//                            width: MediaQuery.of(context).size.width,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -156,7 +180,7 @@ class _AddTaskState extends State<AddTask> {
                                       print(_title);
                                     },
                                     style: TextStyle(
-                                      color: Colors.white
+                                      color: color['mainTextColor']
                                     ),
                                     textCapitalization: TextCapitalization.none,
                                     decoration: InputDecoration(
@@ -200,12 +224,12 @@ class _AddTaskState extends State<AddTask> {
                               setState(() => _description = val);
                             },
                             style: TextStyle(
-                              color: Colors.white
+                              color: color['mainTextColor']
                             ),
                             textCapitalization: TextCapitalization.none,
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                filled: true,
+//                                filled: true,
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide(color: Color(0xFFE0E0E0), width: 2)
@@ -231,7 +255,6 @@ class _AddTaskState extends State<AddTask> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text("TYPE", style: TextStyle(fontSize: 16, color: Colors.grey)),
-//                                SizedBox(height: 5),
                                   Row(
                                     children: [
                                       Text("Personal"),
@@ -240,12 +263,7 @@ class _AddTaskState extends State<AddTask> {
                                         onChanged: (bool value) {
                                           setState(() {
                                             shared = !shared;
-//                                          if (repeated) {
-//                                            days_show = [false, false, false, false, false, false, false];
-//                                          }
-//                                          else {
-//                                            days_show = null;
-//                                          }
+
                                           });
 
                                         },
@@ -271,6 +289,31 @@ class _AddTaskState extends State<AddTask> {
                               )
                             ],
                           ),
+                          shared ? Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 15),
+                                Text("Choose which Group this applies to"),
+                                DropdownButton(
+                                    value: _group_value,
+                                    items: _groups.map<DropdownMenuItem>((value) =>
+                                    new DropdownMenuItem(
+                                      value: value[1],
+                                      child: new Text(value[0]),
+                                    )
+                                    ).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _group_value = value[1];
+                                      });
+                                    })
+                              ],
+                            )
+                          )
+                              :
+                          SizedBox(height: 80),
                           SizedBox(height: 10),
                           DefaultTabController(
                             length: 2,
@@ -311,6 +354,26 @@ class _AddTaskState extends State<AddTask> {
                         ],
                       ),
                     ),
+                    without_errors ? SizedBox()
+                        :
+                        GestureDetector(
+                          child: Container(
+                              color: Colors.red,
+                              width: MediaQuery.of(context).size.width,
+                              height: 40,
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  child: Center(
+                                      child: Text("Not able to add task. One or more fields were not filled in")
+                                  )
+                              )
+                          ),
+                          onTap: () {
+                            setState(() {
+                              without_errors = true;
+                            });
+                          }
+                        ),
                     Positioned(
                       bottom: 10,
                       left: 15,
@@ -339,22 +402,35 @@ class _AddTaskState extends State<AddTask> {
                                 ),
                               ),
                               onPressed: () async {
-                                var puid = user.uid;
-                                var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-                                var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-                                var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
-                                var title = _title;
-                                var description = _description;
-                                var date = _dateTime.millisecondsSinceEpoch;
+                                if (_title != "" && _description != "") {
+                                  var puid = user.uid;
+                                  var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                                  var alertTime = "";
+                                  if (_time == null) {
+                                    alertTime = "13:59";
+                                  }
+                                  else {
+                                    alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                                  }
+                                  var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+                                  var title = _title;
+                                  var description = _description;
+                                  var date = _dateTime.millisecondsSinceEpoch;
 
-                                var group_code = snapshot.data.groups[0].code;
-                                var group_name = snapshot.data.groups[0].name;
+                                  var group_code = snapshot.data.groups[_group_value].code;
+                                  var group_name = snapshot.data.groups[_group_value].name;
 
-                                addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
+                                  addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
 
-                                // Not the correct navigator
-                                Navigator.pop(context);
-                                setState(() {});
+                                  // Not the correct navigator
+                                  Navigator.pop(context);
+                                  setState(() {});
+                                }
+                                else {
+                                  setState(() {
+                                    without_errors = false;
+                                  });
+                                }
                               },
                             );
                           }
@@ -388,45 +464,15 @@ class _AddTaskState extends State<AddTask> {
               Text("SELECT DATE", style: TextStyle(fontSize: 16, color: Colors.grey)),
               SizedBox(height: 15),
               GestureDetector(
-                child: Text(_dateTime.day.toString() + " / " + months_in_year[_dateTime.month - 1] + " / " + _dateTime.year.toString(), style: TextStyle(fontSize: 18)),
+                child: Text(_dateTime.day.toString() + " / " + months_in_year[_dateTime.month] + " / " + _dateTime.year.toString(), style: TextStyle(fontSize: 18)),
                 onTap: () {
                   selectDate(context);
                 },
               )
-            ],
-          ),
-//          Column(
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            children: [
-//              SizedBox(height: 20),
-//              Text("ASSIGN TO", style: TextStyle(fontSize: 16, color: Colors.grey)),
-//              Container(
-////                height: 100,
-//                child: DropdownButton<String>(
-//                  value: dropdownValue,
-//                  icon: Icon(Icons.keyboard_arrow_down),
-//                  iconSize: 24,
-//                  elevation: 16,
-//                  style: TextStyle(color: Colors.deepPurple),
-//                  onChanged: shared ? (String newValue) {
-//                    setState(() {
-//                      dropdownValue = newValue;
-//                    });
-//                  } : null,
-//                  disabledHint: Text("SET TASK TO GROUP"),
-//                  items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
-//                      .map<DropdownMenuItem<String>>((String value) {
-//                    return DropdownMenuItem<String>(
-//                      value: value,
-//                      child: Text(value),
-//                    );
-//                  }).toList(),
-//                ),
-//              )
-//            ],
-//          )
-        ],
-      ),
+            ]
+          )
+        ]
+      )
     );
   }
 
@@ -468,42 +514,19 @@ class _AddTaskState extends State<AddTask> {
                               color: days_show[index] ? color['selectedColor'] : color['unselectedColor'],
                             ),
                             child: Center(child: Text(days[index].substring(0,1))),
-                          ),
-                        ),
+                          )
+                        )
                       );
-                    },
+                    }
                   )
-              ),
-            ],
+              )
+            ]
           ),
           SizedBox(height: 25),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 5),
-//              Text("ASSIGN TO", style: TextStyle(fontSize: 16, color: Colors.grey)),
-//              Container(
-//                child: DropdownButton<String>(
-//                  value: dropdownValue,
-//                  icon: Icon(Icons.keyboard_arrow_down),
-//                  iconSize: 24,
-//                  elevation: 16,
-//                  style: TextStyle(color: Colors.deepPurple),
-//                  onChanged: shared ? (String newValue) {
-//                    setState(() {
-//                      dropdownValue = newValue;
-//                    });
-//                  } : null,
-//                  disabledHint: Text("SET TASK TO GROUP"),
-//                  items: <String>['Ian Ronk', 'Iantje de Tweede', 'Meneertje 3']
-//                      .map<DropdownMenuItem<String>>((String value) {
-//                    return DropdownMenuItem<String>(
-//                      value: value,
-//                      child: Text(value),
-//                    );
-//                  }).toList(),
-//                ),
-//              )
             ],
           )
         ],

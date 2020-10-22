@@ -88,13 +88,7 @@ readGeneralInfoFromStorage() async {
   // Loop through all groups
   data['groups'].forEach((key, value) {
     Map single_group = jsonDecode(value);
-
     groups.add(group.fromMap(single_group));
-
-//    if (task['repeated']) {
-//      print('repeated');
-//      tasks.add(repeated_task.fromMap(task));
-//    }
 
   });
 

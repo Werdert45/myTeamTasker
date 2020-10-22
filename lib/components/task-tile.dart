@@ -1,16 +1,12 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:collaborative_repitition/components/edit_task.dart';
-import 'package:collaborative_repitition/constants/colors.dart';
-import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:emoji_picker/emoji_picker.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'button.dart';
 
 class EmoIcon extends StatefulWidget {
   final Function() notifyParent;
@@ -23,8 +19,9 @@ class EmoIcon extends StatefulWidget {
   final count;
   final Map color;
   final isDone;
+  final user_data;
 //
-  EmoIcon(this.notifyParent, this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, this.count, this.color, {this.isDone});
+  EmoIcon(this.user_data, this.notifyParent, this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, this.count, this.color, {this.isDone});
 
 
   @override
@@ -425,7 +422,7 @@ class EmoIconState extends State<EmoIcon> {
                 ),
                 onTap: () {
                   setState(() {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task, widget.user_data)));
 //              checkedValue = false;
 //              updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
                   });

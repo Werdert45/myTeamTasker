@@ -1,24 +1,22 @@
-import 'dart:io';
-
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/database.dart';
+import 'package:collaborative_repitition/services/functions/general_functions.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/time.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
-
 import 'package:provider/provider.dart';
 
 
 class EditTask extends StatefulWidget {
   final task_data;
+  final user_data;
 
-  EditTask(this.task_data);
+  EditTask(this.task_data, this.user_data);
 
 
   @override
@@ -29,6 +27,7 @@ class _EditTaskState extends State<EditTask> {
   @override
   final Streams streams = Streams();
 
+  bool without_errors = true;
   bool isShowSticker;
   var categories;
   TimeOfDay _time = null;
@@ -47,6 +46,7 @@ class _EditTaskState extends State<EditTask> {
 
   String _title = "";
   String _description = "";
+  var _group_value;
 
   final DatabaseService database = DatabaseService();
 
@@ -135,7 +135,30 @@ class _EditTaskState extends State<EditTask> {
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
-    
+
+    List _groups = [];
+
+    print(widget.user_data);
+    int group_length = widget.user_data.groups.length;
+    for (int i=0; i<group_length; i++) {
+      _groups.add(
+          [
+            widget.user_data.groups[i].name,
+            i
+          ]
+      );
+    }
+
+    if (widget.task_data.repeated)
+    {
+      _group_value = getIndexNestedList(_groups, widget.task_data.belongs_to[1]);
+    }
+
+    else
+      {
+        _group_value = _groups[0][1];
+      }
+
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -184,7 +207,7 @@ class _EditTaskState extends State<EditTask> {
                                 },
                                 textCapitalization: TextCapitalization.none,
                                 style: TextStyle(
-                                    color: Colors.white
+                                    color: color['mainTextColor']
                                 ),
                                 decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -227,7 +250,7 @@ class _EditTaskState extends State<EditTask> {
                         },
                         textCapitalization: TextCapitalization.none,
                         style: TextStyle(
-                            color: Colors.white
+                            color: color['mainTextColor']
                         ),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -295,6 +318,31 @@ class _EditTaskState extends State<EditTask> {
                           )
                         ],
                       ),
+                      shared ? Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 15),
+                              Text("Choose which Group this applies to"),
+                              DropdownButton(
+                                  value: _group_value,
+                                  items: _groups.map<DropdownMenuItem>((value) =>
+                                  new DropdownMenuItem(
+                                    value: value[1],
+                                    child: new Text(value[0]),
+                                  )
+                                  ).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _group_value = value[1];
+                                    });
+                                  })
+                            ],
+                          )
+                      )
+                          :
+                      SizedBox(height: 80),
                       SizedBox(height: 10),
                       DefaultTabController(
                         length: 2,
@@ -336,6 +384,26 @@ class _EditTaskState extends State<EditTask> {
                     ],
                   ),
                 ),
+                without_errors ? SizedBox()
+                    :
+                GestureDetector(
+                    child: Container(
+                        color: Colors.red,
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            child: Center(
+                                child: Text("Not able to add task. One or more fields were not filled in")
+                            )
+                        )
+                    ),
+                    onTap: () {
+                      setState(() {
+                        without_errors = true;
+                      });
+                    }
+                ),
                 Positioned(
                   bottom: 10,
                   left: 15,
@@ -345,7 +413,6 @@ class _EditTaskState extends State<EditTask> {
                     child: FutureBuilder(
                         future: streams.getCompleteUser(user.uid),
                         builder: (context, snapshot) {
-                          print(snapshot.data);
                           return RaisedButton(
                             color: Colors.blue,
                             shape: RoundedRectangleBorder(
@@ -367,11 +434,6 @@ class _EditTaskState extends State<EditTask> {
                               ),
                             ),
                             onPressed: () async {
-
-                              // TODO Dont think that this changes it, but rather adds one
-
-
-
                               var puid = user.uid;
                               var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
                               var alertTime = _time.hour.toString() + ":" + _time.minute.toString();
@@ -394,11 +456,6 @@ class _EditTaskState extends State<EditTask> {
 
                                 addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description, widget.task_data.id);
                               }
-
-
-
-
-
 
                               // Not the correct navigator
                               Navigator.pop(context);

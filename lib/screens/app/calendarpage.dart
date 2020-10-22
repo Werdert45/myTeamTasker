@@ -5,13 +5,10 @@ import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
-import 'package:collaborative_repitition/services/functions/date-functions.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 
@@ -99,6 +96,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             builder: (context, snapshot) {
                 var today = DateTime.now();
 
+                print(today.month);
                 Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
                 calendar.forEach((k,v) => _events[k] = v);
 
@@ -130,7 +128,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(months[today.month].toUpperCase(), style: TextStyle(fontSize: 28, color: color['mainTextColor'])),
+                                      Text(months[today.month - 1].toUpperCase(), style: TextStyle(fontSize: 28, color: color['mainTextColor'])),
                                       Text(today.day < 10 ? "0" + today.day.toString() : today.day.toString(), style: TextStyle(fontSize: 48, color: color['mainTextColor']))
                                     ],
                                   ),
@@ -219,6 +217,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
               child: EmoIcon(
+                user,
                       () {},
                   _selectedEvents[index]['task'],
                   user.uid,

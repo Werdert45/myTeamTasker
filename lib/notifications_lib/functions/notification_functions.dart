@@ -25,11 +25,6 @@ Future<void> cancelAllNotifications() async {
 
 /// Add a notification (day, time, title, body)
 Future<void> addNotificationRepeated(int id, int day, Time time, String title, String body, Time alert_time) async {
-
-  print("Added notification for: ");
-  print(title);
-  print(day);
-  print(time);
   var days = [Day.Monday, Day.Tuesday, Day.Wednesday, Day.Thursday, Day.Friday, Day.Saturday, Day.Sunday];
 
   var androidChannelSpecifics = AndroidNotificationDetails(
@@ -110,8 +105,6 @@ Future<void> setNotifications(List tasks) async {
 
     if (task is repeated_task) {
       // Check which days are possible
-      print("THIS IS THE REPEATED TASK THAT IS ADDED");
-      print(task.days);
       for (int j = day; j < 7; j++) {
         if (task.days[j % 6]) {
           // Set the day that the alert has to go off

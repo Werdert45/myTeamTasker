@@ -43,6 +43,7 @@ getDarkModeSetting() async {
 // Retrieve all settings for settings page
 initSettings() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+
   bool dark_mode = prefs.getBool('dark_mode') ?? false;
   String language = prefs.getString('language') ?? 'en';
   bool notifications = prefs.getBool('notifications') ?? true;

@@ -19,8 +19,9 @@ class ActiveTask extends StatefulWidget {
   final puid;
   final group;
   final parent;
+  final user_data;
 //
-  ActiveTask(this.task, this.puid, this.group, this.parent);
+  ActiveTask(this.task, this.puid, this.group, this.parent, this.user_data);
 
 
   @override
@@ -176,7 +177,15 @@ class ActiveTaskState extends State<ActiveTask> {
     return FutureBuilder(
         future: getDarkModeSetting(),
         builder: (context, snapshot) {
-          var color = snapshot.data ? darkmodeColor : lightmodeColor;
+          var color;
+          
+          if (snapshot.data == null) {
+            color = lightmodeColor;
+          }
+
+          else {
+            color = snapshot.data ? darkmodeColor : lightmodeColor;
+          }
 
         return Slidable(
           // Set the slidable to be able to be accepted when not checked, when checked show undo
@@ -416,7 +425,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                               onPressed: () {
                                                                 print("Showing EditTask");
 
-                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task, widget.user_data)));
                                                               },
                                                               child: Container(
                                                                 width: MediaQuery.of(context).size.width / 3 - 20,
@@ -471,7 +480,7 @@ class ActiveTaskState extends State<ActiveTask> {
                     )
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task, widget.user_data)));
                 },
               ),
               Padding(

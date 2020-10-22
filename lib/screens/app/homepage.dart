@@ -8,10 +8,6 @@ import 'package:collaborative_repitition/services/functions/saveSettingsFunction
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'dashboard.dart';
@@ -80,50 +76,52 @@ class _HomePageState extends State<HomePage>
     getDarkModeSetting().then((val) {
       brightness = val;
     });
-    
 
     var color = brightness ? darkmodeColor : lightmodeColor;
-
     
     return FutureBuilder(
       future: streams.getCompleteUser(user.uid),
       builder: (context, snapshot) {
+        var user_data = snapshot.data;
         return FutureBuilder(
-          future: setNotifications(snapshot.data.tasks),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              return CircularProgressIndicator();
-            }
-            else {
-              return Scaffold(
-
-                bottomNavigationBar: FABBottomAppBar(
-                  onTabSelected: _selectPage,
-                  color: Colors.black,
-                  selectedColor: color['foregroundColor'],
-                  notchedShape: CircularNotchedRectangle(),
-                  items: [
-                    FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
-                    FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
-                    FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics"),
-                    FABBottomAppBarItem(iconData: Icons.edit, text: "Manager"),
-                  ],
-                ),
-                body: pages[_page],
-                floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.add),
-                  backgroundColor: color['primaryColor'],
-                  heroTag: "add_task",
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  AddTask()));
-                  },
-                ),
-                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-              );
-            }
-          }
-        );
+              future: setNotifications(snapshot.data.tasks),
+              builder: (context, snapshot2) {
+                if (snapshot2.connectionState == ConnectionState.active) {
+                  return CircularProgressIndicator();
+                }
+                else {
+                  return Scaffold(
+                    bottomNavigationBar: FABBottomAppBar(
+                      onTabSelected: _selectPage,
+                      color: Colors.black,
+                      selectedColor: color['foregroundColor'],
+                      notchedShape: CircularNotchedRectangle(),
+                      items: [
+                        FABBottomAppBarItem(iconData: Icons.home, text: "Home"),
+                        FABBottomAppBarItem(iconData: Icons.calendar_today, text: "Calendar"),
+                        FABBottomAppBarItem(iconData: Icons.insert_chart, text: "Statistics"),
+                        FABBottomAppBarItem(iconData: Icons.edit, text: "Manager"),
+                      ],
+                    ),
+                    body: pages[_page],
+                    floatingActionButton: button(user_data, color),
+                    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                  );
+                }
+              }
+          );
       }
+    );
+  }
+
+  Widget button(user_data, color) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      backgroundColor: color['primaryColor'],
+      heroTag: "add_task",
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>  AddTask(user_data)));
+      },
     );
   }
 }

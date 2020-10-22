@@ -131,8 +131,8 @@ class _ChangeProfilePicturePageState extends State<ChangeProfilePicturePage> {
                             fit: BoxFit.scaleDown,
                             child: Align(
                                 alignment: Alignment.center,
-                                heightFactor: 0.5,
-                                widthFactor: 1,
+                                heightFactor: 1,
+                                widthFactor: 0.5,
                                 child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.user.profile_picture))),
                           ),
                         ),

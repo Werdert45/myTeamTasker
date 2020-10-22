@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/group.dart';
@@ -7,11 +5,8 @@ import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user_db.dart';
 
-// TODO get all recent catches from the database and all of the species
-
 // @author Ian Ronk
 // @class DatabaseService
-
 
 class Streams {
 
@@ -26,6 +21,8 @@ class Streams {
 
   getCompleteUser(uid) async {
     var userdata = await usersCollection.document(uid).get();
+
+
 
     var user = user_db.fromMap(userdata.data);
 
@@ -92,6 +89,7 @@ class Streams {
     }
 
     tasks = repeated_full + single_full;
+
 
     var userWithTasks = complete_user.fromMap({'name': user.name, 'profile_picture': user.profile_picture, 'email': user.email, 'groups': groups, 'tasks': tasks, 'personal_history': user.tasks_history, 'group_history': group_data.tasks_history});
 
@@ -318,8 +316,6 @@ class Streams {
           day_of_the_year = day_of_the_year.add(Duration(days: 1));
         }
       }
-//      print(tasks.length);
-      print(tasks[i].title);
     }
 
     // Return a map with the days of the next year 
