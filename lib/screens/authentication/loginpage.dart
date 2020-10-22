@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   String _error = '';
 
   bool brightness = false;
+  bool loggedIn = false;
 
   @override
   void initState() {
@@ -41,8 +42,16 @@ class _LoginPageState extends State<LoginPage> {
       if (_formKey.currentState.validate()) {
         dynamic result = await _auth.signInWithEmail(_email, _password);
 
-        if (result is FirebaseUser) {
-          Navigator.pop(context);
+
+
+        if (result.user is FirebaseUser) {
+
+          FirebaseUser user = result.user;
+          _auth.userFromFirebaseUser(user);
+
+          await Navigator.pushNamed(context, '/homepage');
+
+
         }
 
         else {
@@ -56,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
         if (result == null) {
           setState(() => _error = 'No user found with this email');
         }
+
       }
     }
 
@@ -209,7 +219,10 @@ class _LoginPageState extends State<LoginPage> {
                           child: SizedBox(),
                         ),
                       ),
-                      primaryRoundButton(color['primaryColor'], color['mainTextColor'], "LOG IN", _signInAction, 310, 30),
+                      primaryRoundButton(color['primaryColor'], color['mainTextColor'], "LOG IN", () async {
+                       await  _signInAction();
+                       await Navigator.pushNamed(context, '/homepage');
+                      }, 310, 30),
                       SizedBox(height: 20),
                       GestureDetector(
                         onTap: () {

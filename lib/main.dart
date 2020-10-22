@@ -68,7 +68,6 @@ class MyApp extends StatelessWidget {
               return FutureBuilder(
                 future: getDarkModeSetting(),
                 builder: (context, snapshot) {
-
                   return AnnotatedRegion(
                     value: snapshot.data ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
                     child: StreamProvider<User>.value(

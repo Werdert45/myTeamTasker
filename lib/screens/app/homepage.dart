@@ -60,16 +60,6 @@ class _HomePageState extends State<HomePage>
   bool brightness = false;
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-
-    tabController.dispose();
-
-
-  }
-
-  @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
 
@@ -78,7 +68,7 @@ class _HomePageState extends State<HomePage>
     });
 
     var color = brightness ? darkmodeColor : lightmodeColor;
-    
+
     return FutureBuilder(
       future: streams.getCompleteUser(user.uid),
       builder: (context, snapshot) {

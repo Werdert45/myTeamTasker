@@ -44,6 +44,7 @@ class _WrapperState extends State<Wrapper> {
 
     final user = Provider.of<User>(context);
 
+
     if (user == null) {
       if (connected(_source)) {
         return WelcomePage();
