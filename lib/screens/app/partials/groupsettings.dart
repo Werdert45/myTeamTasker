@@ -53,8 +53,10 @@ class _GroupSettingsState extends State<GroupSettings> {
     groupName = widget.group.name;
     groupDescription = widget.group.description;
 
+    var members = [];
+    widget.group.members.forEach((k,v) => members.add([k,v]));
 
-    var members = widget.group.members.values.toList();
+    print(members);
     var user = Provider.of<User>(context);
     getDarkModeSetting().then((val) {
       brightness = val;
@@ -203,11 +205,11 @@ class _GroupSettingsState extends State<GroupSettings> {
                                               alignment: Alignment.center,
                                               heightFactor: 0.5,
                                               widthFactor: 1,
-                                              child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/profile_pictures/7xKIeduBjIMWpGqQynUckKIPjiu1.jpg'))),
+                                              child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/profile_pictures/' + members[index][0] + '.jpg'))),
                                         ),
                                       ),
                                     ),
-                                    title: Text("Ian Ronk"),
+                                    title: Text(members[index][1]),
 //                                    subtitle: admin ? Text("ADMIN") : SizedBox(),
 //                                    trailing: index == 0 ? _simplePopup() : SizedBox()
                                   ),

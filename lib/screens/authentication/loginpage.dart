@@ -42,16 +42,12 @@ class _LoginPageState extends State<LoginPage> {
       if (_formKey.currentState.validate()) {
         dynamic result = await _auth.signInWithEmail(_email, _password);
 
-
-
         if (result.user is FirebaseUser) {
 
           FirebaseUser user = result.user;
           _auth.userFromFirebaseUser(user);
 
           await Navigator.pushNamed(context, '/homepage');
-
-
         }
 
         else {

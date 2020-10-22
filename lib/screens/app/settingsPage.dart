@@ -104,6 +104,25 @@ class _SettingsPageState extends State<SettingsPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                   child: Column(
                     children: [
+                      wrongGroupCode ?
+                      GestureDetector(
+                          child: Container(
+                              color: Colors.red,
+                              width: MediaQuery.of(context).size.width - 140,
+                              height: 40,
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  child: Center(
+                                      child: Text("Wrong group code, try again")
+                                  )
+                              )
+                          ),
+                          onTap: () {
+                            setState(() {
+                              wrongGroupCode = false;
+                            });
+                          }
+                      ) : SizedBox(),
                       Container(
                         width: MediaQuery.of(context).size.width - 40,
                         height: 170,
