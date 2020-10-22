@@ -108,7 +108,10 @@ class _GroupSettingsState extends State<GroupSettings> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
+                        Text("GROUP CODE", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                        SizedBox(height: 5),
+                        Text(widget.group.code, style: TextStyle(fontSize: 24)),
+                        SizedBox(height: 20),
                         Text("GROUP NAME", style: TextStyle(fontSize: 16, color: Colors.grey)),
                         SizedBox(height: 5),
                         TextFormField(
