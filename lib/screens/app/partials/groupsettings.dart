@@ -210,8 +210,6 @@ class _GroupSettingsState extends State<GroupSettings> {
                                       ),
                                     ),
                                     title: Text(members[index][1]),
-//                                    subtitle: admin ? Text("ADMIN") : SizedBox(),
-//                                    trailing: index == 0 ? _simplePopup() : SizedBox()
                                   ),
                                 );
                             },

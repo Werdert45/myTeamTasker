@@ -412,23 +412,33 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                             ),
                             SizedBox(width: 5),
-                            RaisedButton(child: Text("Test"), onPressed: () async {
-                              var result = await database.addGroupToUser(_groupCode, user.uid, widget.data.name);
-                              print(result != "error");
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  var result = await database.addGroupToUser(_groupCode, user.uid, widget.data.name);
+                                  print(result != "error");
 
-                              if (result != "error")
-                              {
-                                setState(() {
-                                  groupsList = groupsList + [result];
-                                });
+                                  if (result != "error")
+                                  {
+                                    setState(() {
+                                      groupsList = groupsList + [result];
+                                    });
 
-                              }
-                              else {
-                                setState(() {
-                                  wrongGroupCode = true;
-                                });
-                              }
-                            })
+                                  }
+                                  else {
+                                    setState(() {
+                                      wrongGroupCode = true;
+                                    });
+                                  }
+                                },
+                                child: Container(
+                                    color: Colors.green, child: Icon(Icons.add, size: 25),
+                                  width: 45,
+                                  height: 45
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
