@@ -29,6 +29,7 @@ class _GroupStatPageState extends State<GroupStatPage> with AfterInitMixin<Group
 
   List<DropdownMenuItem<ListItem>> DropDownMenuItems;
   ListItem _selectedItem;
+  int taskHistoryLength;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _GroupStatPageState extends State<GroupStatPage> with AfterInitMixin<Group
 
   void didInitState() {
     DropDownMenuItems = InheritedUserData.of(context).user_data;
+    taskHistoryLength = InheritedUserData.of(context).taskHistoryLength;
 
     _selectedItem = DropDownMenuItems[0].value;
   }
@@ -50,6 +52,7 @@ class _GroupStatPageState extends State<GroupStatPage> with AfterInitMixin<Group
     super.didChangeDependencies();
     // Your code here
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,6 @@ class _GroupStatPageState extends State<GroupStatPage> with AfterInitMixin<Group
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
-    var taskHistoryLength = widget.task_history.length;
     
     return Container(
         child: DefaultTabController(
@@ -161,8 +163,8 @@ class _GroupStatPageState extends State<GroupStatPage> with AfterInitMixin<Group
                                           items: DropDownMenuItems,
                                           onChanged: (value) {
                                             setState(() {
-                                              print(value);
                                               _selectedItem = value;
+                                              taskHistoryLength = widget.groups[_selectedItem.value].tasks_history.length;
                                             });
                                           }
                                       )
@@ -178,7 +180,7 @@ class _GroupStatPageState extends State<GroupStatPage> with AfterInitMixin<Group
                               ),
                             )
                                 :
-                            Row(
+                            Column(
                               children: [
                                 Container(
                                     height: 280,

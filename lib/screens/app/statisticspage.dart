@@ -169,7 +169,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                       child: TabBarView(
                                         children: [
                                           UserStatPage(snapshot.data.personal_history),
-                                          InheritedUserData(user_data: dropdownItems, child: GroupStatPage(snapshot.data.group_history, snapshot.data.groups, _groups))
+                                          InheritedUserData(user_data: dropdownItems, taskHistoryLength: snapshot.data.groups[0].tasks_history.length, child: GroupStatPage(snapshot.data.group_history, snapshot.data.groups, _groups))
                                         ],
                                       ),
                                     )

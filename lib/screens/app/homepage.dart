@@ -146,8 +146,9 @@ class _HomePageState extends State<HomePage>
 
 class InheritedUserData extends InheritedWidget {
   final user_data;
+  final taskHistoryLength;
 
-  InheritedUserData({this.user_data, Widget child}) : super(child: child);
+  InheritedUserData({this.user_data, this.taskHistoryLength, Widget child}) : super(child: child);
 
   static InheritedUserData of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<InheritedUserData>();
