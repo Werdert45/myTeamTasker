@@ -110,8 +110,51 @@ class _HomePageState extends State<HomePage>
       backgroundColor: color['primaryColor'],
       heroTag: "add_task",
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>  AddTask(user_data)));
+
+        List<ListItem> _groups = [];
+
+        int group_length = user_data.groups.length;
+        for (int i=0; i<group_length; i++) {
+          _groups.add(ListItem(
+              i, user_data.groups[i].name
+          ));
+        }
+
+        List<DropdownMenuItem<ListItem>> buildDropDownMenuItems(List listItems) {
+          List<DropdownMenuItem<ListItem>> items = List();
+          for (ListItem listItem in listItems) {
+            items.add(
+              DropdownMenuItem(
+                child: Text(listItem.name),
+                value: listItem,
+              ),
+            );
+          }
+          return items;
+        }
+
+        List<DropdownMenuItem<ListItem>> dropdownItems;
+
+        dropdownItems = buildDropDownMenuItems(_groups);
+
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>  InheritedUserData(user_data: dropdownItems, child: AddTask(user_data))));
       },
     );
   }
+}
+
+class InheritedUserData extends InheritedWidget {
+  final user_data;
+
+  InheritedUserData({this.user_data, Widget child}) : super(child: child);
+
+  static InheritedUserData of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<InheritedUserData>();
+  }
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) => true;
+
+
 }

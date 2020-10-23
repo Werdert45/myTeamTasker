@@ -12,8 +12,9 @@ import 'package:flutter/scheduler.dart';
 class GroupStatPage extends StatefulWidget {
   final task_history;
   final groups;
+  final groupslist;
 
-  GroupStatPage(this.task_history, this.groups);
+  GroupStatPage(this.task_history, this.groups, this.groupslist);
 
   @override
   _GroupStatPageState createState() => _GroupStatPageState();
@@ -44,10 +45,16 @@ class _GroupStatPageState extends State<GroupStatPage> {
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
+
+    var _groups_list = widget.groupslist;
+    var _group_value = _groups_list[0][1];
+
+
+    var taskHistoryLength = widget.task_history.length;
     
     return Container(
         child: DefaultTabController(
-          initialIndex: 0,
+          initialIndex: 1,
           length: 2,
           child: Column(
             children: [
@@ -88,7 +95,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                 ),
               ),
               Container(
-                height: 420,
+                height: 530,
                 child: TabBarView(
                   children: [
                     Container(
@@ -124,47 +131,93 @@ class _GroupStatPageState extends State<GroupStatPage> {
                             Text("Finished Task History", style: TextStyle(fontSize: 18)),
                             SizedBox(height: 10),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width - 40,
-                                  height: 40,
-                                  child: ListView.builder(
+                                padding: EdgeInsets.symmetric(horizontal: 40),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 15),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                      child: SizedBox(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Text("Choose which Group this applies to"),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 0),
+                                      child: DropdownButton(
+                                          value: _group_value,
+                                          items: _groups_list.map<DropdownMenuItem>((value) =>
+                                          new DropdownMenuItem(
+                                            value: value[1],
+                                            child: new Text(value[0]),
+                                          )
+                                          ).toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              print(value);
+                                              _group_value = value[1];
+                                            });
+                                          })
+                                    )
+                                  ],
+                                )
+                            ),
+                            taskHistoryLength == 0 ?
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                              child: Container(
+                                child: Text("No Completed Tasks, complete one to get more information."),
+                              ),
+                            )
+                                :
+                            Row(
+                              children: [
+                                Container(
+                                    height: 280,
+                                    child: DonutPieChart(pieChartGroup(widget.task_history, widget.groups[_group_value].members))
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                        child: Container(
-                                          height: 30,
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                width: 20,
-                                                height: 20,
-                                                decoration: BoxDecoration(
-                                                    color: pieChartColors[index],
-                                                    borderRadius: BorderRadius.circular(10)
-                                                ),
-                                                child: SizedBox(),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width - 40,
+                                      height: 40,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                            child: Container(
+                                              height: 30,
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    width: 20,
+                                                    height: 20,
+                                                    decoration: BoxDecoration(
+                                                        color: pieChartColors[index],
+                                                        borderRadius: BorderRadius.circular(10)
+                                                    ),
+                                                    child: SizedBox(),
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(widget.groups[_group_value].members.values.toList()[0])
+                                                ],
                                               ),
-                                              SizedBox(width: 5),
-                                              Text(widget.groups[0].members.values.toList()[0])
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    itemCount: widget.groups[0].members.keys.toList().length,
+                                            ),
+                                          );
+                                        },
+                                        itemCount: widget.groups[_group_value].members.keys.toList().length,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
                             SizedBox(height: 10),
-                            Container(
-                                height: 280,
-                                child: DonutPieChart(pieChartGroup(widget.task_history, widget.groups[0].members))
-                            ),
+
                           ],
                         ),
                       ),

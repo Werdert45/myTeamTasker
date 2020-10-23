@@ -115,13 +115,20 @@ pieChartGroup(Map task_history, Map members) {
   // Set all members contrib to zero
   var member_contrib = {};
 
-  members.forEach((key, value) { member_contrib[key] = 0; });
+  if (task_history.length != 0) {
+    members.forEach((key, value) { member_contrib[key] = 0; });
+
+    task_history.forEach((key, value) {
+
+      value.forEach((key, value) => member_contrib[key] += value.length);
+    });
+  }
+
+  else {
+    member_contrib["No tasks completed"] = 1;
+  }
 
 
-  task_history.forEach((key, value) {
-
-    value.forEach((key, value) => member_contrib[key] += value.length);
-  });
 
   // TODO change color to dart colors and
   // Use counter to get the colors etc (note that the color list has to be expanded (a function to loop over values can be used for dart colors
@@ -132,6 +139,7 @@ pieChartGroup(Map task_history, Map members) {
     data.add(LinearSales(counter, value, members[key], colorList[counter]));
     counter += 1;
   });
+
 
   List<charts.Series<LinearSales, int>> _createSampleData() {
     return [

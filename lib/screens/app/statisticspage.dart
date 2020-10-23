@@ -44,6 +44,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Map _source = {ConnectivityResult.none: false};
   MyConnectivity _connectivity = MyConnectivity.instance;
 
+  var _group_value = 1;
 
   var tasks = [];
   bool brightness = false;
@@ -88,6 +89,20 @@ class _StatisticsPageState extends State<StatisticsPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             tasks = snapshot.data.tasks;
 
+            List _groups = [];
+
+            int group_length = snapshot.data.groups.length;
+            for (int i=0; i<group_length; i++) {
+              _groups.add(
+                  [
+                    snapshot.data.groups[i].name,
+                    i
+                  ]
+              );
+            }
+
+            _group_value = _groups[0][1];
+
             _controller = new TextEditingController(text: snapshot.data.name);
 
             return Container(
@@ -124,7 +139,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               SizedBox(height: MediaQuery.of(context).size.height / 8),
                               DefaultTabController(
                                 length: 2,
-                                initialIndex: 0,
+                                initialIndex: 1,
                                 child: Column(
                                   children: [
                                     TabBar(
@@ -140,7 +155,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                       child: TabBarView(
                                         children: [
                                           UserStatPage(snapshot.data.personal_history),
-                                          GroupStatPage(snapshot.data.group_history, snapshot.data.groups)
+                                          GroupStatPage(snapshot.data.group_history, snapshot.data.groups, _groups)
                                         ],
                                       ),
                                     )

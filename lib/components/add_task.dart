@@ -1,14 +1,14 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/screens/app/homepage.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
-
 import 'package:provider/provider.dart';
-
+import 'package:after_init/after_init.dart';
 
 class AddTask extends StatefulWidget {
   final user_data;
@@ -20,7 +20,7 @@ class AddTask extends StatefulWidget {
   _AddTaskState createState() => _AddTaskState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _AddTaskState extends State<AddTask> with AfterInitMixin<AddTask>{
   @override
   final Streams streams = Streams();
 
@@ -41,11 +41,11 @@ class _AddTaskState extends State<AddTask> {
 
   String _title = "";
   String _description = "";
-  var _group_value;
-
-
 
   final DatabaseService database = DatabaseService();
+
+  List<DropdownMenuItem<ListItem>> DropDownMenuItems;
+  ListItem _selectedItem;
 
   bool brightness = false;
 
@@ -56,9 +56,21 @@ class _AddTaskState extends State<AddTask> {
     _dateTime = DateTime.now();
     _time = null;
 
+
     getDarkModeSetting().then((val) {
       brightness = val;
     });
+  }
+
+  void didInitState() {
+    DropDownMenuItems = InheritedUserData.of(context).user_data;
+
+    _selectedItem = DropDownMenuItems[0].value;
+  }
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Your code here
   }
 
   Future<Null> selectDate(BuildContext context) async {
@@ -95,7 +107,6 @@ class _AddTaskState extends State<AddTask> {
     return Future.value(false);
   }
 
-
   // Improve addTaskDB to also save to either group or personal + title not working
   addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description) async {
     if (repeated) {
@@ -110,27 +121,14 @@ class _AddTaskState extends State<AddTask> {
 
   Widget build(BuildContext context) {
 
+
     var user = Provider.of<User>(context);
     var color = brightness ? darkmodeColor : lightmodeColor;
+//
+//    DropDownMenuItems = buildDropDownMenuItems(_groups);
+//
+//    _selectedItem = DropDownMenuItems[0].value;
 
-//    _group_value = {
-////      "name": widget.user_data.groups[0].name,
-////      "value": 0
-////    };
-
-    List _groups = [];
-
-    int group_length = widget.user_data.groups.length;
-    for (int i=0; i<group_length; i++) {
-      _groups.add(
-          [
-            widget.user_data.groups[i].name,
-            i
-      ]
-      );
-    }
-
-    _group_value = _groups[0][1];
 
     return Hero(
         child: Scaffold(
@@ -296,19 +294,16 @@ class _AddTaskState extends State<AddTask> {
                               children: [
                                 SizedBox(height: 15),
                                 Text("Choose which Group this applies to"),
-                                DropdownButton(
-                                    value: _group_value,
-                                    items: _groups.map<DropdownMenuItem>((value) =>
-                                    new DropdownMenuItem(
-                                      value: value[1],
-                                      child: new Text(value[0]),
-                                    )
-                                    ).toList(),
+                                DropdownButton<ListItem>(
+                                    value: _selectedItem,
+                                    items: DropDownMenuItems,
                                     onChanged: (value) {
                                       setState(() {
-                                        _group_value = value[1];
+                                        print(value);
+                                        _selectedItem = value;
                                       });
-                                    })
+                                    }
+                                    )
                               ],
                             )
                           )
@@ -380,7 +375,6 @@ class _AddTaskState extends State<AddTask> {
                       child: FutureBuilder(
                           future: streams.getCompleteUser(user.uid),
                           builder: (context, snapshot) {
-
                             return RaisedButton(
                               color: Colors.green,
                               shape: RoundedRectangleBorder(
@@ -417,8 +411,8 @@ class _AddTaskState extends State<AddTask> {
                                   var description = _description;
                                   var date = _dateTime.millisecondsSinceEpoch;
 
-                                  var group_code = snapshot.data.groups[_group_value].code;
-                                  var group_name = snapshot.data.groups[_group_value].name;
+                                  var group_code = snapshot.data.groups[_selectedItem.value].code;
+                                  var group_name = snapshot.data.groups[_selectedItem.value].name;
 
                                   addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
 
@@ -568,4 +562,11 @@ class _AddTaskState extends State<AddTask> {
       },
     );
   }
+}
+
+class ListItem {
+  int value;
+  String name;
+
+  ListItem(this.value, this.name);
 }
