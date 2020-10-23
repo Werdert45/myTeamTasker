@@ -6,6 +6,7 @@ import 'package:collaborative_repitition/components/syncingComponents.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
+import 'package:collaborative_repitition/screens/app/homepage.dart';
 import 'package:collaborative_repitition/screens/app/partials/group_stats.dart';
 import 'package:collaborative_repitition/screens/app/partials/user_stats.dart';
 import 'package:collaborative_repitition/services/auth.dart';
@@ -88,22 +89,35 @@ class _StatisticsPageState extends State<StatisticsPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             tasks = snapshot.data.tasks;
+            var user_data = snapshot.data;
 
-            List _groups = [];
+            List<ListItem> _groups = [];
 
-            int group_length = snapshot.data.groups.length;
+            int group_length = user_data.groups.length;
             for (int i=0; i<group_length; i++) {
-              _groups.add(
-                  [
-                    snapshot.data.groups[i].name,
-                    i
-                  ]
-              );
+              _groups.add(ListItem(
+                  i, user_data.groups[i].name
+              ));
             }
 
-            _group_value = _groups[0][1];
+            List<DropdownMenuItem<ListItem>> buildDropDownMenuItems(List listItems) {
+              List<DropdownMenuItem<ListItem>> items = List();
+              for (ListItem listItem in listItems) {
+                items.add(
+                  DropdownMenuItem(
+                    child: Text(listItem.name),
+                    value: listItem,
+                  ),
+                );
+              }
+              return items;
+            }
 
-            _controller = new TextEditingController(text: snapshot.data.name);
+            List<DropdownMenuItem<ListItem>> dropdownItems;
+
+            dropdownItems = buildDropDownMenuItems(_groups);
+
+
 
             return Container(
                 child: Stack(
@@ -155,7 +169,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                       child: TabBarView(
                                         children: [
                                           UserStatPage(snapshot.data.personal_history),
-                                          GroupStatPage(snapshot.data.group_history, snapshot.data.groups, _groups)
+                                          InheritedUserData(user_data: dropdownItems, child: GroupStatPage(snapshot.data.group_history, snapshot.data.groups, _groups))
                                         ],
                                       ),
                                     )

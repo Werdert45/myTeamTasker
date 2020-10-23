@@ -1,5 +1,7 @@
+import 'package:after_init/after_init.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/screens/app/homepage.dart';
 import 'package:collaborative_repitition/screens/app/partials/donutchart.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/functions/stat_functions.dart';
@@ -20,10 +22,13 @@ class GroupStatPage extends StatefulWidget {
   _GroupStatPageState createState() => _GroupStatPageState();
 }
 
-class _GroupStatPageState extends State<GroupStatPage> {
+class _GroupStatPageState extends State<GroupStatPage> with AfterInitMixin<GroupStatPage> {
   List<bool> timeFrame = [true,false];
 
   bool brightness = false;
+
+  List<DropdownMenuItem<ListItem>> DropDownMenuItems;
+  ListItem _selectedItem;
 
   @override
   void initState() {
@@ -35,6 +40,17 @@ class _GroupStatPageState extends State<GroupStatPage> {
     });
   }
 
+  void didInitState() {
+    DropDownMenuItems = InheritedUserData.of(context).user_data;
+
+    _selectedItem = DropDownMenuItems[0].value;
+  }
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Your code here
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -44,11 +60,6 @@ class _GroupStatPageState extends State<GroupStatPage> {
     
 
     var color = brightness ? darkmodeColor : lightmodeColor;
-
-
-    var _groups_list = widget.groupslist;
-    var _group_value = _groups_list[0][1];
-
 
     var taskHistoryLength = widget.task_history.length;
     
@@ -145,20 +156,16 @@ class _GroupStatPageState extends State<GroupStatPage> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 0),
-                                      child: DropdownButton(
-                                          value: _group_value,
-                                          items: _groups_list.map<DropdownMenuItem>((value) =>
-                                          new DropdownMenuItem(
-                                            value: value[1],
-                                            child: new Text(value[0]),
-                                          )
-                                          ).toList(),
+                                      child: DropdownButton<ListItem>(
+                                          value: _selectedItem,
+                                          items: DropDownMenuItems,
                                           onChanged: (value) {
                                             setState(() {
                                               print(value);
-                                              _group_value = value[1];
+                                              _selectedItem = value;
                                             });
-                                          })
+                                          }
+                                      )
                                     )
                                   ],
                                 )
@@ -175,7 +182,7 @@ class _GroupStatPageState extends State<GroupStatPage> {
                               children: [
                                 Container(
                                     height: 280,
-                                    child: DonutPieChart(pieChartGroup(widget.task_history, widget.groups[_group_value].members))
+                                    child: DonutPieChart(pieChartGroup(widget.task_history, widget.groups[_selectedItem.value].members))
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -203,13 +210,13 @@ class _GroupStatPageState extends State<GroupStatPage> {
                                                     child: SizedBox(),
                                                   ),
                                                   SizedBox(width: 5),
-                                                  Text(widget.groups[_group_value].members.values.toList()[0])
+                                                  Text(widget.groups[_selectedItem.value].members.values.toList()[0])
                                                 ],
                                               ),
                                             ),
                                           );
                                         },
-                                        itemCount: widget.groups[_group_value].members.keys.toList().length,
+                                        itemCount: widget.groups[_selectedItem.value].members.keys.toList().length,
                                       ),
                                     ),
                                   ),
@@ -296,4 +303,11 @@ class LinearSales {
   final charts.Color color;
 
   LinearSales(this.year, this.sales, this.member, this.color);
+}
+
+class ListItem {
+  int value;
+  String name;
+
+  ListItem(this.value, this.name);
 }
