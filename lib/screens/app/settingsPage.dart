@@ -13,6 +13,7 @@ import 'package:collaborative_repitition/screens/app/settings_sub/changeEmail.da
 import 'package:collaborative_repitition/screens/app/settings_sub/changePassword.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changeProfilePicture.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/notificationSettings.dart';
+import 'package:collaborative_repitition/screens/authentication/create_group.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
@@ -157,14 +158,11 @@ class _SettingsPageState extends State<SettingsPage> {
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(35),
-                                        child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          child: Align(
-                                              alignment: Alignment.center,
-                                              heightFactor: 1,
-                                              widthFactor: 0.5,
-                                              child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.data.profile_picture.toString()))),
-                                        ),
+                                        child: Align(
+                                            alignment: Alignment.center,
+                                            heightFactor: 1,
+                                            widthFactor: 0.5,
+                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.data.profile_picture.toString()))),
                                       ),
                                     ),
                                   )
@@ -356,6 +354,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: Colors.grey,
                           )
                         ],
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.add),
+                        title: Text("Create new group"),
+                        trailing: Icon(Icons.arrow_forward_ios, size: 12,),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupPage()));
+                        },
                       ),
                       Container(
                           height: 60.0 * groupsList.length + 0.0,

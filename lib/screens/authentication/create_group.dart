@@ -24,6 +24,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   String error = '';
 
   bool brightness = false;
+  bool added = false;
+  bool add_error = false;
 
   @override
   void initState() {
@@ -50,7 +52,22 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
     createGroup(uid, group_name, group_description) async {
       try {
         var check = await DatabaseService(uid: uid).createGroup(uid, group_name, group_description);
-        Navigator.popAndPushNamed(context, '/homepage');
+//        Navigator.popAndPushNamed(context, '/homepage');
+
+        print(check);
+
+        if (check) {
+          setState(() {
+            added = true;
+          });
+        }
+
+        else {
+          setState(() {
+            add_error = true;
+          });
+        }
+
       } catch (e) {
         return e;
       }
@@ -83,13 +100,14 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                         onPressed: () { Navigator.pop(context); }
                     )
                 ),
-                Positioned(
+                added ? SizedBox() : Positioned(
                     top: 45,
                     right: 20,
                     child: GestureDetector(
                       onTap: () {
                         createGroup(user.uid, _group_name, _group_description);
 //                        Navigator.popAndPushNamed(context, '/homepage');
+
                       },
                       child: Text("CREATE", style: TextStyle(fontSize: 16, color: color['mainTextColor'])),
                     )
@@ -184,6 +202,52 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                       child: SizedBox()
                   ),
                 ),
+                added ? Align(
+                  alignment: Alignment.topCenter,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        added = false;
+                      });
+                    },
+                    child: Container(
+                        color: Colors.green,
+                        width: MediaQuery.of(context).size.width,
+                        height: 70,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 40),
+                              Text("Succesfully added the group")
+                            ],
+                          ),
+                        )
+                    ),
+                  ),
+                ) : SizedBox(),
+                add_error ? Align(
+                  alignment: Alignment.topCenter,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        add_error = false;
+                      });
+                    },
+                    child: Container(
+                        color: Colors.red,
+                        width: MediaQuery.of(context).size.width,
+                        height: 70,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 40),
+                              Text("Something went wrong with creating the group")
+                            ],
+                          ),
+                        )
+                    ),
+                  ),
+                ) : SizedBox(),
               ],
             ),
           ),
