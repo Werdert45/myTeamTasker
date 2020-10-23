@@ -153,7 +153,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               SizedBox(height: MediaQuery.of(context).size.height / 8),
                               DefaultTabController(
                                 length: 2,
-                                initialIndex: 1,
+                                initialIndex: 0,
                                 child: Column(
                                   children: [
                                     TabBar(

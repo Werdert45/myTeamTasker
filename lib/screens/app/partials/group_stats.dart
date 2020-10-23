@@ -67,7 +67,7 @@ class _GroupStatPageState extends State<GroupStatPage> with AfterInitMixin<Group
     
     return Container(
         child: DefaultTabController(
-          initialIndex: 1,
+          initialIndex: 0,
           length: 2,
           child: Column(
             children: [
