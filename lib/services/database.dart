@@ -717,10 +717,10 @@ class DatabaseService {
     var group_code = puid.toString().substring(0,6).toUpperCase() + "0" + index.toString();
     var user = await usersCollection.document(puid).get();
 
-    var group = await groupsCollection.document(group_code).get();
+    var groupReq = await groupsCollection.document(group_code).get();
 
     while (!allowed) {
-      if (group.data != null) {
+      if (groupReq.data != null) {
         index += 1;
 
         if (index < 10) {
@@ -732,8 +732,8 @@ class DatabaseService {
         }
       }
 
-      group = await groupsCollection.document(group_code).get();
-      if (group.data == null) {
+      groupReq = await groupsCollection.document(group_code).get();
+      if (groupReq.data == null) {
         allowed = true;
       }
     }
@@ -750,6 +750,8 @@ class DatabaseService {
       'tasks_history': {}
     });
 
+    var newGroupReq = await groupsCollection.document(group_code).get();
+
 
     var new_map = user.data['groups'];
     new_map[group_code] = group_name;
@@ -759,7 +761,9 @@ class DatabaseService {
     }, merge: true);
 
 
-    return true;
+    var new_group = group.fromMap(newGroupReq.data);
+
+    return new_group;
   }
 
   Future updateGroup(group_name, group_description, group_code) async {

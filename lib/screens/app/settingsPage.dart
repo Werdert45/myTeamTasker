@@ -62,7 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // Something
   bool isSwitched = false;
-
+  var user_data;
 
   bool changePassword = false;
 
@@ -80,6 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget build(BuildContext context) {
 
+    user_data = widget.data;
     var user = Provider.of<User>(context);
     getDarkModeSetting().then((val) {
       brightness = val;
@@ -88,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
-    groupsList = widget.data.groups;
+    groupsList = user_data.groups;
     
     return FutureBuilder(
       future: initSettings(),
@@ -97,6 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
           isDark = snapshot.data[0];
           sendNotifications = snapshot.data[2];
+
 
           return Scaffold(
             body: SafeArea(
@@ -154,7 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     height: 70,
                                     child: GestureDetector(
                                       onTap: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeProfilePicturePage(widget.data)));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeProfilePicturePage(user_data)));
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(35),
@@ -162,7 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                             alignment: Alignment.center,
                                             heightFactor: 1,
                                             widthFactor: 0.5,
-                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.data.profile_picture.toString()))),
+                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + user_data.profile_picture.toString()))),
                                       ),
                                     ),
                                   )
@@ -178,7 +180,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text("Change your settings,", style: TextStyle(color: Colors.white70)),
-                                        Text(widget.data.name, style: TextStyle(fontSize: 20, color: Colors.white))
+                                        Text(user_data.name, style: TextStyle(fontSize: 20, color: Colors.white))
                                       ],
                                     ),
                                   )
@@ -302,14 +304,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                     height: 30,
                                     child: Row(
                                       children: [
-                                        Text(widget.data.email.toLowerCase()),
+                                        Text(user_data.email.toLowerCase()),
                                         SizedBox(width: 4,),
                                         Icon(Icons.arrow_forward_ios, size: 12,)
                                       ],
                                     ),
                                   ),
                                   onTap: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeEmail(email: widget.data.email)));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeEmail(email: user_data.email)));
                                   },
                                 ),
                                 ListTile(
@@ -330,7 +332,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     ),
                                   ),
                                   onTap: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword(email: widget.data.email)));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword(email: user_data.email)));
                                   },
                                 ),
 //                  changePassword ? Container(height: 200, width: double.infinity, color: Colors.red) : SizedBox()
@@ -359,8 +361,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         leading: Icon(Icons.add),
                         title: Text("Create new group"),
                         trailing: Icon(Icons.arrow_forward_ios, size: 12,),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupPage()));
+                        onTap: () async {
+                          var newGroupsList = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupPage(groupList: groupsList)));
+
+                          setState(() {
+                            groupsList = newGroupsList;
+                          });
                         },
                       ),
                       Container(

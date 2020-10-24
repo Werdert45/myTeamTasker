@@ -1,5 +1,6 @@
 import 'package:collaborative_repitition/components/button.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/models/group.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
@@ -11,6 +12,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class CreateGroupPage extends StatefulWidget {
+  final groupList;
+
+  CreateGroupPage({this.groupList});
+
   @override
   _CreateGroupPageState createState() => _CreateGroupPageState();
 }
@@ -54,9 +59,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
         var check = await DatabaseService(uid: uid).createGroup(uid, group_name, group_description);
 //        Navigator.popAndPushNamed(context, '/homepage');
 
-        print(check);
-
-        if (check) {
+        if (check != null) {
           setState(() {
             added = true;
           });
@@ -68,6 +71,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           });
         }
 
+        return check;
       } catch (e) {
         return e;
       }
@@ -104,10 +108,19 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                     top: 45,
                     right: 20,
                     child: GestureDetector(
-                      onTap: () {
-                        createGroup(user.uid, _group_name, _group_description);
-//                        Navigator.popAndPushNamed(context, '/homepage');
+                      onTap: () async {
+                        if (widget.groupList != null) {
+                          var new_group = await createGroup(user.uid, _group_name, _group_description);
 
+                          List<group> groupsList = widget.groupList.add(new_group);
+                          //                        Navigator.popAndPushNamed(context, '/homepage');
+                          Navigator.pop(context, groupsList);
+                        }
+
+                        else {
+                          await createGroup(user.uid, _group_name, _group_description);
+                          Navigator.popAndPushNamed(context, '/homepage');
+                        }
                       },
                       child: Text("CREATE", style: TextStyle(fontSize: 16, color: color['mainTextColor'])),
                     )
