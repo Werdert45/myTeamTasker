@@ -12,6 +12,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../components/task-tile.dart';
 import '../../services/auth.dart';
 
@@ -36,7 +37,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Map _source = {ConnectivityResult.none: false};
   MyConnectivity _connectivity = MyConnectivity.instance;
 
-  var tasks = [];
+  var tasks;
   bool brightness = false;
 
   void initState() {
@@ -66,6 +67,33 @@ class _DashboardPageState extends State<DashboardPage> {
     super.dispose();
   }
 
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+
+  void _onRefresh(uid) async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    var new_user = await streams.getCompleteUser(uid);
+
+    setState(() {
+      tasks = new_user.tasks;
+    });
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+//    items.add((items.length+1).toString());
+//    if(mounted)
+//      setState(() {
+//
+//      });
+    _refreshController.loadComplete();
+  }
+
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
@@ -82,7 +110,7 @@ class _DashboardPageState extends State<DashboardPage> {
         future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            var tasks = snapshot.data.tasks;
+            tasks = snapshot.data.tasks;
             var finished_tasks = progressBar(tasks);
             var finished_count = finished_tasks[1].length;
 
@@ -193,26 +221,62 @@ class _DashboardPageState extends State<DashboardPage> {
                             padding: EdgeInsets.only(left: 20),
                             child: Text("My Tasks", style: TextStyle(fontSize: 24, color: Colors.grey)),
                           ),
-                          ListView.builder(
-                            padding: EdgeInsets.only(top: 10),
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data.tasks.length,
-                              itemBuilder: (context, index) {
-                                if (snapshot.data.tasks[index].title != "") {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                    child: Container(
-                                      width: double.infinity,
-                                      child: EmoIcon(snapshot.data, refresh, tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, finished_count, tasks.length, color),
-                                    ),
-                                  );
-                                }
-                                else {
-                                  return SizedBox();
-                                }
-                              }
-                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height- 550,
+                            child: SmartRefresher(
+                                enablePullDown: true,
+                                enablePullUp: true,
+                                header: WaterDropHeader(),
+                                footer: CustomFooter(
+                                  builder: (BuildContext context,LoadStatus mode){
+                                    Widget body ;
+                                    if(mode==LoadStatus.idle){
+                                      body =  Text("pull up load");
+                                    }
+                                    else if(mode==LoadStatus.loading){
+                                      body =  CircularProgressIndicator();
+                                    }
+                                    else if(mode == LoadStatus.failed){
+                                      body = Text("Load Failed!Click retry!");
+                                    }
+                                    else if(mode == LoadStatus.canLoading){
+                                      body = Text("release to load more");
+                                    }
+                                    else{
+                                      body = Text("No more Data");
+                                    }
+                                    return Container(
+                                      height: 55.0,
+                                      child: Center(child:body),
+                                    );
+                                  },
+                                ),
+                                controller: _refreshController,
+                                onRefresh: () {_onRefresh(user.uid);},
+                                onLoading: _onLoading,
+                              child: ListView.builder(
+                                  padding: EdgeInsets.only(top: 10),
+                                  shrinkWrap: true,
+//                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: snapshot.data.tasks.length,
+                                  itemBuilder: (context, index) {
+                                    if (snapshot.data.tasks[index].title != "") {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                        child: Container(
+                                          width: double.infinity,
+                                          child: EmoIcon(snapshot.data, refresh, tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, finished_count, tasks.length, color),
+                                        ),
+                                      );
+                                    }
+                                    else {
+                                      return SizedBox();
+                                    }
+                                  }
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
