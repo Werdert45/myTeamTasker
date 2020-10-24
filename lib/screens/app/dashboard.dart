@@ -18,9 +18,9 @@ import '../../services/auth.dart';
 
 class DashboardPage extends StatefulWidget {
   final user_data;
-  
+
   DashboardPage({this.user_data});
-  
+
   @override
   _DashboardPageState createState() => _DashboardPageState();
 
@@ -113,86 +113,81 @@ class _DashboardPageState extends State<DashboardPage> {
     var finished_count = finished_tasks[1].length;
 
     return SingleChildScrollView(
-      child: FutureBuilder(
-        future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-
-          return Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Stack(
                   children: [
-                    Container(
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 120, top: 15),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Hi, " + widget.user_data.name + "!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
-                                  Text("These are today's tasks", style: TextStyle(fontSize: 14, color: Colors.white))
-                                ],
-                              )
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                                padding: EdgeInsets.only(top: 40, right: 15),
-                                child: Container(
-                                  width: 80.0,
-                                  height: 80.0,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(color: color['primaryColor']),
-                                      borderRadius: BorderRadius.all(Radius.circular(125.0)),
-                                      boxShadow: [
-                                        BoxShadow(blurRadius: 4.0, color: Colors.black)
-                                      ]),
-//                          child: Icon(Icons.person, size: 130, color: secondaryColor),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(180),
-                                    child: Align(
-                                        alignment: Alignment.center,
-                                        heightFactor: 1,
-                                        widthFactor: 0.5,
-                                        child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.user_data.profile_picture.toString()))),
-                                  ),
-                                )
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15.0, top: 55),
-                              child: IconButton(
-                                icon: Icon(Icons.settings, color: Colors.white, size: 28),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => SettingsPage(widget.user_data))
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          checkConnectivity(_source, context, true)
-                        ],
-                      ),
-                      height: 160,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: color['foregroundColor'],
-                          border: Border(
-                          ),
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                          padding: EdgeInsets.only(right: 120, top: 15),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Hi, " + widget.user_data.name + "!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                              Text("These are today's tasks", style: TextStyle(fontSize: 14, color: Colors.white))
+                            ],
+                          )
                       ),
                     ),
-                    SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                          padding: EdgeInsets.only(top: 40, right: 15),
+                          child: Container(
+                            width: 80.0,
+                            height: 80.0,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: color['primaryColor']),
+                                borderRadius: BorderRadius.all(Radius.circular(125.0)),
+                                boxShadow: [
+                                  BoxShadow(blurRadius: 4.0, color: Colors.black)
+                                ]),
+//                          child: Icon(Icons.person, size: 130, color: secondaryColor),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(180),
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  heightFactor: 1,
+                                  widthFactor: 0.5,
+                                  child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.user_data.profile_picture.toString()))),
+                            ),
+                          )
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15.0, top: 55),
+                        child: IconButton(
+                          icon: Icon(Icons.settings, color: Colors.white, size: 28),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => SettingsPage(widget.user_data))
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    checkConnectivity(_source, context, true)
+                  ],
+                ),
+                height: 160,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: color['foregroundColor'],
+                    border: Border(
+                    ),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                ),
+              ),
+              SizedBox(height: 20),
 //                      Padding(
 //                        padding: EdgeInsets.only(left: 20, bottom: 10),
 //                        child: Text("Progess", style: TextStyle(fontSize: 24, color: Colors.grey)),
@@ -213,92 +208,79 @@ class _DashboardPageState extends State<DashboardPage> {
 //                          progressColor: Colors.blue,
 //                        ),
 //                      ),
-                    SizedBox(height: 20),
-                    Container(
-                      width: double.infinity,
+              SizedBox(height: 20),
+              Container(
+                width: double.infinity,
 //                      height: MediaQuery.of(context).size.height- 550,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Text("My Tasks", style: TextStyle(fontSize: 24, color: Colors.grey)),
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height- 550,
-                            child: SmartRefresher(
-                                enablePullDown: true,
-                                enablePullUp: true,
-                                header: WaterDropHeader(),
-                                footer: CustomFooter(
-                                  builder: (BuildContext context,LoadStatus mode){
-                                    Widget body ;
-                                    if(mode==LoadStatus.idle){
-                                      body =  Text("pull up load");
-                                    }
-                                    else if(mode==LoadStatus.loading){
-                                      body =  CircularProgressIndicator();
-                                    }
-                                    else if(mode == LoadStatus.failed){
-                                      body = Text("Load Failed!Click retry!");
-                                    }
-                                    else if(mode == LoadStatus.canLoading){
-                                      body = Text("release to load more");
-                                    }
-                                    else{
-                                      body = Text("No more Data");
-                                    }
-                                    return Container(
-                                      height: 55.0,
-                                      child: Center(child:body),
-                                    );
-                                  },
-                                ),
-                                controller: _refreshController,
-                                onRefresh: () {_onRefresh(user.uid);},
-                                onLoading: _onLoading,
-                              child: ListView.builder(
-                                  padding: EdgeInsets.only(top: 10),
-                                  shrinkWrap: true,
-//                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: widget.user_data.tasks.length,
-                                  itemBuilder: (context, index) {
-                                    if (widget.user_data.tasks[index].title != "") {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          child: EmoIcon(widget.user_data, refresh, tasks[index], user.uid, widget.user_data.groups[0], this, widget.user_data.personal_history, finished_count, tasks.length, color),
-                                        ),
-                                      );
-                                    }
-                                    else {
-                                      return SizedBox();
-                                    }
-                                  }
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text("My Tasks", style: TextStyle(fontSize: 24, color: Colors.grey)),
                     ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height- 250,
+                      child: SmartRefresher(
+                        enablePullDown: true,
+                        enablePullUp: true,
+                        header: WaterDropHeader(),
+                        footer: CustomFooter(
+                          builder: (BuildContext context,LoadStatus mode){
+                            Widget body ;
+                            if(mode==LoadStatus.idle){
+                              body =  Text("pull up load");
+                            }
+                            else if(mode==LoadStatus.loading){
+                              body =  CircularProgressIndicator();
+                            }
+                            else if(mode == LoadStatus.failed){
+                              body = Text("Load Failed!Click retry!");
+                            }
+                            else if(mode == LoadStatus.canLoading){
+                              body = Text("release to load more");
+                            }
+                            else{
+                              body = Text("No more Data");
+                            }
+                            return Container(
+                              height: 55.0,
+                              child: Center(child:body),
+                            );
+                          },
+                        ),
+                        controller: _refreshController,
+                        onRefresh: () {_onRefresh(user.uid);},
+                        onLoading: _onLoading,
+                        child: ListView.builder(
+                            padding: EdgeInsets.only(top: 10),
+                            shrinkWrap: true,
+//                                  physics: NeverScrollableScrollPhysics(),
+                            itemCount: tasks.length,
+                            itemBuilder: (context, index) {
+                              if (tasks[index].title != "") {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: EmoIcon(widget.user_data, refresh, tasks[index], user.uid, widget.user_data.groups[0], this, widget.user_data.personal_history, finished_count, tasks.length, color),
+                                  ),
+                                );
+                              }
+                              else {
+                                return SizedBox();
+                              }
+                            }
+                        ),
+                      ),
+                    )
                   ],
-                )
-            );
-          } else {
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Center(
-                child: CircularProgressIndicator(),
+                ),
               ),
-            );
-          }
-
-
-        },
+            ],
+          )
       ),
     );
   }

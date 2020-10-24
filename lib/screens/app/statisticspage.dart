@@ -28,6 +28,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class StatisticsPage extends StatefulWidget {
+  final user_data;
+  
+  StatisticsPage({this.user_data});
+  
   @override
   _StatisticsPageState createState() => new _StatisticsPageState();
 }
@@ -82,120 +86,103 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
-    
+    tasks = widget.user_data.tasks;
+    var user_data = widget.user_data;
+
+    List<ListItem> _groups = [];
+
+    int group_length = user_data.groups.length;
+    for (int i=0; i<group_length; i++) {
+      _groups.add(ListItem(
+          i, user_data.groups[i].name
+      ));
+    }
+
+    List<DropdownMenuItem<ListItem>> buildDropDownMenuItems(List listItems) {
+      List<DropdownMenuItem<ListItem>> items = List();
+      for (ListItem listItem in listItems) {
+        items.add(
+          DropdownMenuItem(
+            child: Text(listItem.name),
+            value: listItem,
+          ),
+        );
+      }
+      return items;
+    }
+
+    List<DropdownMenuItem<ListItem>> dropdownItems;
+
+    dropdownItems = buildDropDownMenuItems(_groups);
+
+
+
     return SingleChildScrollView(
-      child: FutureBuilder(
-        future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            tasks = snapshot.data.tasks;
-            var user_data = snapshot.data;
-
-            List<ListItem> _groups = [];
-
-            int group_length = user_data.groups.length;
-            for (int i=0; i<group_length; i++) {
-              _groups.add(ListItem(
-                  i, user_data.groups[i].name
-              ));
-            }
-
-            List<DropdownMenuItem<ListItem>> buildDropDownMenuItems(List listItems) {
-              List<DropdownMenuItem<ListItem>> items = List();
-              for (ListItem listItem in listItems) {
-                items.add(
-                  DropdownMenuItem(
-                    child: Text(listItem.name),
-                    value: listItem,
-                  ),
-                );
-              }
-              return items;
-            }
-
-            List<DropdownMenuItem<ListItem>> dropdownItems;
-
-            dropdownItems = buildDropDownMenuItems(_groups);
-
-
-
-            return Container(
+      child: Container(
+          child: Stack(
+            children: [
+              Container(
                 child: Stack(
                   children: [
-                    Container(
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30, bottom: 10, top: 30),
-                              child: Text("Statistics", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
-                            ),
-                          ),
-                        ],
-                      ),
-                      height: MediaQuery.of(context).size.height / 6,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: color['primaryColor'],
-                          border: Border(
-                          ),
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30, bottom: 10, top: 30),
+                        child: Text("Statistics", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
+                  ],
+                ),
+                height: MediaQuery.of(context).size.height / 6,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: color['primaryColor'],
+                    border: Border(
+                    ),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))
+                ),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                    padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: MediaQuery.of(context).size.height / 8),
+                        DefaultTabController(
+                          length: 2,
+                          initialIndex: 0,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(height: MediaQuery.of(context).size.height / 8),
-                              DefaultTabController(
-                                length: 2,
-                                initialIndex: 0,
-                                child: Column(
-                                  children: [
-                                    TabBar(
+                              TabBar(
 
-                                      tabs: [
-                                        Tab(icon: Icon(Icons.account_circle, color: Colors.black)),
-                                        Tab(icon: Icon(Icons.group, color: Colors.black))
-                                      ],
-                                    ),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height * 0.7,
+                                tabs: [
+                                  Tab(icon: Icon(Icons.account_circle, color: Colors.black)),
+                                  Tab(icon: Icon(Icons.group, color: Colors.black))
+                                ],
+                              ),
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.7,
 //                                      color: Colors.red,
-                                      child: TabBarView(
-                                        children: [
-                                          UserStatPage(snapshot.data.personal_history),
-                                          InheritedUserData(user_data: dropdownItems, taskHistoryLength: snapshot.data.groups[0].tasks_history.length, child: GroupStatPage(snapshot.data.group_history, snapshot.data.groups, _groups))
-                                        ],
-                                      ),
-                                    )
+                                child: TabBarView(
+                                  children: [
+                                    UserStatPage(widget.user_data.personal_history),
+                                    InheritedUserData(user_data: dropdownItems, taskHistoryLength: widget.user_data.groups[0].tasks_history.length, child: GroupStatPage(widget.user_data.group_history, widget.user_data.groups, _groups))
                                   ],
                                 ),
-                              ),
-
+                              )
                             ],
-                          )
-                      ),
-                    ),
-                    checkConnectivity(_source, context, true),
-                  ],
-                )
-            );
-          }
-          else {
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Center(
-                child: CircularProgressIndicator(),
+                          ),
+                        ),
+
+                      ],
+                    )
+                ),
               ),
-            );
-          }
-        },
+              checkConnectivity(_source, context, true),
+            ],
+          )
       ),
     );
   }

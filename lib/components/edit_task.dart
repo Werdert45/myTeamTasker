@@ -138,7 +138,6 @@ class _EditTaskState extends State<EditTask> {
 
     List _groups = [];
 
-    print(widget.user_data);
     int group_length = widget.user_data.groups.length;
     for (int i=0; i<group_length; i++) {
       _groups.add(
@@ -203,7 +202,6 @@ class _EditTaskState extends State<EditTask> {
                                 validator: (val) => val.isEmpty ? 'Enter an email' : null,
                                 onChanged: (val) {
                                   setState(() => _title = val);
-                                  print(_title);
                                 },
                                 textCapitalization: TextCapitalization.none,
                                 style: TextStyle(

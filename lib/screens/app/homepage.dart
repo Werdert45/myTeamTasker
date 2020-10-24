@@ -46,17 +46,20 @@ class _HomePageState extends State<HomePage>
 
   }
 
+  var user_data;
 
   void didInitState() async {
     var user = Provider.of<User>(context);
 
-    var user_data = await streams.getCompleteUser(user.uid);
+    user_data = await streams.getCompleteUser(user.uid);
+
+    var calendar_data = await streams.getCalendar(user.uid);
 
     pages = <Widget>[
       DashboardPage(user_data: user_data),
-      CalendarScreen(),
-      StatisticsPage(),
-      TaskManagerPage(),
+      CalendarScreen(calendar_data: calendar_data),
+      StatisticsPage(user_data: user_data),
+      TaskManagerPage(user_data: user_data),
     ];
   }
 
@@ -84,7 +87,6 @@ class _HomePageState extends State<HomePage>
     return FutureBuilder(
       future: streams.getCompleteUser(user.uid),
       builder: (context, snapshot) {
-        var user_data = snapshot.data;
         return FutureBuilder(
               future: setNotifications(snapshot.data.tasks),
               builder: (context, snapshot2) {
@@ -152,7 +154,10 @@ class _HomePageState extends State<HomePage>
 
         var new_user_data = await Navigator.push(context, MaterialPageRoute(builder: (context) =>  InheritedUserData(user_data: dropdownItems, child: AddTask(user_data))));
 
+        print("NEW USER DATA");
+        print(new_user_data);
         setState(() {
+          print("USERDATA");
           user_data = new_user_data;
         });
 

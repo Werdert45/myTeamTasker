@@ -13,6 +13,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
+  final calendar_data;
+
+  CalendarScreen({this.calendar_data});
+
   @override
   State<StatefulWidget> createState() {
     return _CalendarScreenState();
@@ -86,7 +90,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
-    
+    Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(widget.calendar_data);
+    calendar.forEach((k,v) => _events[k] = v);
+
+    _selectedEvents = _events[_selectedDay];
 
     return Scaffold(
       body: SafeArea(
@@ -97,10 +104,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 var today = DateTime.now();
 
                 print(today.month);
-                Map<DateTime, dynamic> calendar = Map<DateTime, dynamic>.from(snapshot.data);
-                calendar.forEach((k,v) => _events[k] = v);
 
-                _selectedEvents = _events[_selectedDay];
 
                 return Container(
                   width: double.infinity,

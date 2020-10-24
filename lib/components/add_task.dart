@@ -179,7 +179,6 @@ class _AddTaskState extends State<AddTask> with AfterInitMixin<AddTask>{
                                     validator: (val) => val.isEmpty ? 'Enter an email' : null,
                                     onChanged: (val) {
                                       setState(() => _title = val);
-                                      print(_title);
                                     },
                                     style: TextStyle(
                                       color: color['mainTextColor']
@@ -303,7 +302,6 @@ class _AddTaskState extends State<AddTask> with AfterInitMixin<AddTask>{
                                     items: DropDownMenuItems,
                                     onChanged: (value) {
                                       setState(() {
-                                        print(value);
                                         _selectedItem = value;
                                       });
                                     }
@@ -376,67 +374,63 @@ class _AddTaskState extends State<AddTask> with AfterInitMixin<AddTask>{
                     Positioned(
                       bottom: 10,
                       left: 15,
-                      child: FutureBuilder(
-                          future: streams.getCompleteUser(user.uid),
-                          builder: (context, snapshot) {
-                            var user_data = snapshot.data;
-
-                            print(user_data);
-
-                            return RaisedButton(
-                              color: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
+                      child: RaisedButton(
+                        color: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
 //                                      side: BorderSide(color: Colors.green)
-                              ),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width - 60,
-                                height: 50,
-                                child: Center(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.add, color: Colors.white),
-                                        SizedBox(width: 5),
-                                        Text("ADD TASK", style: TextStyle(color: Colors.white, fontSize: 18))
-                                      ],
-                                    )
-                                ),
-                              ),
-                              onPressed: () async {
-                                if (_title != "" && _description != "") {
-                                  var puid = user.uid;
-                                  var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
-                                  var alertTime = "";
-                                  if (_time == null) {
-                                    alertTime = "13:59";
-                                  }
-                                  else {
-                                    alertTime = _time.hour.toString() + ":" + _time.minute.toString();
-                                  }
-                                  var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
-                                  var title = _title;
-                                  var description = _description;
-                                  var date = _dateTime.millisecondsSinceEpoch;
+                        ),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 60,
+                          height: 50,
+                          child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add, color: Colors.white),
+                                  SizedBox(width: 5),
+                                  Text("ADD TASK", style: TextStyle(color: Colors.white, fontSize: 18))
+                                ],
+                              )
+                          ),
+                        ),
+                        onPressed: () async {
+                          var new_user_data;
 
-                                  var group_code = user_data.groups[_selectedItem.value].code;
-                                  var group_name = user_data.groups[_selectedItem.value].name;
+                          if (_title != "" && _description != "") {
+                            var puid = user.uid;
+                            var icon = categories.toString().substring(categories.toString().length - 2,categories.toString().length);
+                            var alertTime = "";
+                            if (_time == null) {
+                              alertTime = "13:59";
+                            }
+                            else {
+                              alertTime = _time.hour.toString() + ":" + _time.minute.toString();
+                            }
+                            var taskID = user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+                            var title = _title;
+                            var description = _description;
+                            var date = _dateTime.millisecondsSinceEpoch;
 
-                                  var new_task = addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
+                            var group_code = widget.user_data.groups[_selectedItem.value].code;
+                            var group_name = widget.user_data.groups[_selectedItem.value].name;
 
-                                  user_data.tasks.add(new_task);
+                            var new_task = await addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
 
-                                  // Not the correct navigator
-                                  Navigator.pop(context, user_data);
-                                }
-                                else {
-                                  setState(() {
-                                    without_errors = false;
-                                  });
-                                }
-                              },
-                            );
+
+                            widget.user_data.tasks.add(new_task);
+
+                            new_user_data = widget.user_data;
+
+                            // Not the correct navigator
+                            await Navigator.pop(context, new_user_data);
                           }
+                          else {
+                            setState(() {
+                              without_errors = false;
+                            });
+                          }
+                        },
                       ),
                     ),
                     Positioned(

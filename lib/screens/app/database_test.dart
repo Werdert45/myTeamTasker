@@ -23,9 +23,6 @@ class _TestingState extends State<Testing> {
     return FutureBuilder(
       future: streams.getCompleteUser(user.uid),
       builder: (context, snapshot) {
-        print(snapshot);
-
-
         return Container();
       }
     );
