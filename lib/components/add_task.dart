@@ -109,14 +109,18 @@ class _AddTaskState extends State<AddTask> with AfterInitMixin<AddTask>{
 
   // Improve addTaskDB to also save to either group or personal + title not working
   addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description) async {
+    var new_task;
+
     if (repeated) {
       await database.addRepeatedTask(taskID, puid, group_code, shared);
-      await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
+      new_task = await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
     }
     else {
       await database.addSingleTask(taskID, puid, group_code, shared);
-      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name, description);
+      new_task = await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name, description);
     }
+
+    return new_task;
   }
 
   Widget build(BuildContext context) {
@@ -375,6 +379,10 @@ class _AddTaskState extends State<AddTask> with AfterInitMixin<AddTask>{
                       child: FutureBuilder(
                           future: streams.getCompleteUser(user.uid),
                           builder: (context, snapshot) {
+                            var user_data = snapshot.data;
+
+                            print(user_data);
+
                             return RaisedButton(
                               color: Colors.green,
                               shape: RoundedRectangleBorder(
@@ -411,14 +419,15 @@ class _AddTaskState extends State<AddTask> with AfterInitMixin<AddTask>{
                                   var description = _description;
                                   var date = _dateTime.millisecondsSinceEpoch;
 
-                                  var group_code = snapshot.data.groups[_selectedItem.value].code;
-                                  var group_name = snapshot.data.groups[_selectedItem.value].name;
+                                  var group_code = user_data.groups[_selectedItem.value].code;
+                                  var group_name = user_data.groups[_selectedItem.value].name;
 
-                                  addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
+                                  var new_task = addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description);
+
+                                  user_data.tasks.add(new_task);
 
                                   // Not the correct navigator
-                                  Navigator.pop(context);
-                                  setState(() {});
+                                  Navigator.pop(context, user_data);
                                 }
                                 else {
                                   setState(() {

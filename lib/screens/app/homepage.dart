@@ -1,3 +1,4 @@
+import 'package:after_init/after_init.dart';
 import 'package:collaborative_repitition/components/add_task.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/user.dart';
@@ -21,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AfterInitMixin<HomePage> {
   TabController tabController;
 
   final Streams streams = Streams();
@@ -29,12 +30,7 @@ class _HomePageState extends State<HomePage>
 
   var _page = 1;
 
-  var pages = <Widget>[
-    DashboardPage(),
-    CalendarScreen(),
-    StatisticsPage(),
-    TaskManagerPage(),
-  ];
+  var pages = <Widget>[];
 
 
   @override
@@ -49,6 +45,22 @@ class _HomePageState extends State<HomePage>
     });
 
   }
+
+
+  void didInitState() async {
+    var user = Provider.of<User>(context);
+
+    var user_data = await streams.getCompleteUser(user.uid);
+
+    pages = <Widget>[
+      DashboardPage(user_data: user_data),
+      CalendarScreen(),
+      StatisticsPage(),
+      TaskManagerPage(),
+    ];
+  }
+
+
 
 
   void _selectPage(int index) {
@@ -109,7 +121,7 @@ class _HomePageState extends State<HomePage>
       child: Icon(Icons.add),
       backgroundColor: color['primaryColor'],
       heroTag: "add_task",
-      onPressed: () {
+      onPressed: () async {
 
         List<ListItem> _groups = [];
 
@@ -138,7 +150,12 @@ class _HomePageState extends State<HomePage>
         dropdownItems = buildDropDownMenuItems(_groups);
 
 
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>  InheritedUserData(user_data: dropdownItems, child: AddTask(user_data))));
+        var new_user_data = await Navigator.push(context, MaterialPageRoute(builder: (context) =>  InheritedUserData(user_data: dropdownItems, child: AddTask(user_data))));
+
+        setState(() {
+          user_data = new_user_data;
+        });
+
       },
     );
   }

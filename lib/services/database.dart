@@ -477,6 +477,10 @@ class DatabaseService {
         'finished_by': {},
         'belongs_to': [group_code, group_name]
       });
+
+      var new_task = await singleTasksCollection.document(taskID).get();
+
+      return single_task.fromMap(new_task.data);
   }
 
   Future createRepeatedTask(taskID, alertTime, assignee, puid, days, icon, title, shared, group_code, group_name, description) async {
@@ -496,6 +500,11 @@ class DatabaseService {
         'belongs_to': [group_code, group_name]
 //      'description': description
       });
+
+
+      var new_task = await repeatedTasksCollection.document(taskID).get();
+
+      return repeated_task.fromMap(new_task.data);
   }
 
   Future removeSingleTask(taskID) async {

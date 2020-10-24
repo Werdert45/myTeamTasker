@@ -17,6 +17,10 @@ import '../../components/task-tile.dart';
 import '../../services/auth.dart';
 
 class DashboardPage extends StatefulWidget {
+  final user_data;
+  
+  DashboardPage({this.user_data});
+  
   @override
   _DashboardPageState createState() => _DashboardPageState();
 
@@ -104,15 +108,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
+    tasks = widget.user_data.tasks;
+    var finished_tasks = progressBar(tasks);
+    var finished_count = finished_tasks[1].length;
 
     return SingleChildScrollView(
       child: FutureBuilder(
         future: connected(_source) ? streams.getCompleteUser(user.uid) : readGeneralInfoFromStorage(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            tasks = snapshot.data.tasks;
-            var finished_tasks = progressBar(tasks);
-            var finished_count = finished_tasks[1].length;
 
           return Container(
                 child: Column(
@@ -129,7 +133,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Hi, " + snapshot.data.name + "!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                                  Text("Hi, " + widget.user_data.name + "!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
                                   Text("These are today's tasks", style: TextStyle(fontSize: 14, color: Colors.white))
                                 ],
                               )
@@ -156,7 +160,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                         alignment: Alignment.center,
                                         heightFactor: 1,
                                         widthFactor: 0.5,
-                                        child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + snapshot.data.profile_picture.toString()))),
+                                        child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.user_data.profile_picture.toString()))),
                                   ),
                                 )
                             ),
@@ -170,7 +174,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => SettingsPage(snapshot.data))
+                                    MaterialPageRoute(builder: (context) => SettingsPage(widget.user_data))
                                   );
                                 },
                               ),
@@ -259,14 +263,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                   padding: EdgeInsets.only(top: 10),
                                   shrinkWrap: true,
 //                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: snapshot.data.tasks.length,
+                                  itemCount: widget.user_data.tasks.length,
                                   itemBuilder: (context, index) {
-                                    if (snapshot.data.tasks[index].title != "") {
+                                    if (widget.user_data.tasks[index].title != "") {
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                                         child: Container(
                                           width: double.infinity,
-                                          child: EmoIcon(snapshot.data, refresh, tasks[index], user.uid, snapshot.data.groups[0], this, snapshot.data.personal_history, finished_count, tasks.length, color),
+                                          child: EmoIcon(widget.user_data, refresh, tasks[index], user.uid, widget.user_data.groups[0], this, widget.user_data.personal_history, finished_count, tasks.length, color),
                                         ),
                                       );
                                     }
