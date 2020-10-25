@@ -1,6 +1,6 @@
 import 'package:after_init/after_init.dart';
-import 'package:circular_check_box/circular_check_box.dart';
 import 'package:collaborative_repitition/components/edit_task.dart';
+import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/repeated_task.dart';
 import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/services/database.dart';
@@ -10,7 +10,7 @@ import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class EmoIcon extends StatefulWidget {
-  final Function() notifyParent;
+  Function(complete_user) callback;
   final task;
   final puid;
   final group;
@@ -21,8 +21,8 @@ class EmoIcon extends StatefulWidget {
   final Map color;
   final isDone;
   final user_data;
-//
-  EmoIcon(this.user_data, this.notifyParent, this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, this.count, this.color, {this.isDone});
+
+  EmoIcon({this.user_data, this.callback, this.task, this.puid, this.group, this.parent, this.tasks_history_pers, this.total_tasks, this.count, this.color, this.isDone});
 
 
   @override
@@ -33,7 +33,7 @@ class EmoIconState extends State<EmoIcon> with AfterInitMixin<EmoIcon> {
   TimeOfDay _time = TimeOfDay.now();
   DateTime _dateTime = DateTime.now();
   DatabaseService database = DatabaseService();
-
+  final Streams streams = Streams();
 
   bool repeated;
   bool shared;
@@ -112,7 +112,7 @@ class EmoIconState extends State<EmoIcon> with AfterInitMixin<EmoIcon> {
   }
 
   updateFinishedStatus(taskID, status, puid) async {
-    if (checkedValue) {
+    if (status) {
       if (shared) {
         await database.addToSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history);
       }
@@ -129,6 +129,8 @@ class EmoIconState extends State<EmoIcon> with AfterInitMixin<EmoIcon> {
         await database.removeFromPersonalTaskHistory(puid, taskID, widget.tasks_history_pers, widget.total_tasks, task.repeated);
       }
     }
+
+    print(status);
 
     if (task is repeated_task) {
       var task = await database.updateFinishedStatusRepeated(taskID, status, puid);
@@ -170,8 +172,6 @@ class EmoIconState extends State<EmoIcon> with AfterInitMixin<EmoIcon> {
 
     repeated = task.repeated;
     shared = task.shared;
-
-    print(task.finished_by);
 
     return FutureBuilder(
       future: getDarkModeSetting(),
@@ -383,7 +383,7 @@ class EmoIconState extends State<EmoIcon> with AfterInitMixin<EmoIcon> {
                   child: Icon(Icons.check, color: Colors.white),
                 ),
                 onTap: () async {
-                  var new_task_data = await updateFinishedStatus(task.id, checkedValue, widget.puid);
+                  var new_task_data = await updateFinishedStatus(task.id, true, widget.puid);
                   var new_task;
 
                   if (new_task_data.data["repeated"]) {
@@ -394,11 +394,15 @@ class EmoIconState extends State<EmoIcon> with AfterInitMixin<EmoIcon> {
                     new_task = single_task.fromMap(new_task_data.data);
                   }
 
+                  var finished_with_user = await streams.getCompleteUser(widget.puid);
+
                   setState(() {
                     checkedValue = true;
                     task = new_task;
 
-                    print(task.finished_by);
+                    widget.callback(finished_with_user);
+
+
 //                // Set the count of completed tasks to add one
 //                widget.notifyParent();
                   });

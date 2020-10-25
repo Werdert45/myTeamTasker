@@ -1,5 +1,6 @@
 import 'package:collaborative_repitition/components/syncingComponents.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/settingsPage.dart';
 import 'package:collaborative_repitition/services/database.dart';
@@ -17,9 +18,11 @@ import '../../components/task-tile.dart';
 import '../../services/auth.dart';
 
 class DashboardPage extends StatefulWidget {
-  final user_data;
+//  Function(complete_user) callbackParent;
+  complete_user user_data;
+  bool changedData;
 
-  DashboardPage({this.user_data});
+  DashboardPage({this.user_data, this.changedData});
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -44,6 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
   var tasks;
   bool brightness = false;
 
+
   void initState() {
     super.initState();
     checkedValue = false;
@@ -59,10 +63,6 @@ class _DashboardPageState extends State<DashboardPage> {
     getDarkModeSetting().then((val) {
       brightness = val;
     });
-  }
-
-  refresh() {
-    setState(() {});
   }
 
   @override
@@ -102,6 +102,16 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
+
+    updateUser(new_user) {
+      setState(() {
+        widget.user_data = new_user;
+        widget.changedData = true;
+      });
+
+      return new_user;
+    }
+
 
     getDarkModeSetting().then((val) {
       brightness = val;
@@ -266,7 +276,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                                   child: Container(
                                     width: double.infinity,
-                                    child: EmoIcon(widget.user_data, refresh, tasks[index], user.uid, widget.user_data.groups[0], this, widget.user_data.personal_history, finished_count, tasks.length, color),
+                                    child: EmoIcon(user_data: widget.user_data, callback: updateUser, task: tasks[index], puid: user.uid, group: widget.user_data.groups[0], parent: this, tasks_history_pers: widget.user_data.personal_history, total_tasks: finished_count, count: tasks.length, color: color),
                                   ),
                                 );
                               }

@@ -555,7 +555,6 @@ class DatabaseService {
         list.add(taskID);
 
         task_history[date][puid] = list;
-        print(task_history[date][puid]);
       }
       else {
         task_history[date][puid] = [taskID];
@@ -582,10 +581,8 @@ class DatabaseService {
     var list = [];
     list += task_history[date][puid];
 
-
     list.remove(taskID);
 
-    print(list);
     task_history[date][puid] = list;
 
     await groupsCollection.document(groupID).updateData({

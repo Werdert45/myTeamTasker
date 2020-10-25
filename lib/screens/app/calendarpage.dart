@@ -103,9 +103,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
             builder: (context, snapshot) {
                 var today = DateTime.now();
 
-                print(today.month);
-
-
                 return Container(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height,
@@ -221,15 +218,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
               child: EmoIcon(
-                user,
-                      () {},
-                  _selectedEvents[index]['task'],
-                  user.uid,
-                  _selectedEvents[index]['groups'],
-                  this,
-                  _selectedEvents[index]['tasks_history_pers'],
-                  _selectedEvents[index]['total_tasks'],
-                  _selectedEvents[index]['isDone'], color,
+                user_data: user,
+                task: _selectedEvents[index]['task'],
+                puid: user.uid,
+                group: _selectedEvents[index]['groups'],
+                parent: this,
+                tasks_history_pers: _selectedEvents[index]['tasks_history_pers'],
+                total_tasks: _selectedEvents[index]['total_tasks'],
+                isDone: _selectedEvents[index]['isDone'],
+                color: color,
               )
             );
           }

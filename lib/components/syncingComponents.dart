@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 // Check whether the banner is necessary
 // connection:
 Widget checkConnectivity(connection, context, bigger) {
-  print(connection);
+//  print(connection);
   switch (connection.keys.toList()[0]) {
     case ConnectivityResult.none:
       // Offline: show

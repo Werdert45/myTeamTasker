@@ -80,7 +80,6 @@ class _GroupSettingsState extends State<GroupSettings> {
                     onTap: () async {
                       // await the saving of the changes first
                       try {
-                        print(groupDescription);
                         if (groupDescription != widget.group.description || groupName != widget.group.name) {
                           await database.updateGroup(groupName, groupDescription, widget.group.code);
                         }

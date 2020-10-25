@@ -1,6 +1,7 @@
 import 'package:after_init/after_init.dart';
 import 'package:collaborative_repitition/components/add_task.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/notifications_lib/functions/notification_functions.dart';
 import 'package:collaborative_repitition/screens/app/partials/bottombaritem.dart';
@@ -8,9 +9,7 @@ import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-
 import 'dashboard.dart';
 import 'statisticspage.dart';
 import 'calendarpage.dart';
@@ -18,36 +17,46 @@ import 'taskmanagerpage.dart';
 
 class HomePage extends StatefulWidget {
   @override
+
+  ValueNotifier reset = ValueNotifier(complete_user);
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin, AfterInitMixin<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin, AfterInitMixin<HomePage> {
   TabController tabController;
-
   final Streams streams = Streams();
 
-
   var _page = 1;
-
   var pages = <Widget>[];
 
 
   @override
   void initState() {
+
+    widget.reset.addListener(() {
+      debugPrint("value notifier is true");
+      setState(() {
+
+      });
+    });
+
     super.initState();
     tabController = new TabController(length: 4, vsync: this);
+
+
 
     _page = 0;
 
     getDarkModeSetting().then((val) {
       brightness = val;
     });
-
   }
 
   var user_data;
   var calendar_data;
+  var changedData;
+
+
 
   void didInitState() async {
     var user = Provider.of<User>(context);
@@ -56,16 +65,34 @@ class _HomePageState extends State<HomePage>
 
     calendar_data = await streams.getCalendar(user.uid);
 
+    changedData = false;
+
+    callback2(new_user) {
+      setState(() {
+        user_data = new_user;
+      });
+
+      user_data = new_user;
+
+      return new_user;
+    }
+
     pages = <Widget>[
-      DashboardPage(user_data: user_data),
+      DashboardPage(user_data: user_data, changedData: changedData),
       CalendarScreen(calendar_data: calendar_data),
       StatisticsPage(user_data: user_data),
       TaskManagerPage(user_data: user_data),
     ];
   }
 
-  void _selectPage(int index) {
+  void _selectPage(int index) async {
+    var user = Provider.of<User>(context, listen: false);
+
+    var new_user_data = await streams.getCompleteUser(user.uid);
+
     setState(() {
+      user_data = new_user_data;
+
       _page = index;
     });
   }
@@ -74,6 +101,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+
     var user = Provider.of<User>(context);
 
     getDarkModeSetting().then((val) {
@@ -160,8 +188,6 @@ class _HomePageState extends State<HomePage>
         var new_user_data = await Navigator.push(context, MaterialPageRoute(builder: (context) =>  InheritedUserData(user_data: dropdownItems, child: AddTask(user_data))));
 
         setState(() {
-          print("USERDATA");
-          print(new_user_data.tasks);
           user_data = new_user_data;
         });
 
