@@ -1,5 +1,6 @@
 import 'package:collaborative_repitition/components/button.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
+import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/authentication/selectprofpic.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
@@ -44,12 +45,12 @@ class _SignupPageState extends State<SignupPage> {
       if (_formKey.currentState.validate()) {
         dynamic result = await _auth.registerWithEmail(_email, _password, _name);
 
-        if (result is FirebaseUser) {
+        if (result is User) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SelectprofilepicPage(_name)));
         }
 
         else {
-          setState(() => _error = result);
+          setState(() => _error = result.toString());
         }
       }
     }

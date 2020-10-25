@@ -77,10 +77,11 @@ class _DashboardPageState extends State<DashboardPage> {
   void _onRefresh(uid) async{
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
-    var new_user = await streams.getCompleteUser(uid);
+    var new_userData = await streams.getCompleteUser(uid);
+
 
     setState(() {
-      tasks = new_user.tasks;
+      tasks = new_userData.tasks;
     });
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
@@ -88,7 +89,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _onLoading() async {
     // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
+//    await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
 //    items.add((items.length+1).toString());
 //    if(mounted)

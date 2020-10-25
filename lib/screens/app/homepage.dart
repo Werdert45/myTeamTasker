@@ -47,13 +47,14 @@ class _HomePageState extends State<HomePage>
   }
 
   var user_data;
+  var calendar_data;
 
   void didInitState() async {
     var user = Provider.of<User>(context);
 
     user_data = await streams.getCompleteUser(user.uid);
 
-    var calendar_data = await streams.getCalendar(user.uid);
+    calendar_data = await streams.getCalendar(user.uid);
 
     pages = <Widget>[
       DashboardPage(user_data: user_data),
@@ -62,9 +63,6 @@ class _HomePageState extends State<HomePage>
       TaskManagerPage(user_data: user_data),
     ];
   }
-
-
-
 
   void _selectPage(int index) {
     setState(() {
@@ -83,6 +81,13 @@ class _HomePageState extends State<HomePage>
     });
 
     var color = brightness ? darkmodeColor : lightmodeColor;
+
+    pages = <Widget>[
+      DashboardPage(user_data: user_data),
+      CalendarScreen(calendar_data: calendar_data),
+      StatisticsPage(user_data: user_data),
+      TaskManagerPage(user_data: user_data),
+    ];
 
     return FutureBuilder(
       future: streams.getCompleteUser(user.uid),
@@ -154,10 +159,9 @@ class _HomePageState extends State<HomePage>
 
         var new_user_data = await Navigator.push(context, MaterialPageRoute(builder: (context) =>  InheritedUserData(user_data: dropdownItems, child: AddTask(user_data))));
 
-        print("NEW USER DATA");
-        print(new_user_data);
         setState(() {
           print("USERDATA");
+          print(new_user_data.tasks);
           user_data = new_user_data;
         });
 

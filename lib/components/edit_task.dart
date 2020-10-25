@@ -108,20 +108,25 @@ class _EditTaskState extends State<EditTask> {
 
   // Improve addTaskDB to also save to either group or personal + title not working
   addTaskDB(repeated, shared, taskID, alertTime, assignee, puid, days_show, icon, title, date, group_code, group_name, description, old_task_id) async {
+
+    var new_task;
+
     if (repeated) {
       await database.removeRepeatedTaskFromGroup(old_task_id, group_code);
       await database.removeRepeatedTask(old_task_id);
       
       await database.addRepeatedTask(taskID, puid, group_code, shared);
-      await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
+      new_task = await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
     }
     else {
       await database.removeSingleTaskFromGroup(old_task_id, group_code);
       await database.removeSingleTask(old_task_id);
 
       await database.addSingleTask(taskID, puid, group_code, shared);
-      await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name, description);
+      new_task = await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name, description);
     }
+
+    return new_task;
   }
 
   Widget build(BuildContext context) {
@@ -445,19 +450,20 @@ class _EditTaskState extends State<EditTask> {
                                 var group_code = snapshot.data.groups[0].code;
                                 var group_name = snapshot.data.groups[0].name;
 
-                                addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description, widget.task_data.id);
+                                var new_task = addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description, widget.task_data.id);
                               }
 
                               else {
                                 var group_code = "placeholder";
                                 var group_name = "placeholder";
 
-                                addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description, widget.task_data.id);
+                                var new_task = addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description, widget.task_data.id);
                               }
 
+                              var new_user_data = await streams.getCompleteUser(user.uid).data;
+
                               // Not the correct navigator
-                              Navigator.pop(context);
-                              setState(() {});
+                              await Navigator.pop(context, new_user_data);
                             },
                           );
                         }

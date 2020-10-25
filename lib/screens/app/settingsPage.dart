@@ -304,7 +304,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     height: 30,
                                     child: Row(
                                       children: [
-                                        Text(user_data.email.toLowerCase()),
+                                        Text(user_data.email.length < 18 ? user_data.email.toLowerCase() : user_data.email.substring(0,16).toLowerCase() + "..."),
                                         SizedBox(width: 4,),
                                         Icon(Icons.arrow_forward_ios, size: 12,)
                                       ],
