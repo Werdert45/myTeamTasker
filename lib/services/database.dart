@@ -21,9 +21,6 @@ class Streams {
 
   getCompleteUser(uid) async {
     var userdata = await usersCollection.document(uid).get();
-
-
-
     var user = user_db.fromMap(userdata.data);
 
     var tasks = [];
@@ -97,16 +94,6 @@ class Streams {
   }
 
 
-
-
-
-
-
-
-
-
-
-
   getAllTasks(uid) async {
     var userdata = await usersCollection.document(uid).get();
 
@@ -159,9 +146,6 @@ class Streams {
       var single_tasks_data = await singleTasksCollection.document(single_tasks[i]).get();
       var spec_single_task = single_task.fromMap(single_tasks_data.data);
 
-      var today = DateTime.now();
-      var date = DateTime.fromMillisecondsSinceEpoch(spec_single_task.date);
-
       single_full.add(spec_single_task);
     }
 
@@ -179,7 +163,6 @@ class Streams {
     // Get the user data and set model
     var userdata = await usersCollection.document(uid).get();
     var user = user_db.fromMap(userdata.data);
-
 
 
     // Check for the personal tasks
@@ -212,7 +195,6 @@ class Streams {
 
     user.groups.forEach((key, value) { group_codes.add(key); });
 
-
     // Get all of the groups
     for (var i = 0; i < group_codes.length; i++) {
       var groupdata = await groupsCollection.document(group_codes[i]).get();
@@ -227,8 +209,6 @@ class Streams {
       var repeated_tasks_data = await repeatedTasksCollection.document(repeated_tasks[i]).get();
       var spec_repeated_task = repeated_task.fromMap(repeated_tasks_data.data);
 
-      var today = DateTime.now().weekday;
-
       repeated_full.add(spec_repeated_task);
     }
 
@@ -241,9 +221,6 @@ class Streams {
     tasks = repeated_full + single_full;
 
     var day_of_the_year = DateTime.now();
-    var day = day_of_the_year.day;
-    var month = day_of_the_year.month;
-    var year = day_of_the_year.year;
 
     // Per task in the total task list
     for (int i = 0; i < tasks.length; i++) {
@@ -255,7 +232,6 @@ class Streams {
         var year = date.year;
 
         var isDone;
-
 
         var now = DateTime.now();
 
@@ -296,7 +272,6 @@ class Streams {
 
             var isDone;
 
-
             var now = DateTime.now();
 
             if (DateTime(year, month, day) == DateTime(now.year, now.month, now.day)) {
@@ -320,8 +295,6 @@ class Streams {
                 per_day[DateTime(year, month, day)] = [{'task': tasks[i], 'isDone': isDone, 'groups': groups[0], 'tasks_history_pers': user.tasks_history, 'total_tasks': tasks}];
               }
             }
-
-
           }
 
           day_of_the_year = day_of_the_year.add(Duration(days: 1));
@@ -374,12 +347,8 @@ class DatabaseService {
     else if (valid.data is Map){
       // Add the group to the user and the user to the group
       try {
-        var user = await usersCollection.document(puid).get();
         var group_snap = await groupsCollection.document(code).get();
-
-
         var group_data = group.fromMap(group_snap.data);
-
 
         Map members_data = group_data.members;
         members_data[puid] = name;
@@ -498,7 +467,6 @@ class DatabaseService {
         'finished': false,
         'finished_by': {},
         'belongs_to': [group_code, group_name]
-//      'description': description
       });
 
 
@@ -615,7 +583,6 @@ class DatabaseService {
       task_history[date] = [1, total_tasks];
     }
 
-
     await usersCollection.document(puid).updateData({
       'tasks_history': task_history
     });
@@ -630,7 +597,6 @@ class DatabaseService {
     await usersCollection.document(puid).updateData({
       'tasks_history': task_history
     });
-
 
     if (repeated) {
       await repeatedTasksCollection.document(taskID).updateData({
@@ -652,7 +618,6 @@ class DatabaseService {
       'finished': status,
       'finished_by': {puid: user.data['name']}
     }, merge: true);
-
 
     var task = await singleTasksCollection.document(taskID).get();
 
@@ -683,7 +648,6 @@ class DatabaseService {
       'personal_repeated_tasks': [],
       'personal_single_tasks': []
     });
-
   }
 
   Future setProfilePicture(puid, image_path) async {
@@ -694,7 +658,6 @@ class DatabaseService {
 
   Future addToGroup(puid, group_code, name) async {
     try {
-      var user = await usersCollection.document(puid).get();
       var group_snap = await groupsCollection.document(group_code).get();
 
 
@@ -754,7 +717,6 @@ class DatabaseService {
       }
     }
 
-
     await groupsCollection.document(group_code).setData({
       'code': group_code,
       'description': group_description,
@@ -767,15 +729,12 @@ class DatabaseService {
     });
 
     var newGroupReq = await groupsCollection.document(group_code).get();
-
-
     var new_map = user.data['groups'];
     new_map[group_code] = group_name;
 
     await usersCollection.document(puid).setData({
       'groups': new_map
     }, merge: true);
-
 
     var new_group = group.fromMap(newGroupReq.data);
 
@@ -792,12 +751,8 @@ class DatabaseService {
   Future leaveGroup(puid, group_code) async {
     var group_data = await groupsCollection.document(group_code).get();
     var group_model = group.fromMap(group_data.data);
-    var groups_history = group_model.tasks_history;
     var members = group_model.members;
     members.remove(puid);
-
-    var days_list = groups_history.values.toList();
-    List users_per_day;
 
     await groupsCollection.document(group_code).updateData({
       'members': members

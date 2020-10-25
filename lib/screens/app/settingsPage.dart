@@ -1,33 +1,19 @@
-import 'dart:io';
-
 import 'package:collaborative_repitition/constants/colors.dart';
-import 'package:collaborative_repitition/main.dart';
-import 'package:collaborative_repitition/models/group.dart';
 import 'package:collaborative_repitition/models/user.dart';
-import 'package:collaborative_repitition/notifications_lib/builder/RemindersListViewBuilder.dart';
-import 'package:collaborative_repitition/notifications_lib/models/index.dart';
-import 'package:collaborative_repitition/notifications_lib/store/AppState.dart';
-import 'package:collaborative_repitition/notifications_lib/utils/notificationHelper.dart';
 import 'package:collaborative_repitition/screens/app/partials/groupsettings.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changeEmail.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changePassword.dart';
 import 'package:collaborative_repitition/screens/app/settings_sub/changeProfilePicture.dart';
-import 'package:collaborative_repitition/screens/app/settings_sub/notificationSettings.dart';
 import 'package:collaborative_repitition/screens/authentication/create_group.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:collaborative_repitition/services/usermanagement.dart';
 import 'package:collaborative_repitition/theme_changer.dart';
-import 'package:emoji_picker/emoji_picker.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'dart:async';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:provider/provider.dart';
 
 
@@ -55,12 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   bool wrongGroupCode = false;
   bool brightness = false;
-  // Set the standard settings
-//
-//  // Notifications
-//  bool notify = false;
 
-  // Something
   bool isSwitched = false;
   var user_data;
 
@@ -85,7 +66,6 @@ class _SettingsPageState extends State<SettingsPage> {
     getDarkModeSetting().then((val) {
       brightness = val;
     });
-    
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 
@@ -95,7 +75,6 @@ class _SettingsPageState extends State<SettingsPage> {
       future: initSettings(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-
           isDark = snapshot.data[0];
           sendNotifications = snapshot.data[2];
 
@@ -334,11 +313,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword(email: user_data.email)));
                                   },
-                                ),
-//                  changePassword ? Container(height: 200, width: double.infinity, color: Colors.red) : SizedBox()
+                                )
                               ]
-                          ).toList(),
-                        ),
+                          ).toList()
+                        )
                       ),
                       SizedBox(height: 10),
                       Row(
@@ -465,11 +443,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: Text("Licensing"),
                         onTap: _launchURL,
                       )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                    ]
+                  )
+                )
+              )
+            )
           );
         }
 
@@ -479,7 +457,7 @@ class _SettingsPageState extends State<SettingsPage> {
             width: MediaQuery.of(context).size.width,
             child: Center(
               child: CircularProgressIndicator(),
-            ),
+            )
           );
         }
       }

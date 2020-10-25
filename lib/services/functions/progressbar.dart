@@ -1,4 +1,3 @@
-
 progressBar(tasks) {
   var not_finished = [];
   var finished = [];

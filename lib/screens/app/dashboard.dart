@@ -4,10 +4,8 @@ import 'package:collaborative_repitition/models/complete_user.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/settingsPage.dart';
 import 'package:collaborative_repitition/services/database.dart';
-import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
 import 'package:collaborative_repitition/services/functions/progressbar.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
-import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:connectivity/connectivity.dart';
 
 import 'package:firebase_image/firebase_image.dart';

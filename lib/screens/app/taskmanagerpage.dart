@@ -6,12 +6,9 @@ import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
-import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class TaskManagerPage extends StatefulWidget {

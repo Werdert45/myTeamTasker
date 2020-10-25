@@ -1,23 +1,13 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-
 import 'package:collaborative_repitition/constants/colors.dart';
-import 'package:collaborative_repitition/main.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-
 import '../../services/usermanagement.dart';
-
 import 'package:flutter/material.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:image_picker/image_picker.dart';
-
 import 'package:firebase_storage/firebase_storage.dart';
 
 class SelectprofilepicPage extends StatefulWidget {

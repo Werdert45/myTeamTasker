@@ -1,7 +1,6 @@
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import '../../components/button.dart';
 
 class WelcomePage extends StatefulWidget {

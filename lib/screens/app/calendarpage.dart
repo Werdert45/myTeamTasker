@@ -81,12 +81,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     var current_user = Provider.of<User>(context);
 
-    Map<String, dynamic> per_day = new Map();
-
     getDarkModeSetting().then((val) {
       brightness = val;
     });
-    
 
     var color = brightness ? darkmodeColor : lightmodeColor;
 

@@ -1,5 +1,4 @@
 import 'package:collaborative_repitition/constants/colors.dart';
-import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 // Example of task_history_pers:

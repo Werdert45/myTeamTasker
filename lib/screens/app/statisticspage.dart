@@ -1,30 +1,14 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:math';
-
 import 'package:collaborative_repitition/components/syncingComponents.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
-import 'package:collaborative_repitition/models/single_task.dart';
 import 'package:collaborative_repitition/models/user.dart';
 import 'package:collaborative_repitition/screens/app/homepage.dart';
 import 'package:collaborative_repitition/screens/app/partials/group_stats.dart';
 import 'package:collaborative_repitition/screens/app/partials/user_stats.dart';
 import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
-import 'package:collaborative_repitition/services/functions/connectionFunctions.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
-import 'package:collaborative_repitition/services/functions/saveTaskFunctions.dart';
-import 'package:collaborative_repitition/services/usermanagement.dart';
-import 'package:collaborative_repitition/components/task-tile.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:firebase_image/firebase_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class StatisticsPage extends StatefulWidget {
