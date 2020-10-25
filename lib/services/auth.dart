@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:collaborative_repitition/models/user.dart';
 
 class AuthService {
-
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //  Create user obj based on Firebase user
@@ -16,7 +14,6 @@ class AuthService {
   Stream<User> get user {
     return _auth.onAuthStateChanged
         .map(userFromFirebaseUser);
-
   }
 
   Future registerWithEmail(String email, String password, String name) async {
@@ -54,6 +51,7 @@ class AuthService {
       return e.message;
     }
   }
+
 
   Future signOut() async {
     try {

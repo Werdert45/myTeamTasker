@@ -16,11 +16,11 @@ class NoConnection extends StatelessWidget {
                 Text("No Connectivity", style: TextStyle(fontSize: 20)),
                 SizedBox(height: 20),
                 Text("Oops, it seems that you are not connected and we cannot authenticate you right now, try again, when you have internet connection.", textAlign: TextAlign.center,)
-              ],
-            ),
-          ),
-        ),
-      ),
+              ]
+            )
+          )
+        )
+      )
     );
   }
 }

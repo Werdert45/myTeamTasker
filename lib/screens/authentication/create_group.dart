@@ -1,4 +1,3 @@
-import 'package:collaborative_repitition/components/button.dart';
 import 'package:collaborative_repitition/constants/colors.dart';
 import 'package:collaborative_repitition/models/group.dart';
 import 'package:collaborative_repitition/models/user.dart';
@@ -6,9 +5,6 @@ import 'package:collaborative_repitition/services/auth.dart';
 import 'package:collaborative_repitition/services/database.dart';
 import 'package:collaborative_repitition/services/functions/saveSettingsFunctions.dart';
 import 'package:flutter/material.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class CreateGroupPage extends StatefulWidget {

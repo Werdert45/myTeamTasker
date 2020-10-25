@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ThemeBuilder extends StatefulWidget {
-
   final Widget Function(BuildContext context, Brightness brightness) builder;
   final Brightness defaultBrightness;
-
 
   ThemeBuilder({this.builder, this.defaultBrightness});
 
   @override
   _ThemeBuilderState createState() => _ThemeBuilderState();
-
 
   static _ThemeBuilderState of(BuildContext context) {
     return context.findAncestorStateOfType<_ThemeBuilderState>();
@@ -28,7 +25,6 @@ class _ThemeBuilderState extends State<ThemeBuilder> {
 
     if (mounted) {
       setState(() {
-
       });
     }
   }

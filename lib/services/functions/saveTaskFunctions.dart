@@ -128,9 +128,7 @@ readCalendarFromStorage() async {
       var day = date.day;
       var month = date.month;
       var year = date.year;
-
       var isDone;
-
 
       var now = DateTime.now();
 
