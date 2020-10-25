@@ -86,14 +86,6 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _onLoading() async {
-    // monitor network fetch
-//    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-//    items.add((items.length+1).toString());
-//    if(mounted)
-//      setState(() {
-//
-//      });
     _refreshController.loadComplete();
   }
 
@@ -157,14 +149,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                 boxShadow: [
                                   BoxShadow(blurRadius: 4.0, color: Colors.black)
                                 ]),
-//                          child: Icon(Icons.person, size: 130, color: secondaryColor),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(180),
-                              child: Align(
-                                  alignment: Alignment.center,
-                                  heightFactor: 1,
-                                  widthFactor: 0.5,
-                                  child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.user_data.profile_picture.toString()))),
+                              child: Image(fit: BoxFit.fill, image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + widget.user_data.profile_picture.toString())),
+
                             ),
                           )
                       ),

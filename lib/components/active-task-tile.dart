@@ -237,7 +237,7 @@ class ActiveTaskState extends State<ActiveTask> {
                                                   children: [
                                                     SizedBox(height: 10),
                                                     (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: color['primaryColor'], fontSize: 20))) : Text("Loading ...")),
-                                                    Text(widget.task.alert_time, style: TextStyle(color: color['secondaryColor'], fontSize: 12))
+                                                    Text(widget.task.alert_time.split(":")[1].length == 1 ? widget.task.alert_time.split(":")[0] + ":" + "0" + widget.task.alert_time.split(":")[1]: widget.task.alert_time, style: TextStyle(color: color['secondaryColor'], fontSize: 12))
                                                   ]
                                               ),
                                               FlatButton(

@@ -139,11 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(35),
-                                        child: Align(
-                                            alignment: Alignment.center,
-                                            heightFactor: 1,
-                                            widthFactor: 0.5,
-                                            child: Image(image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + user_data.profile_picture.toString()))),
+                                        child: Image(fit: BoxFit.fill, image: FirebaseImage('gs://collaborative-repetition.appspot.com/' + user_data.profile_picture.toString())),
                                       ),
                                     ),
                                   )
