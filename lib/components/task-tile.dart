@@ -1,3 +1,4 @@
+import 'package:after_init/after_init.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:collaborative_repitition/components/edit_task.dart';
 import 'package:collaborative_repitition/models/repeated_task.dart';
@@ -28,7 +29,7 @@ class EmoIcon extends StatefulWidget {
   EmoIconState createState() => new EmoIconState();
 }
 
-class EmoIconState extends State<EmoIcon> {
+class EmoIconState extends State<EmoIcon> with AfterInitMixin<EmoIcon> {
   TimeOfDay _time = TimeOfDay.now();
   DateTime _dateTime = DateTime.now();
   DatabaseService database = DatabaseService();
@@ -39,6 +40,7 @@ class EmoIconState extends State<EmoIcon> {
   var setAlert;
   var task_name;
 
+  var task;
 
   // Helper function:
   List days = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
@@ -57,21 +59,23 @@ class EmoIconState extends State<EmoIcon> {
   void initState() {
     super.initState();
 
-    widget.task.days == null ? repeated = false : repeated = true;
+    task = widget.task;
+
+    task.days == null ? repeated = false : repeated = true;
 
     if (repeated) {
-      days_show = widget.task.days;
+      days_show = task.days;
     }
 
-    widget.task.alert_time != null ? setAlert = true : setAlert = false;
+    task.alert_time != null ? setAlert = true : setAlert = false;
     isShowSticker = false;
-    categories = Emoji(name: 'Sailboat', emoji: widget.task.icon);
-    checkedValue = widget.task.finished;
-    task_name = widget.task.title;
+    categories = Emoji(name: 'Sailboat', emoji: task.icon);
+    checkedValue = task.finished;
+    task_name = task.title;
     _controller = new TextEditingController(text: task_name);
     _dateTime = DateTime.now();
 
-    if (widget.task.title == "New Task") {
+    if (task.title == "New Task") {
       expanded = true;
     }
 
@@ -80,6 +84,10 @@ class EmoIconState extends State<EmoIcon> {
     });
   }
 
+
+  void didInitState() {
+    task = widget.task;
+  }
 
   Future<Null> selectDate(BuildContext context) async {
     var picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime(2100));
@@ -114,24 +122,27 @@ class EmoIconState extends State<EmoIcon> {
     }
     else {
       if (shared) {
-        await database.removeFromSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history, widget.task.repeated);
+        await database.removeFromSharedTaskHistory(puid, taskID, widget.group.code, widget.group.tasks_history, task.repeated);
       }
 
       else {
-        await database.removeFromPersonalTaskHistory(puid, taskID, widget.tasks_history_pers, widget.total_tasks, widget.task.repeated);
+        await database.removeFromPersonalTaskHistory(puid, taskID, widget.tasks_history_pers, widget.total_tasks, task.repeated);
       }
     }
 
-    if (widget.task is repeated_task) {
-      await database.updateFinishedStatusRepeated(taskID, status, puid);
+    if (task is repeated_task) {
+      var task = await database.updateFinishedStatusRepeated(taskID, status, puid);
+      return task;
     }
 
-    else if (widget.task is single_task) {
-      await database.updateFinishedStatusSingle(taskID, status, puid);
+    else if (task is single_task) {
+      var task = await database.updateFinishedStatusSingle(taskID, status, puid);
+      return task;
     }
 
     else {
       print('Houston we have a problem');
+      return "There was an error";
     }
   }
 
@@ -156,8 +167,11 @@ class EmoIconState extends State<EmoIcon> {
 
   @override
   Widget build(BuildContext context) {
-    repeated = widget.task.repeated;
-    shared = widget.task.shared;
+
+    repeated = task.repeated;
+    shared = task.shared;
+
+    print(task.finished_by);
 
     return FutureBuilder(
       future: getDarkModeSetting(),
@@ -210,7 +224,7 @@ class EmoIconState extends State<EmoIcon> {
                                                     children: [
                                                       SizedBox(height: 6),
                                                       Container(
-                                                          child: checkedValue ? Text(widget.task.icon, style: TextStyle(fontSize: 25, color: Colors.grey)) : Text(widget.task.icon, style: TextStyle(fontSize: 25))
+                                                          child: checkedValue ? Text(task.icon, style: TextStyle(fontSize: 25, color: Colors.grey)) : Text(task.icon, style: TextStyle(fontSize: 25))
                                                       )
                                                     ],
                                                   ),
@@ -223,7 +237,7 @@ class EmoIconState extends State<EmoIcon> {
                                                         (task_name != null ? Container(width: 160, child: Text(task_name.length <= 16 ? task_name : task_name.substring(0,13) + "...", style: TextStyle(color: widget.color['primaryColor'], fontSize: 20, decoration: (widget.isDone == null) ? (checkedValue ? TextDecoration.lineThrough : null) : (widget.isDone) ? TextDecoration.lineThrough : null))) : Text("Loading ...")),
 //                      SizedBox(height: 3),
                                                         (widget.isDone == null) ? checkedValue ? (
-                                                          widget.task.shared ? Text("Finished by: " + widget.task.finished_by.values.toList()[0], style: TextStyle(color: widget.color['secondaryColor'], fontSize: 12)) :
+                                                          task.shared ? Text("Finished by: " + task.finished_by.values.toList()[0], style: TextStyle(color: widget.color['secondaryColor'], fontSize: 12)) :
                                                           Text("Completed", style: TextStyle(color: widget.color['secondaryColor'], fontSize: 12))) :
                                                       Text("Not finished", style: TextStyle(color: widget.color['secondaryColor'], fontSize: 12)) :
                                                           SizedBox()
@@ -258,16 +272,16 @@ class EmoIconState extends State<EmoIcon> {
                                                   children: [
                                                     Padding(
                                                       padding: const EdgeInsets.only(top: 10.0),
-                                                      child: Text(widget.task.title, style: TextStyle(fontSize: 20)),
+                                                      child: Text(task.title, style: TextStyle(fontSize: 20)),
                                                     ),
                                                     Container(
                                                       width: MediaQuery.of(context).size.width * 0.6,
-                                                      child: Text(widget.task.description, style: TextStyle(color: Colors.grey)),
+                                                      child: Text(task.description, style: TextStyle(color: Colors.grey)),
                                                     )
                                                   ],
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                 ),
-                                                Text(widget.task.icon, style: TextStyle(fontSize: 40))
+                                                Text(task.icon, style: TextStyle(fontSize: 40))
                                               ],
                                             ),
                                             SizedBox(height: 5),
@@ -280,15 +294,15 @@ class EmoIconState extends State<EmoIcon> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text("ALERT AT", style: TextStyle(fontSize: 14)),
-                                                    Text(widget.task.alert_time, style: TextStyle(fontSize: 24))
+                                                    Text(task.alert_time, style: TextStyle(fontSize: 24))
                                                   ],
                                                 ),
-                                                (widget.isDone == null) ? checkedValue ? (widget.task.shared ?
+                                                (widget.isDone == null) ? checkedValue ? (task.shared ?
                                                 Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text("FINISHED BY", style: TextStyle(fontSize: 14)),
-                                                    Text(widget.task.finished_by.values.toList()[0])
+                                                    Text(task.finished_by.values.toList()[0])
                                                   ],
                                                 ) :
                                                     Text("FINISHED", style: TextStyle(fontSize: 14))) :
@@ -368,12 +382,23 @@ class EmoIconState extends State<EmoIcon> {
                   ),
                   child: Icon(Icons.check, color: Colors.white),
                 ),
-                onTap: () {
+                onTap: () async {
+                  var new_task_data = await updateFinishedStatus(task.id, checkedValue, widget.puid);
+                  var new_task;
+
+                  if (new_task_data.data["repeated"]) {
+                    new_task = repeated_task.fromMap(new_task_data.data);
+                  }
+
+                  else {
+                    new_task = single_task.fromMap(new_task_data.data);
+                  }
+
                   setState(() {
                     checkedValue = true;
-                    updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
+                    task = new_task;
 
-//
+                    print(task.finished_by);
 //                // Set the count of completed tasks to add one
 //                widget.notifyParent();
                   });
@@ -397,7 +422,7 @@ class EmoIconState extends State<EmoIcon> {
                 onTap: () {
                   setState(() {
                     checkedValue = false;
-                    updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
+                    updateFinishedStatus(task.id, checkedValue, widget.puid);
 
 //                // Set the count of completed tasks to remove one
 //                widget.notifyParent();
@@ -422,7 +447,7 @@ class EmoIconState extends State<EmoIcon> {
                 ),
                 onTap: () {
                   setState(() {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(widget.task, widget.user_data)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditTask(task, widget.user_data)));
 //              checkedValue = false;
 //              updateFinishedStatus(widget.task.id, checkedValue, widget.puid);
                   });

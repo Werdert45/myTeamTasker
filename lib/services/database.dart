@@ -655,6 +655,11 @@ class DatabaseService {
       'finished': status,
       'finished_by': {puid: user.data['name']}
     }, merge: true);
+
+
+    var task = await singleTasksCollection.document(taskID).get();
+
+    return task;
   }
 
   Future updateFinishedStatusRepeated(taskID, status, puid) async {
@@ -664,6 +669,11 @@ class DatabaseService {
       'finished': status,
       'finished_by': {puid: user.data['name']}
     }, merge: true);
+
+
+    var task = await repeatedTasksCollection.document(taskID).get();
+
+    return task;
   }
 
   Future createUser(puid, name, email) async {

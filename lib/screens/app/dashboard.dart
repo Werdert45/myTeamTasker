@@ -129,7 +129,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Hi, " + widget.user_data.name + "!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
+                              Text("Hi, " + widget.user_data.name.split(" ")[0] + "!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500, color: Colors.white)),
                               Text("These are today's tasks", style: TextStyle(fontSize: 14, color: Colors.white))
                             ],
                           )

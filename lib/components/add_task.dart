@@ -292,7 +292,7 @@ class _AddTaskState extends State<AddTask> with AfterInitMixin<AddTask>{
                                       onTap: () {
                                         selectTime(context);
                                       },
-                                      child: Text(_time != null ? _time.hour.toString() + ":" + _time.minute.toString() : "Select", style: TextStyle(fontSize: 18)),
+                                      child: Text(_time != null ? _time.hour.toString() + ":" + (_time.minute.toString().length == 1 ?  "0" + _time.minute.toString() : _time.minute.toString()) : "Select", style: TextStyle(fontSize: 18)),
                                     ),
                                   ],
                                 )

@@ -112,17 +112,27 @@ class _EditTaskState extends State<EditTask> {
     var new_task;
 
     if (repeated) {
-      await database.removeRepeatedTaskFromGroup(old_task_id, group_code);
+      if (shared) {
+        await database.removeRepeatedTaskFromGroup(old_task_id, group_code);
+      }
+
       await database.removeRepeatedTask(old_task_id);
       
-      await database.addRepeatedTask(taskID, puid, group_code, shared);
+      if (shared) {
+        await database.addRepeatedTask(taskID, puid, group_code, shared);
+      }
       new_task = await database.createRepeatedTask(taskID, alertTime, puid, puid, days_show, icon, title, shared, group_code, group_name, description);
     }
     else {
-      await database.removeSingleTaskFromGroup(old_task_id, group_code);
+      if (shared) {
+        await database.removeSingleTaskFromGroup(old_task_id, group_code);
+      }
+
       await database.removeSingleTask(old_task_id);
 
-      await database.addSingleTask(taskID, puid, group_code, shared);
+      if (shared) {
+        await database.addSingleTask(taskID, puid, group_code, shared);
+      }
       new_task = await database.createSingleTask(taskID, alertTime, date, icon, assignee, title, puid, shared, group_code, group_name, description);
     }
 
@@ -315,7 +325,7 @@ class _EditTaskState extends State<EditTask> {
                                 onTap: () {
                                   selectTime(context);
                                 },
-                                child: Text(_time != null ? _time.hour.toString() + ":" + _time.minute.toString() : "Select", style: TextStyle(fontSize: 18)),
+                                child: Text(_time != null ? _time.hour.toString() + ":" + (_time.minute.toString().length == 1 ?  "0" + _time.minute.toString() : _time.minute.toString()) : "Select", style: TextStyle(fontSize: 18)),
                               ),
                             ],
                           )
@@ -457,10 +467,12 @@ class _EditTaskState extends State<EditTask> {
                                 var group_code = "placeholder";
                                 var group_name = "placeholder";
 
+                                print(taskID);
+
                                 var new_task = addTaskDB(repeated, shared, taskID, alertTime, puid, puid, days_show, icon, title, date, group_code, group_name, description, widget.task_data.id);
                               }
 
-                              var new_user_data = await streams.getCompleteUser(user.uid).data;
+                              var new_user_data = await streams.getCompleteUser(user.uid);
 
                               // Not the correct navigator
                               await Navigator.pop(context, new_user_data);

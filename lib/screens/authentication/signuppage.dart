@@ -156,7 +156,7 @@ class _SignupPageState extends State<SignupPage> {
                             onChanged: (val) {
                               setState(() => _email = val);
                             },
-                            textCapitalization: TextCapitalization.sentences,
+                            textCapitalization: TextCapitalization.none,
                             decoration: InputDecoration(
                                 prefixText: "df",
                                 prefixStyle: TextStyle(color: Colors.white.withOpacity(0)),
